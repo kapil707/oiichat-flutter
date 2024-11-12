@@ -66,3 +66,22 @@ class MainPasswordbox extends StatelessWidget {
     );
   }
 }
+
+class MainErrorLabel extends StatelessWidget {
+  final String? message;
+
+  const MainErrorLabel({super.key, required this.message});
+
+  @override
+  Widget build(BuildContext context) {
+    return message != null
+        ? Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Text(
+              message!,
+              style: TextStyle(color: Colors.red),
+            ),
+          )
+        : SizedBox.shrink(); // Empty widget if message is null
+  }
+}

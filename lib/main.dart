@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:oiichat/view/login.dart';
-import 'package:oiichat/widget/main_widget.dart';
+import 'package:oiichat/view/home_page.dart';
+import 'package:oiichat/view/login_page.dart';
+import 'package:oiichat/splash_screen.dart';
+
+//https://javiercbk.github.io/json_to_dart/
 
 void main() {
   runApp(MyApp());
@@ -20,21 +23,12 @@ class MyApp extends StatelessWidget {
       ),
   useMaterial3: true,
 ),
-      home: LoginPage(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => SplashScreenClass(),
+        '/login_page': (context) => Login_Page(),
+        '/home_page': (context) => Home_Page(),
+      },
     );
   }
 }
-
-class MyHomePage extends StatelessWidget {
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("jai mata di"),
-      ),
-      body: Text("jai shree ram"),
-    );
-  }
-}
-
