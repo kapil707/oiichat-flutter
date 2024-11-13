@@ -7,26 +7,26 @@ class Shared {
 
   static Future<bool> saveLoginSharedPreference(
                 islogin,
-                user_type,
-                user_code,
-                user_altercode,
-                user_password,
-                user_image,
-                user_fname,
-                user_nrx,
-                user_cart) async {
+                userCode,
+                userType,
+                userAltercode,
+                userPassword,
+                userFname,
+                userImage,
+                userNrx,
+                userCart) async {
     //SharedPreferences.setMockInitialValues({});
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool(loginSharedPreference, islogin);
-    await prefs.setString("user_type", user_type);
-    await prefs.setString("user_code", user_code);
-    await prefs.setString("user_altercode", user_altercode);
-    await prefs.setString("user_password", user_password);
-    await prefs.setString("user_fname", user_fname);
-    await prefs.setString("user_image", user_image);
-    await prefs.setString("user_nrx", user_nrx);
-    await prefs.setString("user_cart", user_cart);
+    await prefs.setString("userCode", userCode);
+    await prefs.setString("userType", userType);
+    await prefs.setString("userAltercode", userAltercode);
+    await prefs.setString("userPassword", userPassword);
+    await prefs.setString("userFname", userFname);
+    await prefs.setString("userImage", userImage);
+    await prefs.setString("userNrx", userNrx);
+    await prefs.setString("userCart", userCart);
 
     return true;
   }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:oiichat/main_functions.dart';
-import 'package:oiichat/models/home_model.dart';
+import 'package:oiichat/models/HomePageModel.dart';
 import 'package:oiichat/retrofit_api.dart';
 
 class HomeController {  

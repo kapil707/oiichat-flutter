@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
-import 'package:oiichat/models/home_model.dart';
-import 'package:oiichat/models/login_model.dart';
+import 'package:oiichat/models/HomePageModel.dart';
+import 'package:oiichat/models/LoginModel.dart';
+import 'package:oiichat/models/NotificationModel.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'retrofit_api.g.dart';
@@ -30,4 +31,15 @@ abstract class MyApiService {
       @Field("user_nrx") String user_nrx,
       @Field("chemist_id") String chemist_id,
       @Field("seq_id") String seq_id);
+
+  @POST("/my_notification_api")
+  @FormUrlEncoded()
+  Future<NotificationModel> my_notification_api(
+      @Field("api_key") String api_key,
+      @Field("user_type") String user_type,
+      @Field("user_altercode") String user_altercode,
+      @Field("user_password") String user_password,
+      @Field("user_nrx") String user_nrx,
+      @Field("chemist_id") String chemist_id,
+      @Field("get_record") String get_record);
 }

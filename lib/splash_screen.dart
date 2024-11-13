@@ -23,9 +23,9 @@ class _SplashScreenClassState extends State<SplashScreenClass> {
     await Shared.getUserSharedPreferences().then((value) async {
       islogin = value;
       if (islogin == true) {
-        Navigator.pushReplacementNamed(context, '/home_page');
+        Navigator.pushReplacementNamed(context, '/HomePage');
       } else {
-        Navigator.pushReplacementNamed(context, '/login_page');
+        Navigator.pushReplacementNamed(context, '/LoginPage');
       }
     });
   }

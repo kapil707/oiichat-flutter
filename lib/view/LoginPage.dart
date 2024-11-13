@@ -1,16 +1,16 @@
 import 'package:art_sweetalert/art_sweetalert.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:oiichat/controllers/login_controller.dart';
+import 'package:oiichat/controllers/LoginController.dart';
 import 'package:oiichat/retrofit_api.dart';
 import 'package:oiichat/widget/main_widget.dart';
 
-class Login_Page extends StatefulWidget {
+class LoginPage extends StatefulWidget {
   @override
-  State<Login_Page> createState() => _Login_PageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _Login_PageState extends State<Login_Page> {
+class _LoginPageState extends State<LoginPage> {
 
   final apiService = MyApiService(Dio());
   late final LoginController authService;

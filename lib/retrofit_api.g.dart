@@ -117,6 +117,56 @@ class _MyApiService implements MyApiService {
     return _value;
   }
 
+  @override
+  Future<NotificationModel> my_notification_api(
+    String api_key,
+    String user_type,
+    String user_altercode,
+    String user_password,
+    String user_nrx,
+    String chemist_id,
+    String get_record,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = {
+      'api_key': api_key,
+      'user_type': user_type,
+      'user_altercode': user_altercode,
+      'user_password': user_password,
+      'user_nrx': user_nrx,
+      'chemist_id': chemist_id,
+      'get_record': get_record,
+    };
+    final _options = _setStreamType<NotificationModel>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+      contentType: 'application/x-www-form-urlencoded',
+    )
+        .compose(
+          _dio.options,
+          '/my_notification_api',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late NotificationModel _value;
+    try {
+      _value = NotificationModel.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
     if (T != dynamic &&
         !(requestOptions.responseType == ResponseType.bytes ||

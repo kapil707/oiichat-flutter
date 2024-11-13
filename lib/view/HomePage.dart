@@ -1,17 +1,15 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:oiichat/controllers/home_controller.dart';
+import 'package:oiichat/controllers/HomeController.dart';
 import 'package:oiichat/main_functions.dart';
-import 'package:oiichat/models/home_model.dart';
 import 'package:oiichat/retrofit_api.dart';
-import 'package:oiichat/widget/main_widget.dart';
 
-class Home_Page extends StatefulWidget {
+class HomePage extends StatefulWidget {
   @override
-  State<Home_Page> createState() => _Home_PageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _Home_PageState extends State<Home_Page> {
+class _HomePageState extends State<HomePage> {
   
   final apiService = MyApiService(Dio());
   late final HomeController authService;

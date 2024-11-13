@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:oiichat/view/home_page.dart';
-import 'package:oiichat/view/login_page.dart';
+import 'package:oiichat/view/HomePage.dart';
+import 'package:oiichat/view/LoginPage.dart';
 import 'package:oiichat/splash_screen.dart';
+import 'package:oiichat/view/NotificationPage.dart';
 
 //https://javiercbk.github.io/json_to_dart/
 
@@ -26,8 +27,9 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => SplashScreenClass(),
-        '/login_page': (context) => Login_Page(),
-        '/home_page': (context) => Home_Page(),
+        '/LoginPage': (context) => LoginPage(),
+        '/HomePage': (context) => HomePage(),
+        '/NotificationPage': (context) => NotificationPage(),
       },
     );
   }

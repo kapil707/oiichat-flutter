@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:oiichat/retrofit_api.dart';
 import 'package:oiichat/session.dart';
-import 'package:oiichat/view/home_page.dart';
+import 'package:oiichat/view/HomePage.dart';
 
 class LoginController {  
   
@@ -22,24 +22,23 @@ class LoginController {
       }
       if (status == "1") {
 
-        var userSession = response.items?.first.userSession;
-        var userFname = response.items?.first.userFname;
         var userCode = response.items?.first.userCode;
         var userAltercode = response.items?.first.userAltercode;
         var userType = response.items?.first.userType;
         var userPassword = response.items?.first.userPassword;
+        var userFname = response.items?.first.userFname;
         var userImage = response.items?.first.userImage;
         var userNrx = response.items?.first.userNrx;
         var userCart = 0;
 
         Shared.saveLoginSharedPreference(
               true,
-              userType,
               userCode,
+              userType,
               userAltercode,
               userPassword,
-              userImage,
               userFname,
+              userImage,
               userNrx,
               userCart)
               .then((value) {});
@@ -47,7 +46,7 @@ class LoginController {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => Home_Page(),
+              builder: (context) => HomePage(),
             ),
           );
 
