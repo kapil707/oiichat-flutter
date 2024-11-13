@@ -1,4 +1,5 @@
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:oiichat/session.dart';
 
@@ -25,6 +26,11 @@ class MyDrawerTile extends StatelessWidget {
 }
 
 class AppDrawer extends StatelessWidget {
+  
+  singOut() async{
+    await FirebaseAuth.instance.signOut();
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -95,7 +101,8 @@ class AppDrawer extends StatelessWidget {
             title: "Logout",
             icon: Icons.logout,
             onTap: () {
-              Shared.logout();
+              singOut();
+              //Shared.logout();
               Navigator.pushReplacementNamed(
                 context,
                 '/'

@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:oiichat/controllers/HomeController.dart';
 import 'package:oiichat/controllers/LoginController.dart';
@@ -5,10 +6,13 @@ import 'package:oiichat/controllers/MyProfileController.dart';
 import 'package:oiichat/controllers/NotificationController.dart';
 import 'package:oiichat/controllers/StoriesController.dart';
 import 'package:oiichat/splash_screen.dart';
+import 'package:oiichat/wrapper.dart';
 
 //https://javiercbk.github.io/json_to_dart/
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -26,7 +30,8 @@ class MyApp extends StatelessWidget {
       ),
   useMaterial3: true,
 ),
-      initialRoute: '/',
+home: Wrapper(),
+      /*initialRoute: '/',
       routes: {
         '/': (context) => SplashScreenClass(),
         '/LoginPage': (context) => LoginController(),
@@ -34,7 +39,7 @@ class MyApp extends StatelessWidget {
         '/StoriesPage': (context) => StoriesController(),
         '/MyProfilePage': (context) => MyProfileController(),
         '/NotificationPage': (context) => NotificationController(),
-      },
+      },*/
     );
   }
 }

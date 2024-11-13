@@ -1,5 +1,7 @@
 import 'package:art_sweetalert/art_sweetalert.dart';
 import 'package:dio/dio.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:oiichat/retrofit_api.dart';
 import 'package:oiichat/service/LoginService.dart';
@@ -73,6 +75,10 @@ class _LoginControllerState extends State<LoginController> {
     });
   }
 
+  singIn()async{
+    await FirebaseAuth.instance.signInWithEmailAndPassword(email: username.text, password: password.text);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -109,7 +115,7 @@ class _LoginControllerState extends State<LoginController> {
                 ),
               }else...{              
                 // Login Button
-                MainButton(btnName: 'Login',callBack: _handleLogin),
+                MainButton(btnName: 'Login',callBack: singIn),
               },
               MainErrorLabel(message:mainError),
               SizedBox(height: 20),

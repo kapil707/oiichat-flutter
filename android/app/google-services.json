@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "105882593982",
+    "project_id": "oiichat-707",
+    "storage_bucket": "oiichat-707.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:105882593982:android:7338c2e7a650784b59ccef",
+        "android_client_info": {
+          "package_name": "com.example.oiichat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCSgDBiZyc8yaeeygNcSTscq5bzghxn1Xs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

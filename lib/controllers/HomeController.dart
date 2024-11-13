@@ -1,4 +1,6 @@
 import 'package:dio/dio.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:oiichat/AppDrawer.dart';
 import 'package:oiichat/main_functions.dart';
@@ -11,6 +13,8 @@ class HomeController extends StatefulWidget {
 }
 
 class _HomeControllerState extends State<HomeController> {
+
+  final user = FirebaseAuth.instance.currentUser;
   
   final apiService = MyApiService(Dio());
   late final HomeService homeService;
@@ -23,6 +27,8 @@ class _HomeControllerState extends State<HomeController> {
     homeService = HomeService(apiService); // Initialize AuthService
     _handlePageLoad();
   }
+
+
 
   Future<void> _handlePageLoad() async {
      setState(() {
@@ -62,7 +68,7 @@ class _HomeControllerState extends State<HomeController> {
           ],
       ),drawer: AppDrawer(),
       body: Center(
-        child: Text("hello"),
+        child: Text('${user!.email}'),
       ),
     );
   }
