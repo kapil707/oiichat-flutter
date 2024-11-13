@@ -1,34 +1,70 @@
-import 'package:oiichat/main_functions.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:oiichat/models/NotificationModel.dart';
 import 'package:oiichat/retrofit_api.dart';
+import 'package:oiichat/service/NotificationService.dart';
 
-class NotificationController {  
+class NotificationController extends StatefulWidget {
+  @override
+  State<NotificationController> createState() => _NotificationControllerState();
+}
+
+class _NotificationControllerState extends State<NotificationController> {
   
-  final MyApiService apiService;
-  NotificationController(this.apiService);
+  final apiService = MyApiService(Dio());
+  bool _isLoading = false;
 
-  Future<NotificationModel> fetchNotifications() async {
-    try {
-      UserSession userSession = UserSession();
-      Map<String, String> userSessionData = await userSession.GetUserSession();
+  late Future<NotificationModel> _notificationsFuture;
+  late NotificationService notificationService;
+   
+  @override
+  void initState() {
+    super.initState();
+    notificationService = NotificationService(apiService); 
+    _notificationsFuture = notificationService.fetchNotifications(); 
+  }
 
-      var userType = userSessionData['userType']!;
-      var userAltercode = userSessionData['userAltercode']!;
-      var userPassword = userSessionData['userPassword']!;
-      var chemistId = userSessionData['ChemistId']!;
-      var userNrx = userSessionData['userNrx']!;
-      
-      print("userAltercode: $userAltercode");
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Row(children: [ Text("NotificationPage"),
+          if (_isLoading)...{
+              Center(
+                child: CircularProgressIndicator(),
+            ),
+          },
+        ]),
+      ),
+      body: FutureBuilder<NotificationModel>(
+        future: _notificationsFuture,
+        builder: (context, snapshot) {
+          if (_isLoading) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.items!.isEmpty) {
+            return Center(child: Text('No notifications found'));
+          }
 
-      final response = await apiService.my_notification_api(
-        "xx", userType, userAltercode, userPassword, chemistId, userNrx, "10"
-      );
+          final items = snapshot.data!.items!;
 
-      print(userType); // Print the raw response data
-      return response; // Return the fetched data
-    } catch (error) {
-      print('Error fetching notifications: $error');
-      rethrow; // Re-throw to allow error handling outside this function
-    }
+          return ListView.builder(
+            itemCount: items.length,
+            itemBuilder: (context, index) {
+              final item = items[index];
+              return ListTile(
+                leading: Image.network(item.itemImage ?? ''),
+                title: Text(item.itemTitle ?? ''),
+                subtitle: Text('${item.itemMessage}\n${item.itemDateTime}'),
+                isThreeLine: true,
+              );
+            },
+          );
+        },
+      ),
+    );
   }
 }

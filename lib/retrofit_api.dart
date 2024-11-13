@@ -25,7 +25,7 @@ abstract class MyApiService {
   @FormUrlEncoded()
   Future<HomePageModel> home_page_api(
       @Field("api_key") String api_key,
-      @Field("user_type") String user_name,
+      @Field("user_type") String user_type,
       @Field("user_altercode") String user_altercode,
       @Field("user_password") String user_password,
       @Field("user_nrx") String user_nrx,

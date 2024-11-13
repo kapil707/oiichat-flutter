@@ -1,18 +1,34 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:oiichat/AppDrawer.dart';
 import 'package:oiichat/main_functions.dart';
-import 'package:oiichat/models/HomePageModel.dart';
 import 'package:oiichat/retrofit_api.dart';
+import 'package:oiichat/service/HomeService.dart';
 
-class HomeController {  
+class HomeController extends StatefulWidget {
+  @override
+  State<HomeController> createState() => _HomeControllerState();
+}
+
+class _HomeControllerState extends State<HomeController> {
   
-  final MyApiService apiService;
-  HomeController(this.apiService);
+  final apiService = MyApiService(Dio());
+  late final HomeService homeService;
+  bool _isLoading = false;
 
-  /*Future<List<HomePageModel>> homePageLoad(BuildContext context, String seqId) async {
+  String? items0;
+  @override
+  void initState() {
+    super.initState();
+    homeService = HomeService(apiService); // Initialize AuthService
+    _handlePageLoad();
+  }
 
-    print("work");
-
-    /*UserSession userSession = UserSession();
+  Future<void> _handlePageLoad() async {
+     setState(() {
+      _isLoading = true;
+    });
+    UserSession userSession = UserSession();
     Map<String, String> userSessionData = await userSession.GetUserSession();
 
     var userType = userSessionData['userType']!;
@@ -21,20 +37,33 @@ class HomeController {
     var chemistId = userSessionData['ChemistId']!;
     var userNrx = userSessionData['userNrx']!;
 
-    try {
-      final response = await apiService.home_page_api(
-        "xx", userType, userAltercode, userPassword, chemistId, userNrx, seqId,
+  final response = await apiService.home_page_api(
+        "xx", userType, userAltercode, userPassword, chemistId, userNrx,"1"
       );
+    items0 = response.items?.first.itemId;
+    print(response.items?.first.itemId);
+    if(response.success=="1"){
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
 
-      if (response.success == "1") {
-        return response.items;
-      } else {
-        print("Error: ${response.message}");
-        return [];
-      }
-    } catch (e) {
-      print("Exception: $e");
-      return [];
-    }*/
-  } */
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("HomePage"),
+        backgroundColor: Colors.deepPurple,
+        elevation: 0,
+          actions: [
+            IconButton(onPressed: (){}, 
+            icon: Icon(Icons.person))
+          ],
+      ),drawer: AppDrawer(),
+      body: Center(
+        child: Text("hello"),
+      ),
+    );
+  }
 }
