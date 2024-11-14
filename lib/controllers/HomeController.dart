@@ -2,7 +2,11 @@ import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:get/instance_manager.dart';
+import 'package:get/route_manager.dart';
 import 'package:oiichat/AppDrawer.dart';
+import 'package:oiichat/RealTimeService.dart';
+import 'package:oiichat/controllers/ChatRoomController.dart';
 import 'package:oiichat/main_functions.dart';
 import 'package:oiichat/retrofit_api.dart';
 import 'package:oiichat/service/HomeService.dart';
@@ -14,45 +18,43 @@ class HomeController extends StatefulWidget {
 
 class _HomeControllerState extends State<HomeController> {
 
-  final user = FirebaseAuth.instance.currentUser;
+  final RealTimeService _realTimeService = RealTimeService();
+  List<Map<String, dynamic>> users = []; // Store users list
+
+  String? user1;
   
   final apiService = MyApiService(Dio());
   late final HomeService homeService;
-  bool _isLoading = false;
-
-  String? items0;
-  @override
+   @override
   void initState() {
     super.initState();
-    homeService = HomeService(apiService); // Initialize AuthService
+    _realTimeService.initSocket();
     _handlePageLoad();
+
+    // Set the callback for when all users are received
+    _realTimeService.onAllUsersReceived = (List<Map<String, dynamic>> userList) {
+      setState(() {
+        users = userList;
+      });
+    };
+
+    // Get all users from the server
+    _realTimeService.getAllUsers();
   }
 
-
+  @override
+  void dispose() {
+    _realTimeService.dispose();
+    super.dispose();
+  }
 
   Future<void> _handlePageLoad() async {
-     setState(() {
-      _isLoading = true;
-    });
+    
     UserSession userSession = UserSession();
     Map<String, String> userSessionData = await userSession.GetUserSession();
-
-    var userType = userSessionData['userType']!;
-    var userAltercode = userSessionData['userAltercode']!;
-    var userPassword = userSessionData['userPassword']!;
-    var chemistId = userSessionData['ChemistId']!;
-    var userNrx = userSessionData['userNrx']!;
-
-  final response = await apiService.home_page_api(
-        "xx", userType, userAltercode, userPassword, chemistId, userNrx,"1"
-      );
-    items0 = response.items?.first.itemId;
-    print(response.items?.first.itemId);
-    if(response.success=="1"){
-      setState(() {
-        _isLoading = false;
-      });
-    }
+    setState(() {
+      user1 = userSessionData['userId']!;
+    });
   }
 
   @override
@@ -67,8 +69,31 @@ class _HomeControllerState extends State<HomeController> {
             icon: Icon(Icons.person))
           ],
       ),drawer: AppDrawer(),
-      body: Center(
-        child: Text('${user!.email}'),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            if (users.isEmpty)
+              Center(child: CircularProgressIndicator()) // Loading indicator
+            else
+              Expanded(
+                child: ListView.builder(
+                  itemCount: users.length,
+                  itemBuilder: (context, index) {
+                    final user = users[index];
+                    return ListTile(
+                      title: Text(user['name']),
+                      subtitle: Text(user['email']),
+                      onTap: () => {
+                        //print('${user1}')
+                        Get.to(ChatRoomController(user1:user1,user2: user['_id'],))
+                      }
+                    );
+                  },
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }

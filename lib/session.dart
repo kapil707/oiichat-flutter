@@ -1,32 +1,20 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Shared {
-  static String loginSharedPreference = "drdlite";
+  static String loginSharedPreference = "OiiChatNew";
 
   // save data
 
   static Future<bool> saveLoginSharedPreference(
                 islogin,
-                userCode,
-                userType,
-                userAltercode,
-                userPassword,
-                userFname,
-                userImage,
-                userNrx,
-                userCart) async {
+                userId,
+                userName) async {
     //SharedPreferences.setMockInitialValues({});
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool(loginSharedPreference, islogin);
-    await prefs.setString("userCode", userCode);
-    await prefs.setString("userType", userType);
-    await prefs.setString("userAltercode", userAltercode);
-    await prefs.setString("userPassword", userPassword);
-    await prefs.setString("userFname", userFname);
-    await prefs.setString("userImage", userImage);
-    await prefs.setString("userNrx", userNrx);
-    await prefs.setString("userCart", userCart);
+    await prefs.setString("userId", userId);
+    await prefs.setString("userName", userName);
 
     return true;
   }

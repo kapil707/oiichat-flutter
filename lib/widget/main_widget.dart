@@ -27,6 +27,28 @@ class MainButton extends StatelessWidget {
   }
 }
 
+class MainTextboxWithIcon extends StatelessWidget {
+
+  final TextEditingController mytextController;
+  final Icon? btnIcon;
+  final String? btnName;
+
+  const MainTextboxWithIcon({super.key, required this.mytextController, this.btnIcon, this.btnName});
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+        controller: mytextController,
+        decoration: InputDecoration(
+          labelText: btnName,
+          border: OutlineInputBorder(),
+          prefixIcon: btnIcon,
+        ),
+        keyboardType: TextInputType.emailAddress,
+      );
+  }
+}
+
 class MainEmailbox extends StatelessWidget {
 
   final TextEditingController mytextController;

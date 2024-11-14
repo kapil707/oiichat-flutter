@@ -32,7 +32,7 @@ class LoginService {
         var userNrx = response.items?.first.userNrx;
         var userCart = 0;
 
-        Shared.saveLoginSharedPreference(
+        /*Shared.saveLoginSharedPreference(
               true,
               userCode,
               userType,
@@ -42,7 +42,7 @@ class LoginService {
               userImage,
               userNrx,
               userCart)
-              .then((value) {});
+              .then((value) {});*/
 
         Navigator.pushReplacement(
             context,

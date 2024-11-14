@@ -3,28 +3,27 @@ import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_state_manager/src/simple/get_responsive.dart';
 import 'package:get/instance_manager.dart';
 import 'package:get/route_manager.dart';
 import 'package:oiichat/RealTimeService.dart';
-import 'package:oiichat/controllers/HomeController.dart';
-import 'package:oiichat/controllers/SingUpController.dart';
+import 'package:oiichat/controllers/LoginController.dart';
 import 'package:oiichat/retrofit_api.dart';
 import 'package:oiichat/service/LoginService.dart';
-import 'package:oiichat/session.dart';
 import 'package:oiichat/widget/main_widget.dart';
+import 'package:oiichat/wrapper.dart';
 
-class LoginController extends StatefulWidget {
+class SingUpController extends StatefulWidget {
   @override
-  State<LoginController> createState() => _LoginControllerState();
+  State<SingUpController> createState() => _SingUpControllerState();
 }
 
-class _LoginControllerState extends State<LoginController> {
+class _SingUpControllerState extends State<SingUpController> {
 
   final RealTimeService _realTimeService = RealTimeService();
 
-  final apiService = MyApiService(Dio());
-  late final LoginService loginService;
-
+  var name = TextEditingController();
+  String? nameError;
   var username = TextEditingController();
   String? usernameError;
   var password = TextEditingController();
@@ -36,21 +35,6 @@ class _LoginControllerState extends State<LoginController> {
   void initState() {
     super.initState();
     _realTimeService.initSocket();
-    loginService = LoginService(apiService);
-
-    _realTimeService.onLoginResponse = (String message, String userId, String userName) {
-      setState(() {
-        _isLoading = false;
-        mainError = message;
-          Shared.saveLoginSharedPreference(
-              true,
-              userId,
-              userName,);
-          Get.to(HomeController());
-        
-        //this.userId = userId; // Update userId
-      });
-    };
   }
 
   @override
@@ -59,67 +43,19 @@ class _LoginControllerState extends State<LoginController> {
     super.dispose();
   }
 
-  Future<void> _handleLogin() async {
-    usernameError = "";
-    passwordError = "";
-    mainError = "";
-    if (username.text.isEmpty) {
-      usernameError = "Please enter your username.";
-      ArtSweetAlert.show(
-        context: context,
-        artDialogArgs: ArtDialogArgs(
-          type: ArtSweetAlertType.warning,
-          title: "Enter Username",
-        ),
-      );
-    }
-
-    if (password.text.isEmpty) {
-      passwordError = "Please enter your password.";
-      ArtSweetAlert.show(
-        context: context,
-        artDialogArgs: ArtDialogArgs(
-          type: ArtSweetAlertType.warning,
-          title: "Enter Password",
-        ),
-      );
-    }
-
-    if (username.text.isEmpty || password.text.isEmpty){
-      setState(() {
-        mainError = "Please enter username or password.";
-      });
-      return;
-    }
-    
-    setState(() {
-      _isLoading = true;
-    });
-
-    final errorMessage = await loginService.login(context, username.text, password.text);
-
-    setState(() {
-      _isLoading = false;
-      mainError = errorMessage; 
-    });
-  }
-
-  singIn()async{
-    setState(() {
-      _isLoading = true;
-    });
-    _realTimeService.loginUser(
+  singUp()async{
+    _realTimeService.addUser(
+      name.text,
       username.text,
       password.text,
     );
-    //await FirebaseAuth.instance.signInWithEmailAndPassword(email: username.text, password: password.text);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Login Page"),
+        title: Text("SingUp Page"),
       ),
       body: Center(
         child: Padding(
@@ -136,9 +72,14 @@ class _LoginControllerState extends State<LoginController> {
               ),
               SizedBox(height: 40),
               
+
+              MainTextboxWithIcon(mytextController: name,btnIcon: Icon(Icons.person) ,btnName:'Name'),
+              MainErrorLabel(message:nameError),
+              SizedBox(height: 20),
+
               // Username/Email Text Field
               MainEmailbox(mytextController: username,),
-              MainErrorLabel(message:usernameError),              
+              MainErrorLabel(message:usernameError),
               SizedBox(height: 20),
               
               // Password Text Field
@@ -151,7 +92,7 @@ class _LoginControllerState extends State<LoginController> {
                 ),
               }else...{              
                 // Login Button
-                MainButton(btnName: 'Login',callBack: singIn),
+                MainButton(btnName: 'singUp',callBack: singUp),
               },
               MainErrorLabel(message:mainError),
               SizedBox(height: 20),
@@ -162,10 +103,10 @@ class _LoginControllerState extends State<LoginController> {
                 children: [
                   TextButton(
                     onPressed: () {
-                      Get.to(SingUpController());
                       // Handle register logic here
+                      Get.to(LoginController());
                     },
-                    child: Text('Create Account'),
+                    child: Text('Login Account'),
                   ),
                   TextButton(
                     onPressed: () {

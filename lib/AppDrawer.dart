@@ -1,7 +1,11 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/instance_manager.dart';
+import 'package:get/route_manager.dart';
+import 'package:oiichat/controllers/SingUpController.dart';
 import 'package:oiichat/session.dart';
+import 'package:oiichat/splash_screen.dart';
 
 class MyDrawerTile extends StatelessWidget {
   final IconData icon;
@@ -28,7 +32,9 @@ class MyDrawerTile extends StatelessWidget {
 class AppDrawer extends StatelessWidget {
   
   singOut() async{
-    await FirebaseAuth.instance.signOut();
+    //await FirebaseAuth.instance.signOut();
+    Shared.logout();
+    Get.to(SplashScreenClass());
   }
   
   @override
@@ -102,11 +108,6 @@ class AppDrawer extends StatelessWidget {
             icon: Icons.logout,
             onTap: () {
               singOut();
-              //Shared.logout();
-              Navigator.pushReplacementNamed(
-                context,
-                '/'
-            );
             },
           )
         ],
