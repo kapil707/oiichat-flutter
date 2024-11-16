@@ -31,31 +31,23 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
       'autoConnect': true,
     });
 
-    // Join room
-    String roomId = [widget.user1, widget.user2].join('_');
-    socket.emit('joinRoom', {'user1': widget.user1, 'user2': widget.user2});
-
-    // Receive previous messages
-    socket.on('previousMessages', (data) {
-      setState(() {
-        messages = List<Map<String, dynamic>>.from(data);
-      });
-    });
-
     // Receive real-time messages
-    socket.on('receiveMessage', (data) {
-      setState(() {
-        messages.add(data);
+    socket.on('receiveMessage_'+widget.user1!, (data) {
+       setState(() {
+        messages.add({
+          'sender': widget.user2,
+          'message':data['message'],
+          'timestamp': DateTime.now().toString(),
+        });
       });
     });
   }
 
   void sendMessage() {
     if (messageController.text.isNotEmpty) {
-      String roomId = [widget.user1, widget.user2].join('_');
       socket.emit('sendMessage', {
-        'roomId': roomId,
-        'sender': widget.user1,
+        'user1': widget.user1,
+        'user2': widget.user2,
         'message': messageController.text,
       });
 
