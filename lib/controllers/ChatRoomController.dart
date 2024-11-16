@@ -26,7 +26,7 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
   }
 
   void connectToServer() {
-    socket = IO.io('http://192.168.1.9:3000', <String, dynamic>{
+    socket = IO.io('http://192.168.1.7:3000', <String, dynamic>{
       'transports': ['websocket'],
       'autoConnect': true,
     });
