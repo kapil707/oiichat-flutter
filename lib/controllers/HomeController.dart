@@ -10,6 +10,7 @@ import 'package:oiichat/controllers/ChatRoomController.dart';
 import 'package:oiichat/main_functions.dart';
 import 'package:oiichat/retrofit_api.dart';
 import 'package:oiichat/service/HomeService.dart';
+import 'package:oiichat/widget/main_widget.dart';
 
 class HomeController extends StatefulWidget {
   @override
@@ -28,18 +29,7 @@ class _HomeControllerState extends State<HomeController> {
    @override
   void initState() {
     super.initState();
-    _realTimeService.initSocket();
     _handlePageLoad();
-
-    // Set the callback for when all users are received
-    _realTimeService.onAllUsersReceived = (List<Map<String, dynamic>> userList) {
-      setState(() {
-        users = userList;
-      });
-    };
-
-    // Get all users from the server
-    _realTimeService.getAllUsers();
   }
 
   @override
@@ -57,6 +47,10 @@ class _HomeControllerState extends State<HomeController> {
     });
   }
 
+  void chatroom(){
+    Get.to(ChatRoomController(user1:user1,user2: '6735b919c9b5f0da9da5fb9a'));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,7 +63,9 @@ class _HomeControllerState extends State<HomeController> {
             icon: Icon(Icons.person))
           ],
       ),drawer: AppDrawer(),
-      body: Padding(
+      body:
+      MainButton(btnName: 'Login',callBack: chatroom)
+       /*Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
@@ -94,7 +90,7 @@ class _HomeControllerState extends State<HomeController> {
               ),
           ],
         ),
-      ),
+      ),*/
     );
   }
 }

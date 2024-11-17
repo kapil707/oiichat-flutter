@@ -31,8 +31,14 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
       'autoConnect': true,
     });
 
+    // Register the userId with the server
+    socket.on('connect', (_) {
+      socket.emit('registerUser', widget.user1);
+      print('Connected to server as ${widget.user1}');
+    });
+
     // Receive real-time messages
-    socket.on('receiveMessage_'+widget.user1!, (data) {
+    socket.on('receiveMessage', (data) {
        setState(() {
         messages.add({
           'sender': widget.user2,
