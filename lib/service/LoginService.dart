@@ -5,56 +5,39 @@ import 'package:oiichat/retrofit_api.dart';
 import 'package:oiichat/session.dart';
 import 'package:oiichat/view/HomePage.dart';
 
+class LoginResponse {
+  final String status;
+  final String message;
+
+  LoginResponse({required this.status, required this.message});
+}
+
 class LoginService {  
   
   final MyApiService apiService;
-
   LoginService(this.apiService);
 
-  Future<String?> login(BuildContext context, String username, String password) async {
-
+  Future<LoginResponse> login_api(BuildContext context, String username, String password) async {
     try {
-      final response = await apiService.get_login_api("xx", username, password, "");
-      final status = response.items?.first.status;
-      final statusMessage = response.items?.first.statusMessage;
+      final response = await apiService.login_api("xx", username, password, "");
+      final status = response.status.toString();
+      final statusMessage = response.message.toString();
 
       if (status != "1") {
-        return statusMessage;
+        return LoginResponse(status: status, message: statusMessage);
       }
+
       if (status == "1") {
+        var userId = response.users?.userId;
+        var userName = response.users?.userName;
 
-        var userCode = response.items?.first.userCode;
-        var userAltercode = response.items?.first.userAltercode;
-        var userType = response.items?.first.userType;
-        var userPassword = response.items?.first.userPassword;
-        var userFname = response.items?.first.userFname;
-        var userImage = response.items?.first.userImage;
-        var userNrx = response.items?.first.userNrx;
-        var userCart = 0;
-
-        /*Shared.saveLoginSharedPreference(
-              true,
-              userCode,
-              userType,
-              userAltercode,
-              userPassword,
-              userFname,
-              userImage,
-              userNrx,
-              userCart)
-              .then((value) {});*/
-
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => HomeController(),
-            ),
-          );
-
-        return "Login successful!";
+        await Shared.saveLoginSharedPreference(true, userId, userName);
+        return LoginResponse(status: status, message: "Login successful!");
       }
     } catch (e) {
-      return e.toString() + "An error occurred. Please try again.";
+      return LoginResponse(status: "0", message: "An error occurred. Please try again. Error: $e");
     }
+    // Return a fallback response if no condition matches (should rarely occur)
+    return LoginResponse(status: "0", message: "Unexpected error occurred.");
   }
 }

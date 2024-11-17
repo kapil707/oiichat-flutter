@@ -1,81 +1,45 @@
 class LoginModel {
-  String? success;
+  int? status;
   String? message;
-  List<Items>? items;
+  Users? users;
 
-  LoginModel({this.success, this.message, this.items});
+  LoginModel({this.status, this.message, this.users});
 
   LoginModel.fromJson(Map<String, dynamic> json) {
-    success = json['success'];
+    status = json['status'];
     message = json['message'];
-    if (json['items'] != null) {
-      items = <Items>[];
-      json['items'].forEach((v) {
-        items!.add(new Items.fromJson(v));
-      });
-    }
+    users = json['users'] != null ? new Users.fromJson(json['users']) : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['success'] = this.success;
+    data['status'] = this.status;
     data['message'] = this.message;
-    if (this.items != null) {
-      data['items'] = this.items!.map((v) => v.toJson()).toList();
+    if (this.users != null) {
+      data['users'] = this.users!.toJson();
     }
     return data;
   }
 }
 
-class Items {
-  String? userSession;
-  String? userFname;
-  String? userCode;
-  String? userAltercode;
-  String? userType;
-  String? userPassword;
-  String? userImage;
-  String? userNrx;
-  String? status;
-  String? statusMessage;
+class Users {
+  String? userId;
+  String? userEmail;
+  String? userName;
 
-  Items(
-      {this.userSession,
-      this.userFname,
-      this.userCode,
-      this.userAltercode,
-      this.userType,
-      this.userPassword,
-      this.userImage,
-      this.userNrx,
-      this.status,
-      this.statusMessage});
+  Users({this.userId, this.userEmail, this.userName});
 
-  Items.fromJson(Map<String, dynamic> json) {
-    userSession = json['user_session'];
-    userFname = json['user_fname'];
-    userCode = json['user_code'];
-    userAltercode = json['user_altercode'];
-    userType = json['user_type'];
-    userPassword = json['user_password'];
-    userImage = json['user_image'];
-    userNrx = json['user_nrx'];
-    status = json['status'];
-    statusMessage = json['status_message'];
+  Users.fromJson(Map<String, dynamic> json) {
+    userId = json['user_id'];
+    userEmail = json['user_email'];
+    userName = json['user_name'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['user_session'] = this.userSession;
-    data['user_fname'] = this.userFname;
-    data['user_code'] = this.userCode;
-    data['user_altercode'] = this.userAltercode;
-    data['user_type'] = this.userType;
-    data['user_password'] = this.userPassword;
-    data['user_image'] = this.userImage;
-    data['user_nrx'] = this.userNrx;
-    data['status'] = this.status;
-    data['status_message'] = this.statusMessage;
+    data['user_id'] = this.userId;
+    data['user_email'] = this.userEmail;
+    data['user_name'] = this.userName;
     return data;
   }
 }

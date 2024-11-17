@@ -20,8 +20,6 @@ class LoginController extends StatefulWidget {
 
 class _LoginControllerState extends State<LoginController> {
 
-  final RealTimeService _realTimeService = RealTimeService();
-
   final apiService = MyApiService(Dio());
   late final LoginService loginService;
 
@@ -35,28 +33,7 @@ class _LoginControllerState extends State<LoginController> {
   @override
   void initState() {
     super.initState();
-    _realTimeService.initSocket();
     loginService = LoginService(apiService);
-
-    _realTimeService.onLoginResponse = (String message, String userId, String userName) {
-      setState(() {
-        _isLoading = false;
-        mainError = message;
-          Shared.saveLoginSharedPreference(
-              true,
-              userId,
-              userName,);
-          Get.to(HomeController());
-        
-        //this.userId = userId; // Update userId
-      });
-    };
-  }
-
-  @override
-  void dispose() {
-    _realTimeService.dispose();
-    super.dispose();
   }
 
   Future<void> _handleLogin() async {
@@ -96,23 +73,15 @@ class _LoginControllerState extends State<LoginController> {
       _isLoading = true;
     });
 
-    final errorMessage = await loginService.login(context, username.text, password.text);
+    final loginResponse = await loginService.login_api(context, username.text, password.text);
 
     setState(() {
       _isLoading = false;
-      mainError = errorMessage; 
+      mainError = loginResponse.message; 
+      if(loginResponse.status=="1"){
+        Get.to(HomeController());
+      }
     });
-  }
-
-  singIn()async{
-    setState(() {
-      _isLoading = true;
-    });
-    _realTimeService.loginUser(
-      username.text,
-      password.text,
-    );
-    //await FirebaseAuth.instance.signInWithEmailAndPassword(email: username.text, password: password.text);
   }
 
   @override
@@ -151,7 +120,7 @@ class _LoginControllerState extends State<LoginController> {
                 ),
               }else...{              
                 // Login Button
-                MainButton(btnName: 'Login',callBack: singIn),
+                MainButton(btnName: 'Login',callBack: _handleLogin),
               },
               MainErrorLabel(message:mainError),
               SizedBox(height: 20),

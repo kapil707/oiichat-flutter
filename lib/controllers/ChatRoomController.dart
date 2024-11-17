@@ -4,10 +4,11 @@ import 'package:oiichat/AppDrawer.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class ChatRoomController extends StatefulWidget {
+  final String? name;
   final String? user1;
   final String? user2;
 
-  const ChatRoomController({super.key, this.user1, this.user2});
+  const ChatRoomController({super.key, this.name, this.user1, this.user2 });
 
   @override
   State<ChatRoomController> createState() => _ChatRoomControllerState();
@@ -72,7 +73,7 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Chat Room')),
+      appBar: AppBar(title: Text(widget.name!)),
       body: Column(
         children: [
           Expanded(

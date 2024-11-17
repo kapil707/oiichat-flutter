@@ -14,7 +14,7 @@ class _MyApiService implements MyApiService {
     this.baseUrl,
     this.errorLogger,
   }) {
-    baseUrl ??= 'https://www.drdistributor.com/flutter_api/Api01/';
+    baseUrl ??= 'http://192.168.1.7:3000/api/';
   }
 
   final Dio _dio;
@@ -24,7 +24,7 @@ class _MyApiService implements MyApiService {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<LoginModel> get_login_api(
+  Future<LoginModel> login_api(
     String api_key,
     String user_name,
     String user_password,
@@ -35,8 +35,8 @@ class _MyApiService implements MyApiService {
     final _headers = <String, dynamic>{};
     final _data = {
       'api_key': api_key,
-      'user_name': user_name,
-      'user_password': user_password,
+      'email': user_name,
+      'password': user_password,
       'firebase_token': firebase_token,
     };
     final _options = _setStreamType<LoginModel>(Options(
@@ -47,7 +47,7 @@ class _MyApiService implements MyApiService {
     )
         .compose(
           _dio.options,
-          '/get_login_api',
+          'user/login',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -68,27 +68,11 @@ class _MyApiService implements MyApiService {
   }
 
   @override
-  Future<HomePageModel> home_page_api(
-    String api_key,
-    String user_name,
-    String user_altercode,
-    String user_password,
-    String user_nrx,
-    String chemist_id,
-    String seq_id,
-  ) async {
+  Future<HomePageModel> home_page_api(String api_key) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = {
-      'api_key': api_key,
-      'user_type': user_name,
-      'user_altercode': user_altercode,
-      'user_password': user_password,
-      'user_nrx': user_nrx,
-      'chemist_id': chemist_id,
-      'seq_id': seq_id,
-    };
+    final _data = {'api_key': api_key};
     final _options = _setStreamType<HomePageModel>(Options(
       method: 'POST',
       headers: _headers,
@@ -97,7 +81,7 @@ class _MyApiService implements MyApiService {
     )
         .compose(
           _dio.options,
-          '/home_page_api',
+          'user/alluser',
           queryParameters: queryParameters,
           data: _data,
         )

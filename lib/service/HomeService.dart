@@ -12,19 +12,10 @@ class HomeService {
       UserSession userSession = UserSession();
       Map<String, String> userSessionData = await userSession.GetUserSession();
 
-      var userType = userSessionData['userType']!;
-      var userAltercode = userSessionData['userAltercode']!;
-      var userPassword = userSessionData['userPassword']!;
-      var chemistId = userSessionData['ChemistId']!;
-      var userNrx = userSessionData['userNrx']!;
-      
-      print("userAltercode: $userAltercode");
+      var userId = userSessionData['userId']!;
 
-      final response = await apiService.home_page_api(
-        "xx", userType, userAltercode, userPassword, chemistId, userNrx, "1"
-      );
-
-      print(userType); // Print the raw response data
+      final response = await apiService.home_page_api("xx");
+      print(response.status);
       return response; // Return the fetched data
     } catch (error) {
       print('Error fetching notifications: $error');

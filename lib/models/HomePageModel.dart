@@ -1,92 +1,69 @@
 class HomePageModel {
-  String? success;
+  int? status;
   String? message;
-  String? title;
-  String? categoryId;
-  String? pageType;
-  int? nextId;
-  List<Items>? items;
+  List<Users>? users;
 
-  HomePageModel(
-      {this.success,
-      this.message,
-      this.title,
-      this.categoryId,
-      this.pageType,
-      this.nextId,
-      this.items});
+  HomePageModel({this.status, this.message, this.users});
 
   HomePageModel.fromJson(Map<String, dynamic> json) {
-    success = json['success'];
+    status = json['status'];
     message = json['message'];
-    title = json['title'];
-    categoryId = json['category_id'];
-    pageType = json['page_type'];
-    nextId = json['next_id'];
-    if (json['items'] != null) {
-      items = <Items>[];
-      json['items'].forEach((v) {
-        items!.add(new Items.fromJson(v));
+    if (json['users'] != null) {
+      users = <Users>[];
+      json['users'].forEach((v) {
+        users!.add(new Users.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['success'] = this.success;
+    data['status'] = this.status;
     data['message'] = this.message;
-    data['title'] = this.title;
-    data['category_id'] = this.categoryId;
-    data['page_type'] = this.pageType;
-    data['next_id'] = this.nextId;
-    if (this.items != null) {
-      data['items'] = this.items!.map((v) => v.toJson()).toList();
+    if (this.users != null) {
+      data['users'] = this.users!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
-class Items {
-  String? itemId;
-  String? itemTitle;
-  String? itemType;
-  String? itemCode;
-  String? itemDivision;
-  String? itemImage;
-  String? itemWebAction;
-  String? itemPageType;
+class Users {
+  String? sId;
+  String? name;
+  String? email;
+  String? password;
+  String? createdAt;
+  String? updatedAt;
+  int? iV;
 
-  Items(
-      {this.itemId,
-      this.itemTitle,
-      this.itemType,
-      this.itemCode,
-      this.itemDivision,
-      this.itemImage,
-      this.itemWebAction,
-      this.itemPageType});
+  Users(
+      {this.sId,
+      this.name,
+      this.email,
+      this.password,
+      this.createdAt,
+      this.updatedAt,
+      this.iV});
 
-  Items.fromJson(Map<String, dynamic> json) {
-    itemId = json['item_id'];
-    itemTitle = json['item_title'];
-    itemType = json['item_type'];
-    itemCode = json['item_code'];
-    itemDivision = json['item_division'];
-    itemImage = json['item_image'];
-    itemWebAction = json['item_web_action'];
-    itemPageType = json['item_page_type'];
+  Users.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    name = json['name'];
+    email = json['email'];
+    password = json['password'];
+    createdAt = json['createdAt'];
+    updatedAt = json['updatedAt'];
+    iV = json['__v'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['item_id'] = this.itemId;
-    data['item_title'] = this.itemTitle;
-    data['item_type'] = this.itemType;
-    data['item_code'] = this.itemCode;
-    data['item_division'] = this.itemDivision;
-    data['item_image'] = this.itemImage;
-    data['item_web_action'] = this.itemWebAction;
-    data['item_page_type'] = this.itemPageType;
+    data['_id'] = this.sId;
+    data['name'] = this.name;
+    data['email'] = this.email;
+    data['password'] = this.password;
+    data['createdAt'] = this.createdAt;
+    data['updatedAt'] = this.updatedAt;
+    data['__v'] = this.iV;
     return data;
   }
 }
