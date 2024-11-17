@@ -30,6 +30,9 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
     socket = IO.io('http://192.168.1.7:3000', <String, dynamic>{
       'transports': ['websocket'],
       'autoConnect': true,
+      'reconnection': true, // Enable reconnection
+      'reconnectionAttempts': 5, // Retry 5 times before giving up
+      'reconnectionDelay': 2000, // Wait 2 seconds before retrying
     });
 
     // Register the userId with the server
@@ -38,8 +41,19 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
       print('Connected to server as ${widget.user1}');
     });
 
+    socket.on('disconnect', (_) {
+      print('Disconnected from server');
+    });
+
+    // Reconnect listener
+    socket.on('reconnect', (_) {
+      print('Reconnected to server');
+      socket.emit('registerUser', widget.user1); // Re-register user
+    });
+
     // Receive real-time messages
     socket.on('receiveMessage', (data) {
+      print("receiveMessage"+data["message"]);
        setState(() {
         messages.add({
           'sender': widget.user2,
