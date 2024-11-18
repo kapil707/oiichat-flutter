@@ -37,7 +37,7 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
 
     // Register the userId with the server
     socket.on('connect', (_) {
-      socket.emit('registerUser', widget.user1);
+      socket.emit('register', widget.user1);
       print('Connected to server as ${widget.user1}');
     });
 
@@ -61,6 +61,11 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
           'timestamp': DateTime.now().toString(),
         });
       });
+    });
+
+    // Handle user offline message
+    socket.on('user_offline', (data) {
+        print('User ${data['user2']} is offline.');
     });
   }
 

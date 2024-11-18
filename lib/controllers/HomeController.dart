@@ -43,7 +43,7 @@ class _HomeControllerState extends State<HomeController> {
     UserSession userSession = UserSession();
     Map<String, String> userSessionData = await userSession.GetUserSession();
     setState(() {
-      user1 = userSessionData['userId']!;
+      user1 = userSessionData['userName']!;
     });
   }
 
@@ -94,7 +94,7 @@ class _HomeControllerState extends State<HomeController> {
                 Get.to(ChatRoomController(
                   name:user['name'],
                   user1: user1,
-                  user2: user['_id'], // Pass user ID
+                  user2: user['name'], // Pass user ID
                 ));
               },
             );
