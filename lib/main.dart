@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
+    return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
       colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
@@ -58,7 +58,7 @@ class _RealTimeScreenState extends State<RealTimeScreen> {
   @override
   void initState() {
     super.initState();
-    _realTimeService.initSocket();
+    //_realTimeService.initSocket();
 
     _realTimeService.socket.on('server_update', (data) {
       setState(() {

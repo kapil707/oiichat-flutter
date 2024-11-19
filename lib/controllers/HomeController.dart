@@ -19,7 +19,7 @@ class HomeController extends StatefulWidget {
 }
 
 class _HomeControllerState extends State<HomeController> {
-
+  final RealTimeService _realTimeService = RealTimeService();
   List<Map<String, dynamic>> users = []; // Store users list
 
   String? user1;
@@ -91,11 +91,16 @@ class _HomeControllerState extends State<HomeController> {
               title: Text(user['name'] ?? 'No Name'),
               subtitle: Text(user['email'] ?? 'No Email'),
               onTap: () {
-                Get.to(ChatRoomController(
-                  name:user['name'],
-                  user1: user1,
-                  user2: user['name'], // Pass user ID
-                ));
+               Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ChatRoomController(
+                      name: user['name'],
+                      user1: user1,
+                      user2: user['name'], // Pass user ID or name
+                    ),
+                  ),
+                );
               },
             );
           },

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart'; // Add this package for date formatting
+import 'package:oiichat/RealTimeService.dart';
+import 'package:oiichat/database_helper.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:sqflite/sqflite.dart';
 
 class ChatRoomController extends StatefulWidget {
   final String? name;
@@ -14,6 +17,7 @@ class ChatRoomController extends StatefulWidget {
 }
 
 class _ChatRoomControllerState extends State<ChatRoomController> {
+  final RealTimeService _realTimeService = RealTimeService();
   late IO.Socket socket;
   TextEditingController messageController = TextEditingController();
   List<Map<String, dynamic>> messages = [];
@@ -21,69 +25,58 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
   @override
   void initState() {
     super.initState();
-    connectToServer();
+    addMessage(); // Load chat history
+     _realTimeService.initSocket(widget.user1!);
+
+     _realTimeService.onMessageReceived = (data) {
+      setState(() {
+        messages.add({
+          'sender': widget.user2, // Assuming the other user is the sender
+          'message': data,
+          'timestamp': DateTime.now().toString(),
+        });
+      });
+    };
   }
 
   @override
   void dispose() {
     // Disconnect the socket when leaving the screen
-    socket.disconnect();
+     _realTimeService.manual_disconnect(widget.user1!);
+    _realTimeService.dispose();
     super.dispose();
   }
 
-  void connectToServer() {
-  // Initialize the socket connection
-  socket = IO.io('http://192.168.1.7:3000', <String, dynamic>{
-    'transports': ['websocket'],
-    'autoConnect': false,
-  });
+  Future<void> addMessage() async {
+    final message = {
+      'user1': 'UserA',
+      'user2': 'UserB',
+      'message': 'Hello, UserB!',
+      'timestamp': DateTime.now().toIso8601String(),
+    };
+    final dbHelper = DatabaseHelper();
+    int id = await dbHelper.insertMessage(message);
+    print('Message inserted with ID: $id');
+  }
 
-  // Establish the connection
-  socket.connect();
+  Future<void> loadMessages() async {
 
-  // Handle connection event
-  socket.on('connect', (_) {
-    print('Connected to server as ${socket.id}');
-    // Register the user on connection
-    socket.emit("register", widget.user1);
-  });
+    print("Database Messages loadMessages1");
+    final dbHelper = DatabaseHelper();
+    final messages1 = await dbHelper.getAllMessages();
+    print("Database Messages: $messages1");
 
-  // Handle disconnection
-  socket.on('disconnect', (_) {
-    print('Disconnected from server: ${widget.user1}');
-  });
-
-  // Handle connection errors
-  socket.on('connect_error', (error) {
-    print('Connection error: $error');
-  });
-
-  // Handle incoming messages
-  socket.on('receiveMessage', (data) {
-    print("Message received: ${data["message"]}");
+    
+    final chatHistory = await dbHelper.getMessages(widget.user1!, widget.user2!);
+    print("loadMessages2");
     setState(() {
-      messages.add({
-        'sender': data['sender'],
-        'message': data['message'],
-        'timestamp': data['timestamp'] ?? DateTime.now().toString(),
-      });
+      messages = chatHistory;
     });
-  });
-
-  // Handle user offline status
-  socket.on('user_offline', (data) {
-    print('User ${data['user']} is offline.');
-  });
-}
-
+  }
 
   void sendMessage() {
     if (messageController.text.isNotEmpty) {
-      socket.emit('sendMessage', {
-        'user1': widget.user1,
-        'user2': widget.user2,
-        'message': messageController.text,
-      });
+      _realTimeService.sendMessage(widget.user1!, widget.user2!, messageController.text);
 
       setState(() {
         messages.add({

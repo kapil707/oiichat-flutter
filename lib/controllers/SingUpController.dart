@@ -34,7 +34,7 @@ class _SingUpControllerState extends State<SingUpController> {
   @override
   void initState() {
     super.initState();
-    _realTimeService.initSocket();
+    //_realTimeService.initSocket();
   }
 
   @override
@@ -44,11 +44,11 @@ class _SingUpControllerState extends State<SingUpController> {
   }
 
   singUp()async{
-    _realTimeService.addUser(
+    /*_realTimeService.addUser(
       name.text,
       username.text,
       password.text,
-    );
+    );*/
   }
 
   @override

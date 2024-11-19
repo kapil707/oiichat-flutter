@@ -1,12 +1,13 @@
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'database_helper.dart';
 
 class RealTimeService {
   late IO.Socket socket;
-  Function(String, String,String)? onLoginResponse;
-  Function(List<Map<String, dynamic>>)? onAllUsersReceived;
-  Function(List<Map<String, dynamic>>)? receiveMessage;
+  final dbHelper = DatabaseHelper();
 
-  void initSocket() {
+  Function(String)? onMessageReceived;
+
+  void initSocket(String user) {
     // Socket.IO connection setup
     socket = IO.io('http://192.168.1.7:3000/', <String, dynamic>{
       'transports': ['websocket'],
@@ -17,71 +18,50 @@ class RealTimeService {
 
     // Listen for server events
     socket.on('connect', (_) {
-      print('Connected to the server');
+        print('Connected to the server');
+        socket.emit("register", user);
     });
-
-    socket.on('server_update', (data) {
-      print('Real-time data from server: ${data['message']}');
-    });
-
-    // Send data to server
-    socket.emit('client_update', {'message': 'Hello from Flutter'});
-
     // Handle disconnection
     socket.on('disconnect', (_) => print('Disconnected from server'));
 
-    // Listen for login response and notify listener
-    socket.on('login_response', (data) {
-      if (onLoginResponse != null) {
-        onLoginResponse!(data['message'], data['userId'] ?? "", data['userName'] ?? ""); // Passing userId here
+    socket.on('receiveMessage', (data) async {
+      print("Message received: ${data["message"]}");
+      
+      await dbHelper.insertMessage({
+        'user1': data['user1'],
+        'user2': data['user2'],
+        'message': data['message'],
+        'timestamp': DateTime.now().toIso8601String(),
+      });
+
+      if (onMessageReceived != null) {
+        onMessageReceived!(data["message"]); // Pass the raw string to the callback
       }
     });
-
-    // Listen for all users response and notify listener
-    socket.on('all_users', (data) {
-      if (onAllUsersReceived != null) {
-        onAllUsersReceived!(List<Map<String, dynamic>>.from(data));
-      }
-    });
-    
   }
 
-   void addUser(String name, String email, String password) {
-    socket.emit('add_user', {
-      'name': name,
-      'email': email,
-      'password': password,
-    });
-  }
-
-  void loginUser(String email, String password) {
-    print(email);
-    socket.emit('login_user', {
-      'email': email,
-      'password': password,
-    });
-  }
-  
-
-  void getAllUsers() {
-    socket.emit('get_all_users'); // Request for all users
-  }
-
-  /******************************** */
-
-  void joinRoom(String roomId) {    
-    socket.emit('joinRoom', {'roomId': roomId});
+  void manual_disconnect(String user) {
+    socket.emit("manual_disconnect", user);
   }
 
   void sendMessage(String user1,String user2,String message) { 
-    socket.emit('sendMessage', {
-          'user1': user1,
-          'user2': user2,
-          'message': message,
-        });
+      socket.emit('sendMessage', {
+        'user1': user1,
+        'user2': user2,
+        'message': message,
+      });
+
+      // Save the sent message locally
+      dbHelper.insertMessage({
+        'user1': user1,
+        'user2': user2,
+        'message': message,
+        'timestamp': DateTime.now().toIso8601String(),
+      });
   }
 
   void dispose() {
     socket.disconnect();
+    socket.close();
   }
 }
