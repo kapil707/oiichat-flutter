@@ -43,12 +43,6 @@ class RealTimeService {
         onAllUsersReceived!(List<Map<String, dynamic>>.from(data));
       }
     });
-
-    socket.emit('joinRoom','6735b919c9b5f0da9da5fb9a');
-    // Receive real-time messages
-    socket.on('receiveMessage', (data) {
-      print("working receiveMessage");
-    });
     
   }
 
