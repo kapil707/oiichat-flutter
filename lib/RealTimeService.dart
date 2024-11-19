@@ -1,3 +1,4 @@
+import 'package:oiichat/models/message.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'database_helper.dart';
 
@@ -25,14 +26,15 @@ class RealTimeService {
     socket.on('disconnect', (_) => print('Disconnected from server'));
 
     socket.on('receiveMessage', (data) async {
-      print("Message received: ${data["message"]}");
+      print("Message received: ${data["user2"]}");
       
-      await dbHelper.insertMessage({
-        'user1': data['user1'],
-        'user2': data['user2'],
-        'message': data['message'],
-        'timestamp': DateTime.now().toIso8601String(),
-      });
+      final newMessage = Message(
+        user1: data["user1"],
+        user2: data["user2"],
+        message: data["message"],
+        timestamp: DateTime.now().toIso8601String(),
+      );
+      await dbHelper.insertMessage(newMessage);
 
       if (onMessageReceived != null) {
         onMessageReceived!(data["message"]); // Pass the raw string to the callback
@@ -44,20 +46,20 @@ class RealTimeService {
     socket.emit("manual_disconnect", user);
   }
 
-  void sendMessage(String user1,String user2,String message) { 
+  void sendMessage(String user1,String user2,String message) async { 
       socket.emit('sendMessage', {
         'user1': user1,
         'user2': user2,
         'message': message,
       });
 
-      // Save the sent message locally
-      dbHelper.insertMessage({
-        'user1': user1,
-        'user2': user2,
-        'message': message,
-        'timestamp': DateTime.now().toIso8601String(),
-      });
+      final newMessage = Message(
+        user1: user1,
+        user2: user2,
+        message: message,
+        timestamp: DateTime.now().toIso8601String(),
+      );
+      await dbHelper.insertMessage(newMessage);
   }
 
   void dispose() {

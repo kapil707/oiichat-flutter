@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:oiichat/models/FriendPageModel.dart';
 import 'package:oiichat/models/HomePageModel.dart';
 import 'package:oiichat/models/LoginModel.dart';
 import 'package:oiichat/models/NotificationModel.dart';
@@ -24,6 +25,11 @@ abstract class MyApiService {
   @POST("user/alluser")
   @FormUrlEncoded()
   Future<HomePageModel> home_page_api(
+      @Field("api_key") String api_key);
+
+  @POST("user/alluser")
+  @FormUrlEncoded()
+  Future<FriendPageModel> friend_page_api(
       @Field("api_key") String api_key);
 
   @POST("/my_notification_api")

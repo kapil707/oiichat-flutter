@@ -80,6 +80,10 @@ class AppDrawer extends StatelessWidget {
             title: "My Friends",
             icon: Icons.ice_skating,
             onTap: () {
+              Navigator.pushReplacementNamed(
+                context,
+                '/MyFriends'
+              );
             },
           ),
 

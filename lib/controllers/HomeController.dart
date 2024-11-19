@@ -4,9 +4,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
 import 'package:get/route_manager.dart';
+import 'package:intl/intl.dart';
 import 'package:oiichat/AppDrawer.dart';
 import 'package:oiichat/RealTimeService.dart';
 import 'package:oiichat/controllers/ChatRoomController.dart';
+import 'package:oiichat/database_helper.dart';
 import 'package:oiichat/main_functions.dart';
 import 'package:oiichat/models/HomePageModel.dart';
 import 'package:oiichat/retrofit_api.dart';
@@ -20,7 +22,8 @@ class HomeController extends StatefulWidget {
 
 class _HomeControllerState extends State<HomeController> {
   final RealTimeService _realTimeService = RealTimeService();
-  List<Map<String, dynamic>> users = []; // Store users list
+  final dbHelper = DatabaseHelper();
+  List<Map<String, dynamic>> chats = [];
 
   String? user1;
   
@@ -31,11 +34,12 @@ class _HomeControllerState extends State<HomeController> {
     super.initState();
     homeService = HomeService(apiService);
     _handlePageLoad();
-    fetchData();
   }
 
   @override
   void dispose() {
+     _realTimeService.manual_disconnect(user1!);
+    _realTimeService.dispose();
     super.dispose();
   }
 
@@ -44,68 +48,72 @@ class _HomeControllerState extends State<HomeController> {
     Map<String, String> userSessionData = await userSession.GetUserSession();
     setState(() {
       user1 = userSessionData['userName']!;
+      loadChats();
+      // Initialize the real-time service
+      _realTimeService.initSocket(user1!);
+
+      // Listen for new messages and refresh the chat list
+      _realTimeService.onMessageReceived = (data) {
+        loadChats();
+      };
     });
   }
 
-  Future<void> fetchData() async {
-    try {
-      print("Fetching home page data...");
-      final res = await apiService.home_page_api("xx"); // Fetch data from API
-
-      setState(() {
-        users = res.users!.map((user) => {
-          'name': user.name,
-          'email': user.email,
-          '_id': user.sId,
-        }).toList();
-      });
-
-      print("Data fetched successfully: ${users.length} users found");
-    } catch (e) {
-      print("Error fetching data: $e");
-    }
+  Future<void> loadChats() async {
+    final chatList = await dbHelper.getChatList(user1!);
+    setState(() {
+      chats = chatList;
+    });
   }
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("HomePage"),
-        backgroundColor: Colors.deepPurple,
-        elevation: 0,
-          actions: [
-            IconButton(onPressed: (){}, 
-            icon: Icon(Icons.person))
-          ],
-      ),drawer: AppDrawer(),
-      body: Padding(
-  padding: const EdgeInsets.all(16.0),
-  child: users.isEmpty
-      ? Center(child: CircularProgressIndicator()) // Show loading indicator if no data
-      : ListView.builder(
-          itemCount: users.length,
-          itemBuilder: (context, index) {
-            final user = users[index];
-            return ListTile(
-              title: Text(user['name'] ?? 'No Name'),
-              subtitle: Text(user['email'] ?? 'No Email'),
-              onTap: () {
-               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ChatRoomController(
-                      name: user['name'],
-                      user1: user1,
-                      user2: user['name'], // Pass user ID or name
-                    ),
+      appBar: AppBar(title: Text("Chats")),
+      drawer: AppDrawer(),
+      body: chats.isEmpty
+          ? Center(child: Text("No chats available"))
+          : ListView.builder(
+              itemCount: chats.length,
+              itemBuilder: (context, index) {
+                final chat = chats[index];
+                final lastMessageTime = DateTime.parse(chat['lastMessageTime']);
+                String chatuser = chat['chatUser'] == user1 ? user1 : chat['chatUser'];
+
+                return ListTile(
+                  leading: CircleAvatar(
+                    backgroundImage: AssetImage('assets/default_avatar.png'), // Replace with profile photo
+                    radius: 25,
                   ),
+                  title: Text(
+                    chatuser,
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  subtitle: Text(
+                    chat['message'],
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  trailing: Text(
+                    DateFormat('hh:mm a').format(lastMessageTime),
+                    style: TextStyle(fontSize: 12, color: Colors.grey),
+                  ),
+                  onTap: () {
+                    // Navigate to Chat Room
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ChatRoomController(
+                          name: chatuser,
+                          user1: user1,
+                          user2: chatuser,
+                        ),
+                      ),
+                    );
+                  },
                 );
               },
-            );
-          },
-        ),
-      ),
+            ),
     );
   }
 }
