@@ -25,19 +25,19 @@ class _MyApiService implements MyApiService {
 
   @override
   Future<LoginModel> login_api(
-    String api_key,
-    String user_name,
-    String user_password,
-    String firebase_token,
+    String apiKey,
+    String userName,
+    String userPassword,
+    String firebaseToken,
   ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = {
-      'api_key': api_key,
-      'email': user_name,
-      'password': user_password,
-      'firebase_token': firebase_token,
+      'api_key': apiKey,
+      'email': userName,
+      'password': userPassword,
+      'firebase_token': firebaseToken,
     };
     final _options = _setStreamType<LoginModel>(Options(
       method: 'POST',
@@ -68,11 +68,11 @@ class _MyApiService implements MyApiService {
   }
 
   @override
-  Future<HomePageModel> home_page_api(String api_key) async {
+  Future<HomePageModel> home_page_api(String apiKey) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = {'api_key': api_key};
+    final _data = {'api_key': apiKey};
     final _options = _setStreamType<HomePageModel>(Options(
       method: 'POST',
       headers: _headers,
@@ -102,11 +102,11 @@ class _MyApiService implements MyApiService {
   }
 
   @override
-  Future<FriendPageModel> friend_page_api(String api_key) async {
+  Future<FriendPageModel> friend_page_api(String apiKey) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = {'api_key': api_key};
+    final _data = {'api_key': apiKey};
     final _options = _setStreamType<FriendPageModel>(Options(
       method: 'POST',
       headers: _headers,
@@ -137,25 +137,25 @@ class _MyApiService implements MyApiService {
 
   @override
   Future<NotificationModel> my_notification_api(
-    String api_key,
-    String user_type,
-    String user_altercode,
-    String user_password,
-    String user_nrx,
-    String chemist_id,
-    String get_record,
+    String apiKey,
+    String userType,
+    String userAltercode,
+    String userPassword,
+    String userNrx,
+    String chemistId,
+    String getRecord,
   ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = {
-      'api_key': api_key,
-      'user_type': user_type,
-      'user_altercode': user_altercode,
-      'user_password': user_password,
-      'user_nrx': user_nrx,
-      'chemist_id': chemist_id,
-      'get_record': get_record,
+      'api_key': apiKey,
+      'user_type': userType,
+      'user_altercode': userAltercode,
+      'user_password': userPassword,
+      'user_nrx': userNrx,
+      'chemist_id': chemistId,
+      'get_record': getRecord,
     };
     final _options = _setStreamType<NotificationModel>(Options(
       method: 'POST',

@@ -24,7 +24,6 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
   final dbHelper = DatabaseHelper();
   final ScrollController _scrollController = ScrollController();
 
-
   @override
   void initState() {
     super.initState();
@@ -35,7 +34,6 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
 
     // Handle incoming messages from the server
     _realTimeService.onMessageReceived = (data) {
-      
       setState(() {
         messages.add({
           'sender': widget.user2!,
@@ -60,13 +58,14 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
   // Load chat history from the database
   Future<void> loadMessages() async {
     print("Loading messages from database...");
-    final chatHistory = await dbHelper.getMessages(widget.user1!, widget.user2!);
+    final chatHistory =
+        await dbHelper.getMessages(widget.user1!, widget.user2!);
     print("Loaded ${chatHistory.length} messages");
 
     setState(() {
       for (var message in chatHistory) {
         String sender = widget.user2!;
-        if(message.user1==widget.user1){
+        if (message.user1 == widget.user1) {
           sender = widget.user1!;
         }
         messages.add({
@@ -90,7 +89,8 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
         });
       });
       // Send the message to the server
-      _realTimeService.sendMessage(widget.user1!, widget.user2!, messageController.text);
+      _realTimeService.sendMessage(
+          widget.user1!, widget.user2!, messageController.text);
       messageController.clear();
       // Scroll to the bottom
       scrollToBottom();
@@ -108,12 +108,12 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Chat deleted successfully")),
+        const SnackBar(content: Text("Chat deleted successfully")),
       );
     } catch (e) {
       print("Error deleting chat: $e");
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Failed to delete chat")),
+        const SnackBar(content: Text("Failed to delete chat")),
       );
     }
   }
@@ -121,13 +121,13 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
   void scrollToBottom() {
     if (_scrollController.hasClients) {
       _scrollController.animateTo(
-        _scrollController.position.maxScrollExtent, // Move to the end of the list
-        duration: Duration(milliseconds: 300),
+        _scrollController
+            .position.maxScrollExtent, // Move to the end of the list
+        duration: const Duration(milliseconds: 300),
         curve: Curves.easeOut,
       );
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -136,22 +136,23 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
         title: Text(widget.name ?? "Chat Room"),
         actions: [
           IconButton(
-            icon: Icon(Icons.delete),
+            icon: const Icon(Icons.delete),
             onPressed: () async {
               // Confirm delete action
               final confirmDelete = await showDialog<bool>(
                 context: context,
                 builder: (context) => AlertDialog(
-                  title: Text("Delete Chat"),
-                  content: Text("Are you sure you want to delete this chat?"),
+                  title: const Text("Delete Chat"),
+                  content:
+                      const Text("Are you sure you want to delete this chat?"),
                   actions: [
                     TextButton(
                       onPressed: () => Navigator.of(context).pop(false),
-                      child: Text("Cancel"),
+                      child: const Text("Cancel"),
                     ),
                     TextButton(
                       onPressed: () => Navigator.of(context).pop(true),
-                      child: Text("Delete"),
+                      child: const Text("Delete"),
                     ),
                   ],
                 ),
@@ -173,8 +174,10 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
               itemCount: messages.length,
               itemBuilder: (context, index) {
                 final msg = messages[index];
-                final isSentByUser1 = msg['sender'] == widget.user1; // Check sender
-                final screenWidth = MediaQuery.of(context).size.width; // Screen width
+                final isSentByUser1 =
+                    msg['sender'] == widget.user1; // Check sender
+                final screenWidth =
+                    MediaQuery.of(context).size.width; // Screen width
 
                 return Align(
                   alignment: isSentByUser1
@@ -185,21 +188,23 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
                       maxWidth: screenWidth * 0.7, // 70% of screen width
                     ),
                     child: Container(
-                      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 5, horizontal: 10),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 15),
                       decoration: BoxDecoration(
                         color: isSentByUser1
                             ? Colors.grey[300] // Background for user1
                             : Colors.blue[200], // Background for user2
                         borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(12),
-                          topRight: Radius.circular(12),
+                          topLeft: const Radius.circular(12),
+                          topRight: const Radius.circular(12),
                           bottomLeft: isSentByUser1
-                              ? Radius.circular(0)
-                              : Radius.circular(12),
+                              ? const Radius.circular(0)
+                              : const Radius.circular(12),
                           bottomRight: isSentByUser1
-                              ? Radius.circular(12)
-                              : Radius.circular(0),
+                              ? const Radius.circular(12)
+                              : const Radius.circular(0),
                         ),
                       ),
                       child: Column(
@@ -207,15 +212,16 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
                         children: [
                           Text(
                             msg['message'],
-                            style: TextStyle(fontSize: 16),
+                            style: const TextStyle(fontSize: 16),
                           ),
-                          SizedBox(height: 5),
+                          const SizedBox(height: 5),
                           Align(
                             alignment: Alignment.bottomRight,
                             child: Text(
-                              DateFormat('hh:mm a')
-                                  .format(DateTime.parse(msg['timestamp']).toLocal()),
-                              style: TextStyle(fontSize: 10, color: Colors.black54),
+                              DateFormat('hh:mm a').format(
+                                  DateTime.parse(msg['timestamp']).toLocal()),
+                              style: const TextStyle(
+                                  fontSize: 10, color: Colors.black54),
                             ),
                           ),
                         ],
@@ -234,11 +240,12 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
                 Expanded(
                   child: TextField(
                     controller: messageController,
-                    decoration: InputDecoration(hintText: 'Enter message'),
+                    decoration:
+                        const InputDecoration(hintText: 'Enter message'),
                   ),
                 ),
                 IconButton(
-                  icon: Icon(Icons.send),
+                  icon: const Icon(Icons.send),
                   onPressed: sendMessage,
                 ),
               ],

@@ -11,17 +11,17 @@ class FriendPageModel {
     if (json['users'] != null) {
       users = <Users>[];
       json['users'].forEach((v) {
-        users!.add(new Users.fromJson(v));
+        users!.add(Users.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status'] = this.status;
-    data['message'] = this.message;
-    if (this.users != null) {
-      data['users'] = this.users!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['status'] = status;
+    data['message'] = message;
+    if (users != null) {
+      data['users'] = users!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -56,14 +56,14 @@ class Users {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.sId;
-    data['name'] = this.name;
-    data['email'] = this.email;
-    data['password'] = this.password;
-    data['createdAt'] = this.createdAt;
-    data['updatedAt'] = this.updatedAt;
-    data['__v'] = this.iV;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['_id'] = sId;
+    data['name'] = name;
+    data['email'] = email;
+    data['password'] = password;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    data['__v'] = iV;
     return data;
   }
 }

@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:oiichat/controllers/HomeController.dart';
 import 'package:oiichat/controllers/LoginController.dart';
-import 'package:oiichat/session.dart';
 
 class Wrapper extends StatefulWidget {
   const Wrapper({super.key});
@@ -12,19 +11,18 @@ class Wrapper extends StatefulWidget {
 }
 
 class _WrapperState extends State<Wrapper> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: StreamBuilder(
-        stream: FirebaseAuth.instance.authStateChanges(), 
-        builder: (context,snapshot){
-          if(snapshot.hasData){
-            return HomeController();
-          }else{
-            return LoginController();
-          }
-        }),
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return HomeController();
+            } else {
+              return LoginController();
+            }
+          }),
     );
   }
 }

@@ -14,6 +14,8 @@ import 'package:oiichat/service/HomeService.dart';
 import 'package:oiichat/widget/main_widget.dart';
 
 class FriendController extends StatefulWidget {
+  const FriendController({super.key});
+
   @override
   State<FriendController> createState() => _FriendControllerState();
 }
@@ -23,10 +25,10 @@ class _FriendControllerState extends State<FriendController> {
   List<Map<String, dynamic>> users = []; // Store users list
 
   String? user1;
-  
+
   final apiService = MyApiService(Dio());
   late final HomeService homeService;
-   @override
+  @override
   void initState() {
     super.initState();
     homeService = HomeService(apiService);
@@ -39,7 +41,7 @@ class _FriendControllerState extends State<FriendController> {
     super.dispose();
   }
 
-  Future<void> _handlePageLoad() async {    
+  Future<void> _handlePageLoad() async {
     UserSession userSession = UserSession();
     Map<String, String> userSessionData = await userSession.GetUserSession();
     setState(() {
@@ -53,11 +55,13 @@ class _FriendControllerState extends State<FriendController> {
       final res = await apiService.home_page_api("xx"); // Fetch data from API
 
       setState(() {
-        users = res.users!.map((user) => {
-          'name': user.name,
-          'email': user.email,
-          '_id': user.sId,
-        }).toList();
+        users = res.users!
+            .map((user) => {
+                  'name': user.name,
+                  'email': user.email,
+                  '_id': user.sId,
+                })
+            .toList();
       });
 
       print("Data fetched successfully: ${users.length} users found");
@@ -66,45 +70,44 @@ class _FriendControllerState extends State<FriendController> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("HomePage"),
+        title: const Text("HomePage"),
         backgroundColor: Colors.deepPurple,
         elevation: 0,
-          actions: [
-            IconButton(onPressed: (){}, 
-            icon: Icon(Icons.person))
-          ],
-      ),drawer: AppDrawer(),
+        actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.person))],
+      ),
+      drawer: AppDrawer(),
       body: Padding(
-  padding: const EdgeInsets.all(16.0),
-  child: users.isEmpty
-      ? Center(child: CircularProgressIndicator()) // Show loading indicator if no data
-      : ListView.builder(
-          itemCount: users.length,
-          itemBuilder: (context, index) {
-            final user = users[index];
-            return ListTile(
-              title: Text(user['name'] ?? 'No Name'),
-              subtitle: Text(user['email'] ?? 'No Email'),
-              onTap: () {
-               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ChatRoomController(
-                      name: user['name'],
-                      user1: user1,
-                      user2: user['name'], // Pass user ID or name
-                    ),
-                  ),
-                );
-              },
-            );
-          },
-        ),
+        padding: const EdgeInsets.all(16.0),
+        child: users.isEmpty
+            ? const Center(
+                child:
+                    CircularProgressIndicator()) // Show loading indicator if no data
+            : ListView.builder(
+                itemCount: users.length,
+                itemBuilder: (context, index) {
+                  final user = users[index];
+                  return ListTile(
+                    title: Text(user['name'] ?? 'No Name'),
+                    subtitle: Text(user['email'] ?? 'No Email'),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ChatRoomController(
+                            name: user['name'],
+                            user1: user1,
+                            user2: user['name'], // Pass user ID or name
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
       ),
     );
   }

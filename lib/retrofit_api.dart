@@ -17,29 +17,27 @@ abstract class MyApiService {
   @POST("user/login")
   @FormUrlEncoded()
   Future<LoginModel> login_api(
-      @Field("api_key") String api_key,
-      @Field("email") String user_name,
-      @Field("password") String user_password,
-      @Field("firebase_token") String firebase_token);
+      @Field("api_key") String apiKey,
+      @Field("email") String userName,
+      @Field("password") String userPassword,
+      @Field("firebase_token") String firebaseToken);
 
   @POST("user/alluser")
   @FormUrlEncoded()
-  Future<HomePageModel> home_page_api(
-      @Field("api_key") String api_key);
+  Future<HomePageModel> home_page_api(@Field("api_key") String apiKey);
 
   @POST("user/alluser")
   @FormUrlEncoded()
-  Future<FriendPageModel> friend_page_api(
-      @Field("api_key") String api_key);
+  Future<FriendPageModel> friend_page_api(@Field("api_key") String apiKey);
 
   @POST("/my_notification_api")
   @FormUrlEncoded()
   Future<NotificationModel> my_notification_api(
-      @Field("api_key") String api_key,
-      @Field("user_type") String user_type,
-      @Field("user_altercode") String user_altercode,
-      @Field("user_password") String user_password,
-      @Field("user_nrx") String user_nrx,
-      @Field("chemist_id") String chemist_id,
-      @Field("get_record") String get_record);
+      @Field("api_key") String apiKey,
+      @Field("user_type") String userType,
+      @Field("user_altercode") String userAltercode,
+      @Field("user_password") String userPassword,
+      @Field("user_nrx") String userNrx,
+      @Field("chemist_id") String chemistId,
+      @Field("get_record") String getRecord);
 }

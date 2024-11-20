@@ -14,12 +14,13 @@ import 'package:oiichat/widget/main_widget.dart';
 import 'package:oiichat/wrapper.dart';
 
 class SingUpController extends StatefulWidget {
+  const SingUpController({super.key});
+
   @override
   State<SingUpController> createState() => _SingUpControllerState();
 }
 
 class _SingUpControllerState extends State<SingUpController> {
-
   final RealTimeService _realTimeService = RealTimeService();
 
   var name = TextEditingController();
@@ -28,7 +29,7 @@ class _SingUpControllerState extends State<SingUpController> {
   String? usernameError;
   var password = TextEditingController();
   String? passwordError;
-  bool _isLoading = false;
+  final bool _isLoading = false;
   String? mainError;
 
   @override
@@ -43,7 +44,7 @@ class _SingUpControllerState extends State<SingUpController> {
     super.dispose();
   }
 
-  singUp()async{
+  singUp() async {
     /*_realTimeService.addUser(
       name.text,
       username.text,
@@ -55,7 +56,7 @@ class _SingUpControllerState extends State<SingUpController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("SingUp Page"),
+        title: const Text("SingUp Page"),
       ),
       body: Center(
         child: Padding(
@@ -65,38 +66,45 @@ class _SingUpControllerState extends State<SingUpController> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               // App logo or Icon
-              Icon(
+              const Icon(
                 Icons.person,
                 size: 80,
                 color: Colors.deepPurple,
               ),
-              SizedBox(height: 40),
-              
+              const SizedBox(height: 40),
 
-              MainTextboxWithIcon(mytextController: name,btnIcon: Icon(Icons.person) ,btnName:'Name'),
-              MainErrorLabel(message:nameError),
-              SizedBox(height: 20),
+              MainTextboxWithIcon(
+                  mytextController: name,
+                  btnIcon: const Icon(Icons.person),
+                  btnName: 'Name'),
+              MainErrorLabel(message: nameError),
+              const SizedBox(height: 20),
 
               // Username/Email Text Field
-              MainEmailbox(mytextController: username,),
-              MainErrorLabel(message:usernameError),
-              SizedBox(height: 20),
-              
-              // Password Text Field
-              MainPasswordbox(mytextController: password,),MainErrorLabel(message:passwordError),
-              SizedBox(height: 30),
+              MainEmailbox(
+                mytextController: username,
+              ),
+              MainErrorLabel(message: usernameError),
+              const SizedBox(height: 20),
 
-              if (_isLoading)...{
-                  Center(
-                    child: CircularProgressIndicator(),
+              // Password Text Field
+              MainPasswordbox(
+                mytextController: password,
+              ),
+              MainErrorLabel(message: passwordError),
+              const SizedBox(height: 30),
+
+              if (_isLoading) ...{
+                const Center(
+                  child: CircularProgressIndicator(),
                 ),
-              }else...{              
+              } else ...{
                 // Login Button
-                MainButton(btnName: 'singUp',callBack: singUp),
+                MainButton(btnName: 'singUp', callBack: singUp),
               },
-              MainErrorLabel(message:mainError),
-              SizedBox(height: 20),
-              
+              MainErrorLabel(message: mainError),
+              const SizedBox(height: 20),
+
               // Register and Forgot Password Links
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -106,13 +114,13 @@ class _SingUpControllerState extends State<SingUpController> {
                       // Handle register logic here
                       Get.to(LoginController());
                     },
-                    child: Text('Login Account'),
+                    child: const Text('Login Account'),
                   ),
                   TextButton(
                     onPressed: () {
                       // Handle forgot password logic here
                     },
-                    child: Text('Forgot Password?'),
+                    child: const Text('Forgot Password?'),
                   ),
                 ],
               ),

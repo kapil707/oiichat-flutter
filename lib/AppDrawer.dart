@@ -1,4 +1,3 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
@@ -13,11 +12,11 @@ class MyDrawerTile extends StatelessWidget {
   final VoidCallback onTap;
 
   const MyDrawerTile({
-    Key? key,
+    super.key,
     required this.icon,
     required this.title,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -30,93 +29,77 @@ class MyDrawerTile extends StatelessWidget {
 }
 
 class AppDrawer extends StatelessWidget {
-  
-  singOut() async{
+  const AppDrawer({super.key});
+
+  singOut() async {
     //await FirebaseAuth.instance.signOut();
     Shared.logout();
-    Get.to(SplashScreenClass());
+    Get.to(const SplashScreenClass());
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: Colors.blue,
-      child: SafeArea(child: 
-      Padding(padding: EdgeInsets.all(8.0),
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(25.0),
-            child: Icon(Icons.person,size: 80,),
+        backgroundColor: Colors.blue,
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.all(25.0),
+                  child: Icon(
+                    Icons.person,
+                    size: 80,
+                  ),
+                ),
+                const Divider(
+                  color: Colors.black,
+                ),
+                MyDrawerTile(
+                  title: "Home",
+                  icon: Icons.home,
+                  onTap: () {
+                    Navigator.pushReplacementNamed(context, '/HomePage');
+                  },
+                ),
+                MyDrawerTile(
+                  title: "Edit Profile",
+                  icon: Icons.edit,
+                  onTap: () {
+                    Navigator.pushReplacementNamed(context, '/MyProfilePage');
+                  },
+                ),
+                MyDrawerTile(
+                  title: "My Friends",
+                  icon: Icons.ice_skating,
+                  onTap: () {
+                    Navigator.pushReplacementNamed(context, '/MyFriends');
+                  },
+                ),
+                MyDrawerTile(
+                  title: "Friends Request",
+                  icon: Icons.ice_skating,
+                  onTap: () {},
+                ),
+                MyDrawerTile(
+                  title: "Story",
+                  icon: Icons.ice_skating,
+                  onTap: () {
+                    Navigator.pushReplacementNamed(context, '/StoriesPage');
+                  },
+                ),
+                const Spacer(),
+                MyDrawerTile(
+                  title: "Logout",
+                  icon: Icons.logout,
+                  onTap: () {
+                    singOut();
+                  },
+                )
+              ],
+            ),
           ),
-          
-          Divider(
-            color: Colors.black,
-          ),
-
-          MyDrawerTile(
-            title: "Home",
-            icon: Icons.home,
-            onTap: () {
-              Navigator.pushReplacementNamed(
-                context,
-                '/HomePage'
-            );
-            },
-          ),
-
-          MyDrawerTile(
-            title: "Edit Profile",
-            icon: Icons.edit,
-            onTap: () {
-              Navigator.pushReplacementNamed(
-                context,
-                '/MyProfilePage'
-            );
-            },
-          ),
-
-          MyDrawerTile(
-            title: "My Friends",
-            icon: Icons.ice_skating,
-            onTap: () {
-              Navigator.pushReplacementNamed(
-                context,
-                '/MyFriends'
-              );
-            },
-          ),
-
-          MyDrawerTile(
-            title: "Friends Request",
-            icon: Icons.ice_skating,
-            onTap: () {
-            },
-          ),
-
-          MyDrawerTile(
-            title: "Story",
-            icon: Icons.ice_skating,
-            onTap: () {
-               Navigator.pushReplacementNamed(
-                context,
-                '/StoriesPage'
-            );
-            },
-          ),
-
-          Spacer(),
-
-          MyDrawerTile(
-            title: "Logout",
-            icon: Icons.logout,
-            onTap: () {
-              singOut();
-            },
-          )
-        ],
-      ),
-      ),)
-    );
+        ));
   }
 }

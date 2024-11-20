@@ -45,7 +45,7 @@ class _SplashScreenClassState extends State<SplashScreenClass> {
               width: 100,
             ),
             Container(height: 11),
-            Text(
+            const Text(
               'D.R. Distributor',
               style: TextStyle(
                 fontSize: 34,
@@ -53,18 +53,18 @@ class _SplashScreenClassState extends State<SplashScreenClass> {
                 color: Colors.white,
               ),
             ),
-            CircularProgressIndicator(),
+            const CircularProgressIndicator(),
             Container(height: 100),
-            Center(
-              child: const Text(
+            const Center(
+              child: Text(
                 "D R Distributors Pvt Ltd",
                 style: TextStyle(
                   fontSize: 16,
                 ),
               ),
             ),
-            Center(
-              child: const Text(
+            const Center(
+              child: Text(
                 "Website version 44",
                 style: TextStyle(
                   fontSize: 16,

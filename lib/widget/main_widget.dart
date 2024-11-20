@@ -9,48 +9,48 @@ class MainButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-                onPressed: () {
-                  // Handle login logic here
-                  callBack!();
-                },
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(vertical: 15), backgroundColor: Colors.deepPurple,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ), // Background color
-                ),
-                child: Text(
-                  btnName,
-                  style: TextStyle(fontSize: 18,color: Colors.white),
-                ),
-              );
+      onPressed: () {
+        // Handle login logic here
+        callBack!();
+      },
+      style: ElevatedButton.styleFrom(
+        padding: const EdgeInsets.symmetric(vertical: 15),
+        backgroundColor: Colors.deepPurple,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ), // Background color
+      ),
+      child: Text(
+        btnName,
+        style: const TextStyle(fontSize: 18, color: Colors.white),
+      ),
+    );
   }
 }
 
 class MainTextboxWithIcon extends StatelessWidget {
-
   final TextEditingController mytextController;
   final Icon? btnIcon;
   final String? btnName;
 
-  const MainTextboxWithIcon({super.key, required this.mytextController, this.btnIcon, this.btnName});
+  const MainTextboxWithIcon(
+      {super.key, required this.mytextController, this.btnIcon, this.btnName});
 
   @override
   Widget build(BuildContext context) {
     return TextField(
-        controller: mytextController,
-        decoration: InputDecoration(
-          labelText: btnName,
-          border: OutlineInputBorder(),
-          prefixIcon: btnIcon,
-        ),
-        keyboardType: TextInputType.emailAddress,
-      );
+      controller: mytextController,
+      decoration: InputDecoration(
+        labelText: btnName,
+        border: const OutlineInputBorder(),
+        prefixIcon: btnIcon,
+      ),
+      keyboardType: TextInputType.emailAddress,
+    );
   }
 }
 
 class MainEmailbox extends StatelessWidget {
-
   final TextEditingController mytextController;
 
   const MainEmailbox({super.key, required this.mytextController});
@@ -58,19 +58,18 @@ class MainEmailbox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextField(
-        controller: mytextController,
-        decoration: InputDecoration(
-          labelText: 'Email',
-          border: OutlineInputBorder(),
-          prefixIcon: Icon(Icons.email),
-        ),
-        keyboardType: TextInputType.emailAddress,
-      );
+      controller: mytextController,
+      decoration: const InputDecoration(
+        labelText: 'Email',
+        border: OutlineInputBorder(),
+        prefixIcon: Icon(Icons.email),
+      ),
+      keyboardType: TextInputType.emailAddress,
+    );
   }
 }
 
 class MainPasswordbox extends StatelessWidget {
-  
   final TextEditingController mytextController;
 
   const MainPasswordbox({super.key, required this.mytextController});
@@ -79,7 +78,7 @@ class MainPasswordbox extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       controller: mytextController,
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         labelText: 'Password',
         border: OutlineInputBorder(),
         prefixIcon: Icon(Icons.lock),
@@ -101,9 +100,9 @@ class MainErrorLabel extends StatelessWidget {
             padding: const EdgeInsets.only(top: 8.0),
             child: Text(
               message!,
-              style: TextStyle(color: Colors.red),
+              style: const TextStyle(color: Colors.red),
             ),
           )
-        : SizedBox.shrink(); // Empty widget if message is null
+        : const SizedBox.shrink(); // Empty widget if message is null
   }
 }

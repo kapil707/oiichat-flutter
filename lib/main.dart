@@ -20,23 +20,25 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-      colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      appBarTheme: AppBarTheme(
-        foregroundColor: Colors.white, // AppBar text color
-        backgroundColor: Colors.deepPurple, // AppBar background color
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        appBarTheme: const AppBarTheme(
+          foregroundColor: Colors.white, // AppBar text color
+          backgroundColor: Colors.deepPurple, // AppBar background color
+        ),
+        useMaterial3: true,
       ),
-  useMaterial3: true,
-),
 //home: RealTimeScreen(),
       initialRoute: '/',
       routes: {
-        '/': (context) => SplashScreenClass(),
+        '/': (context) => const SplashScreenClass(),
         '/LoginPage': (context) => LoginController(),
         '/HomePage': (context) => HomeController(),
         '/StoriesPage': (context) => StoriesController(),
@@ -49,6 +51,8 @@ class MyApp extends StatelessWidget {
 }
 
 class RealTimeScreen extends StatefulWidget {
+  const RealTimeScreen({super.key});
+
   @override
   _RealTimeScreenState createState() => _RealTimeScreenState();
 }
@@ -78,7 +82,7 @@ class _RealTimeScreenState extends State<RealTimeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Real-Time Updates")),
+      appBar: AppBar(title: const Text("Real-Time Updates")),
       body: Center(
         child: Text("Message from server: $message"),
       ),

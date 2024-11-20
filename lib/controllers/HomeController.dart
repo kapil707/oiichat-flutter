@@ -16,6 +16,8 @@ import 'package:oiichat/service/HomeService.dart';
 import 'package:oiichat/widget/main_widget.dart';
 
 class HomeController extends StatefulWidget {
+  const HomeController({super.key});
+
   @override
   State<HomeController> createState() => _HomeControllerState();
 }
@@ -26,10 +28,10 @@ class _HomeControllerState extends State<HomeController> {
   List<Map<String, dynamic>> chats = [];
 
   String? user1;
-  
+
   final apiService = MyApiService(Dio());
   late final HomeService homeService;
-   @override
+  @override
   void initState() {
     super.initState();
     homeService = HomeService(apiService);
@@ -38,12 +40,12 @@ class _HomeControllerState extends State<HomeController> {
 
   @override
   void dispose() {
-     _realTimeService.manual_disconnect(user1!);
+    _realTimeService.manual_disconnect(user1!);
     _realTimeService.dispose();
     super.dispose();
   }
 
-  Future<void> _handlePageLoad() async {    
+  Future<void> _handlePageLoad() async {
     UserSession userSession = UserSession();
     Map<String, String> userSessionData = await userSession.GetUserSession();
     setState(() {
@@ -69,25 +71,27 @@ class _HomeControllerState extends State<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Chats")),
+      appBar: AppBar(title: const Text("Chats")),
       drawer: AppDrawer(),
       body: chats.isEmpty
-          ? Center(child: Text("No chats available"))
+          ? const Center(child: Text("No chats available"))
           : ListView.builder(
               itemCount: chats.length,
               itemBuilder: (context, index) {
                 final chat = chats[index];
                 final lastMessageTime = DateTime.parse(chat['lastMessageTime']);
-                String chatuser = chat['chatUser'] == user1 ? user1 : chat['chatUser'];
+                String chatuser =
+                    chat['chatUser'] == user1 ? user1 : chat['chatUser'];
 
                 return ListTile(
-                  leading: CircleAvatar(
-                    backgroundImage: AssetImage('assets/default_avatar.png'), // Replace with profile photo
+                  leading: const CircleAvatar(
+                    backgroundImage: AssetImage(
+                        'assets/default_avatar.png'), // Replace with profile photo
                     radius: 25,
                   ),
                   title: Text(
                     chatuser,
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   subtitle: Text(
                     chat['message'],
@@ -96,7 +100,7 @@ class _HomeControllerState extends State<HomeController> {
                   ),
                   trailing: Text(
                     DateFormat('hh:mm a').format(lastMessageTime),
-                    style: TextStyle(fontSize: 12, color: Colors.grey),
+                    style: const TextStyle(fontSize: 12, color: Colors.grey),
                   ),
                   onTap: () {
                     // Navigate to Chat Room

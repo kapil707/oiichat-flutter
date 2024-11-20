@@ -13,19 +13,19 @@ class NotificationModel {
     if (json['items'] != null) {
       items = <Items>[];
       json['items'].forEach((v) {
-        items!.add(new Items.fromJson(v));
+        items!.add(Items.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['success'] = this.success;
-    data['message'] = this.message;
-    if (this.items != null) {
-      data['items'] = this.items!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['success'] = success;
+    data['message'] = message;
+    if (items != null) {
+      data['items'] = items!.map((v) => v.toJson()).toList();
     }
-    data['get_record'] = this.getRecord;
+    data['get_record'] = getRecord;
     return data;
   }
 }
@@ -53,12 +53,12 @@ class Items {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['item_id'] = this.itemId;
-    data['item_title'] = this.itemTitle;
-    data['item_message'] = this.itemMessage;
-    data['item_date_time'] = this.itemDateTime;
-    data['item_image'] = this.itemImage;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['item_id'] = itemId;
+    data['item_title'] = itemTitle;
+    data['item_message'] = itemMessage;
+    data['item_date_time'] = itemDateTime;
+    data['item_image'] = itemImage;
     return data;
   }
 }

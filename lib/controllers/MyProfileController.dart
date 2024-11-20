@@ -7,24 +7,23 @@ import 'package:oiichat/service/HomeService.dart';
 import 'package:oiichat/view/MyProfilePage.dart';
 
 class MyProfileController extends StatefulWidget {
+  const MyProfileController({super.key});
+
   @override
   State<MyProfileController> createState() => _MyProfileControllerState();
 }
 
 class _MyProfileControllerState extends State<MyProfileController> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Edit Profile"),
+        title: const Text("Edit Profile"),
         backgroundColor: Colors.deepPurple,
         elevation: 0,
-          actions: [
-            IconButton(onPressed: (){}, 
-            icon: Icon(Icons.person))
-          ],
-      ),drawer: AppDrawer(),
+        actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.person))],
+      ),
+      drawer: AppDrawer(),
       body: MyProfilePage(),
     );
   }
