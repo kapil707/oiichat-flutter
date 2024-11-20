@@ -60,16 +60,23 @@ class DatabaseHelper {
     );
   }
 
-  Future<List<Map<String, dynamic>>> getChatList(String currentUser) async {
-    final db = await database;
+    // Query to get the last message for each user
+   Future<List<Map<String, dynamic>>> getChatList(String currentUser) async {
+  final db = await database;
 
     // Query to get the last message for each user
     return await db.rawQuery('''
-      SELECT user2 AS chatUser, MAX(timestamp) AS lastMessageTime, message
+      SELECT 
+        CASE 
+          WHEN user1 = ? THEN user2 
+          ELSE user1 
+        END AS chatUser, 
+        MAX(timestamp) AS lastMessageTime, 
+        message
       FROM messages
       WHERE user1 = ? OR user2 = ?
       GROUP BY chatUser
       ORDER BY lastMessageTime DESC
-    ''', [currentUser, currentUser]);
-  }
+    ''', [currentUser, currentUser, currentUser]);
+    }
 }

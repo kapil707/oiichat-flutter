@@ -106,3 +106,73 @@ class MainErrorLabel extends StatelessWidget {
         : const SizedBox.shrink(); // Empty widget if message is null
   }
 }
+
+class ChatInputBox extends StatelessWidget {
+  final TextEditingController messageController;
+  final Function onSend;
+  final FocusNode messageFocus;
+
+  ChatInputBox({required this.messageController, required this.onSend, required this.messageFocus});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border(top: BorderSide(color: Colors.grey.shade300)),
+      ),
+      child: Row(
+        children: [
+          // Attachment Icon
+          IconButton(
+            icon: Icon(Icons.attach_file, color: Colors.grey.shade600),
+            onPressed: () {
+              // Handle attachment
+            },
+          ),
+          // Text Field
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.grey.shade200,
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              child: Row(
+                children: [
+                  SizedBox(width: 8.0),
+                  Expanded(
+                    child: TextField(
+                      focusNode: messageFocus,
+                      controller: messageController,
+                      decoration: InputDecoration(
+                        hintText: "Type a message",
+                        border: InputBorder.none,
+                      ),
+                    ),
+                  ),
+                  // Emoji Icon
+                  IconButton(
+                    icon: Icon(Icons.emoji_emotions, color: Colors.grey.shade600),
+                    onPressed: () {
+                      // Handle emoji picker
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
+          // Send Button
+          IconButton(
+            icon: Icon(Icons.send, color: Colors.blue),
+            onPressed: () {
+              if (messageController.text.isNotEmpty) {
+                onSend(); // Call the send function
+              }
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}

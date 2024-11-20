@@ -39,6 +39,13 @@ class _HomeControllerState extends State<HomeController> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _handlePageLoad(); // Reload the chats when returning to this screen
+  }
+
+
+  @override
   void dispose() {
     _realTimeService.manual_disconnect(user1!);
     _realTimeService.dispose();

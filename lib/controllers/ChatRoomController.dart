@@ -3,7 +3,9 @@ import 'package:intl/intl.dart'; // For date formatting
 import 'package:oiichat/RealTimeService.dart'; // Your real-time service class
 import 'package:oiichat/database_helper.dart'; // SQLite helper class
 import 'package:oiichat/models/Message.dart';
+import 'package:oiichat/widget/main_widget.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:audioplayers/audioplayers.dart';
 
 class ChatRoomController extends StatefulWidget {
   final String? name;
@@ -23,11 +25,17 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
   List<Map<String, dynamic>> messages = [];
   final dbHelper = DatabaseHelper();
   final ScrollController _scrollController = ScrollController();
+  final AudioPlayer _audioPlayer = AudioPlayer();
+  final FocusNode _focusNode = FocusNode(); // FocusNode for the TextField
 
   @override
   void initState() {
     super.initState();
     loadMessages(); // Load chat history from SQLite
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      FocusScope.of(context).requestFocus(_focusNode);
+    });
 
     // Initialize socket connection for real-time messaging
     _realTimeService.initSocket(widget.user1!);
@@ -41,10 +49,24 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
           'timestamp': DateTime.now().toString(),
         });
       });
+      // Play notification sound
+      playNotificationSound();
       // Scroll to the bottom
       scrollToBottom();
     };
   }
+
+  void playNotificationSound() async {
+    print("Attempting to play sound...");
+    try {
+      await _audioPlayer.play(AssetSource('notification_sound.mp3'));
+      print("Sound played successfully!");
+    } catch (e) {
+      print("Error playing sound: $e");
+    }
+  }
+
+
 
   @override
   void dispose() {
@@ -52,6 +74,7 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
     _realTimeService.manual_disconnect(widget.user1!);
     _realTimeService.dispose();
     messageController.dispose(); // Dispose the message controller
+    _focusNode.dispose(); // Dispose the FocusNode
     super.dispose();
   }
 
@@ -235,20 +258,11 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
           // Input Field for Sending Messages
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: messageController,
-                    decoration:
-                        const InputDecoration(hintText: 'Enter message'),
-                  ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.send),
-                  onPressed: sendMessage,
-                ),
-              ],
+            child:
+            ChatInputBox(
+              messageController: messageController,
+              onSend: sendMessage,
+              messageFocus:_focusNode
             ),
           ),
         ],
