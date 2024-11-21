@@ -111,8 +111,9 @@ class ChatInputBox extends StatelessWidget {
   final TextEditingController messageController;
   final Function onSend;
   final FocusNode messageFocus;
+  final Function emojiOpen;
 
-  ChatInputBox({required this.messageController, required this.onSend, required this.messageFocus});
+  ChatInputBox({required this.messageController, required this.onSend, required this.messageFocus, required this.emojiOpen});
 
   @override
   Widget build(BuildContext context) {
@@ -155,7 +156,7 @@ class ChatInputBox extends StatelessWidget {
                   IconButton(
                     icon: Icon(Icons.emoji_emotions, color: Colors.grey.shade600),
                     onPressed: () {
-                      // Handle emoji picker
+                      emojiOpen();
                     },
                   ),
                 ],

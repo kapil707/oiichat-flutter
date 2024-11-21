@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart'; // For date formatting
+import 'package:oiichat/AppBar.dart';
 import 'package:oiichat/RealTimeService.dart'; // Your real-time service class
 import 'package:oiichat/database_helper.dart'; // SQLite helper class
 import 'package:oiichat/models/Message.dart';
@@ -27,6 +28,7 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
   final ScrollController _scrollController = ScrollController();
   final AudioPlayer _audioPlayer = AudioPlayer();
   final FocusNode _focusNode = FocusNode(); // FocusNode for the TextField
+  bool _emojiShowing = false;
 
   @override
   void initState() {
@@ -66,8 +68,6 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
     }
   }
 
-
-
   @override
   void dispose() {
     // Disconnect from the server and cleanup resources
@@ -96,6 +96,18 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
           'message': message.message,
           'timestamp': message.timestamp,
         });
+      }
+    });
+  }
+
+  bool _isEmojiPickerOpen = false;
+  void _toggleEmojiPicker() {
+    setState(() {
+      _isEmojiPickerOpen = !_isEmojiPickerOpen;
+      if (_isEmojiPickerOpen) {
+        _focusNode.unfocus(); // Hide the keyboard if emoji picker is open
+      } else {
+        _focusNode.requestFocus(); // Show the keyboard if emoji picker is closed
       }
     });
   }
@@ -155,40 +167,23 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.name ?? "Chat Room"),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.delete),
-            onPressed: () async {
-              // Confirm delete action
-              final confirmDelete = await showDialog<bool>(
-                context: context,
-                builder: (context) => AlertDialog(
-                  title: const Text("Delete Chat"),
-                  content:
-                      const Text("Are you sure you want to delete this chat?"),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.of(context).pop(false),
-                      child: const Text("Cancel"),
-                    ),
-                    TextButton(
-                      onPressed: () => Navigator.of(context).pop(true),
-                      child: const Text("Delete"),
-                    ),
-                  ],
-                ),
-              );
-
-              if (confirmDelete == true) {
-                await deleteChat(); // Call the delete function
-              }
-            },
-          ),
-        ],
+      appBar: WhatsAppAppBar(
+        userName: widget.user2!,
+        userStatus: "Online", // You can dynamically change this
+        profileImageUrl: "https://via.placeholder.com/150", // Replace with user's profile image
+        onCallPressed: () {
+          print("Call button pressed");
+        },
+        onVideoCallPressed: () {
+          print("Video call button pressed");
+        },
+        onMorePressed: () {
+          print("More options pressed");
+        },
       ),
-      body: Column(
+      body: Container(
+        color: const Color(0xFFECE5DD), // WhatsApp-like background color
+        child:Column(
         children: [
           // Chat Messages List
           Expanded(
@@ -256,17 +251,14 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
             ),
           ),
           // Input Field for Sending Messages
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child:
-            ChatInputBox(
-              messageController: messageController,
-              onSend: sendMessage,
-              messageFocus:_focusNode
-            ),
+          ChatInputBox(
+            messageController: messageController,
+            onSend: sendMessage,
+            messageFocus:_focusNode,
+            emojiOpen: _toggleEmojiPicker,
           ),
         ],
       ),
-    );
+    ),);
   }
 }
