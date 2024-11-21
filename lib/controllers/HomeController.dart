@@ -78,11 +78,19 @@ class _HomeControllerState extends State<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Chats")),
+      appBar: AppBar(
+        backgroundColor: Colors.teal,
+        title: const Text("Chats")),
       drawer: AppDrawer(),
       body: chats.isEmpty
           ? const Center(child: Text("No chats available"))
-          : ListView.builder(
+          : Container(
+        color: const Color(0xFFECE5DD), // WhatsApp-like background color
+        child:Column(
+        children: [
+          // Chat Messages List
+          Expanded(
+            child:ListView.builder(
               itemCount: chats.length,
               itemBuilder: (context, index) {
                 final chat = chats[index];
@@ -125,6 +133,10 @@ class _HomeControllerState extends State<HomeController> {
                 );
               },
             ),
+          ),
+        ],
+      ),
+          ),
     );
   }
 }
