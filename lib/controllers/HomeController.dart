@@ -34,8 +34,8 @@ class _HomeControllerState extends State<HomeController> {
   @override
   void initState() {
     super.initState();
-    homeService = HomeService(apiService);
-    _handlePageLoad();
+    //homeService = HomeService(apiService);
+    //_handlePageLoad();
   }
 
   @override
@@ -60,7 +60,6 @@ class _HomeControllerState extends State<HomeController> {
       loadChats();
       // Initialize the real-time service
       _realTimeService.initSocket(user1!);
-
       // Listen for new messages and refresh the chat list
       _realTimeService.onMessageReceived = (data) {
         loadChats();

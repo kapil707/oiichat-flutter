@@ -25,7 +25,7 @@ class DatabaseHelper {
       path,
       version: 1,
       onCreate: (db, version) {
-        db.execute('CREATE TABLE messages (id INTEGER PRIMARY KEY AUTOINCREMENT, user1 TEXT NOT NULL, user2 TEXT NOT NULL, message TEXT NOT NULL, timestamp TEXT NOT NULL)');
+        db.execute('CREATE TABLE messages (id INTEGER PRIMARY KEY AUTOINCREMENT, user1 TEXT NOT NULL, user2 TEXT NOT NULL, message TEXT NOT NULL,status INTEGER, timestamp TEXT NOT NULL)');
       },
     );
   }
@@ -78,5 +78,28 @@ class DatabaseHelper {
       GROUP BY chatUser
       ORDER BY lastMessageTime DESC
     ''', [currentUser, currentUser, currentUser]);
+    }
+
+    Future<int> updateMessageStatus(int id, int newStatus) async {
+      final db = await database;
+      return await db.update(
+        'messages', // Table name
+        {'status': newStatus}, // Column and value to update
+        where: 'id = ?', // WHERE clause
+        whereArgs: [id], // Value for the WHERE clause
+      );
+    }
+
+    Future<List<Message>> check_offline_message(String user1) async {
+      final db = await database;
+      final maps = await db.query(
+        'messages',
+        where: '(user1 = ? AND status = ?)',
+        whereArgs: [user1, 0],
+        orderBy: 'timestamp ASC'
+      );
+
+      // Convert List<Map<String, dynamic>> to List<Message>
+      return maps.map((map) => Message.fromMap(map)).toList();
     }
 }

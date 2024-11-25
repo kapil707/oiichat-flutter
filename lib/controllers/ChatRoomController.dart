@@ -21,132 +21,126 @@ class ChatRoomController extends StatefulWidget {
 
 class _ChatRoomControllerState extends State<ChatRoomController> {
   final RealTimeService _realTimeService = RealTimeService();
-  late IO.Socket socket;
-  TextEditingController messageController = TextEditingController();
-  List<Map<String, dynamic>> messages = [];
-  final dbHelper = DatabaseHelper();
+  final TextEditingController messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
+  final FocusNode _focusNode = FocusNode();
   final AudioPlayer _audioPlayer = AudioPlayer();
-  final FocusNode _focusNode = FocusNode(); // FocusNode for the TextField
-  bool _emojiShowing = false;
+  final dbHelper = DatabaseHelper();
+
+  List<Map<String, dynamic>> messages = [];
+  bool _isEmojiPickerOpen = false;
 
   @override
   void initState() {
     super.initState();
-    loadMessages(); // Load chat history from SQLite
+    loadMessages();
 
+    // Focus on the input field initially
     WidgetsBinding.instance.addPostFrameCallback((_) {
       FocusScope.of(context).requestFocus(_focusNode);
     });
 
-    // Initialize socket connection for real-time messaging
+    // Initialize Socket connection
     _realTimeService.initSocket(widget.user1!);
 
-    // Handle incoming messages from the server
+    // Handle incoming messages
     _realTimeService.onMessageReceived = (data) {
       setState(() {
         messages.add({
+          'status': 1, // Message delivered
           'sender': widget.user2!,
           'message': data,
           'timestamp': DateTime.now().toString(),
         });
       });
-      // Play notification sound
       playNotificationSound();
-      // Scroll to the bottom
       scrollToBottom();
+    };
+
+    // Handle message sent event
+    _realTimeService.onMessageSend = (data) {
+      messages.clear();
+      loadMessages();
     };
   }
 
+  @override
+  void dispose() {
+    // Clean up resources
+    _realTimeService.manual_disconnect(widget.user1!);
+    _realTimeService.dispose();
+    messageController.dispose();
+    _focusNode.dispose();
+    super.dispose();
+  }
+
   void playNotificationSound() async {
-    print("Attempting to play sound...");
     try {
       await _audioPlayer.play(AssetSource('notification_sound.mp3'));
-      print("Sound played successfully!");
     } catch (e) {
       print("Error playing sound: $e");
     }
   }
 
-  @override
-  void dispose() {
-    // Disconnect from the server and cleanup resources
-    _realTimeService.manual_disconnect(widget.user1!);
-    _realTimeService.dispose();
-    messageController.dispose(); // Dispose the message controller
-    _focusNode.dispose(); // Dispose the FocusNode
-    super.dispose();
-  }
-
-  // Load chat history from the database
   Future<void> loadMessages() async {
-    print("Loading messages from database...");
-    final chatHistory =
-        await dbHelper.getMessages(widget.user1!, widget.user2!);
-    print("Loaded ${chatHistory.length} messages");
-
+    final chatHistory = await dbHelper.getMessages(widget.user1!, widget.user2!);
     setState(() {
-      for (var message in chatHistory) {
-        String sender = widget.user2!;
-        if (message.user1 == widget.user1) {
-          sender = widget.user1!;
-        }
-        messages.add({
-          'sender': sender,
-          'message': message.message,
-          'timestamp': message.timestamp,
-        });
-      }
+      messages = chatHistory
+          .map((message) => {
+                'status': message.status,
+                'sender': message.user1 == widget.user1
+                    ? widget.user1
+                    : widget.user2,
+                'message': message.message,
+                'timestamp': message.timestamp,
+              })
+          .toList();
     });
   }
 
-  bool _isEmojiPickerOpen = false;
   void _toggleEmojiPicker() {
     setState(() {
       _isEmojiPickerOpen = !_isEmojiPickerOpen;
       if (_isEmojiPickerOpen) {
-        _focusNode.unfocus(); // Hide the keyboard if emoji picker is open
+        _focusNode.unfocus(); // Hide the keyboard
       } else {
-        _focusNode.requestFocus(); // Show the keyboard if emoji picker is closed
+        _focusNode.requestFocus(); // Show the keyboard
       }
     });
   }
 
-  // Handle sending a message
   void sendMessage() async {
     if (messageController.text.isNotEmpty) {
-      // Update the UI
       setState(() {
         messages.add({
+          'status': 0, // Sent but not delivered yet
           'sender': widget.user1,
           'message': messageController.text,
           'timestamp': DateTime.now().toString(),
         });
       });
-      // Send the message to the server
+
       _realTimeService.sendMessage(
-          widget.user1!, widget.user2!, messageController.text);
+        widget.user1!,
+        widget.user2!,
+        messageController.text,
+      );
+
       messageController.clear();
-      // Scroll to the bottom
       scrollToBottom();
     }
   }
 
   Future<void> deleteChat() async {
     try {
-      // Delete messages from the database
       await dbHelper.deleteMessages(widget.user1!, widget.user2!);
-
-      // Clear the messages list in the UI
       setState(() {
         messages.clear();
       });
-
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Chat deleted successfully")),
       );
     } catch (e) {
-      print("Error deleting chat: $e");
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Failed to delete chat")),
       );
@@ -156,8 +150,7 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
   void scrollToBottom() {
     if (_scrollController.hasClients) {
       _scrollController.animateTo(
-        _scrollController
-            .position.maxScrollExtent, // Move to the end of the list
+        _scrollController.position.maxScrollExtent,
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeOut,
       );
@@ -169,96 +162,101 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
     return Scaffold(
       appBar: WhatsAppAppBar(
         userName: widget.user2!,
-        userStatus: "Online", // You can dynamically change this
-        profileImageUrl: "https://via.placeholder.com/150", // Replace with user's profile image
-        onCallPressed: () {
-          print("Call button pressed");
-        },
-        onVideoCallPressed: () {
-          print("Video call button pressed");
-        },
-        onMorePressed: () {
-          print("More options pressed");
-        },
+        userStatus: "Online",
+        profileImageUrl: "https://via.placeholder.com/150",
+        onCallPressed: () => print("Call button pressed"),
+        onVideoCallPressed: () => print("Video call button pressed"),
+        onMorePressed: () => print("More options pressed"),
       ),
       body: Container(
-        color: const Color(0xFFECE5DD), // WhatsApp-like background color
-        child:Column(
-        children: [
-          // Chat Messages List
-          Expanded(
-            child: ListView.builder(
-              controller: _scrollController, // Attach the ScrollController
-              itemCount: messages.length,
-              itemBuilder: (context, index) {
-                final msg = messages[index];
-                final isSentByUser1 =
-                    msg['sender'] == widget.user1; // Check sender
-                final screenWidth =
-                    MediaQuery.of(context).size.width; // Screen width
+        color: const Color(0xFFECE5DD), // WhatsApp-like background
+        child: Column(
+          children: [
+            // Messages List
+            Expanded(
+              child: ListView.builder(
+                controller: _scrollController,
+                itemCount: messages.length,
+                itemBuilder: (context, index) {
+                  final msg = messages[index];
+                  final isSentByUser1 = msg['sender'] == widget.user1;
 
-                return Align(
-                  alignment: isSentByUser1
-                      ? Alignment.centerRight
-                      : Alignment.centerLeft, // Align messages
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(
-                      maxWidth: screenWidth * 0.7, // 70% of screen width
-                    ),
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(
-                          vertical: 5, horizontal: 10),
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 15),
-                      decoration: BoxDecoration(
-                        color: isSentByUser1
-                            ? Colors.grey[300] // Background for user1
-                            : Colors.blue[200], // Background for user2
-                        borderRadius: BorderRadius.only(
-                          topLeft: const Radius.circular(12),
-                          topRight: const Radius.circular(12),
-                          bottomLeft: isSentByUser1
-                              ? const Radius.circular(0)
-                              : const Radius.circular(12),
-                          bottomRight: isSentByUser1
-                              ? const Radius.circular(12)
-                              : const Radius.circular(0),
+                  return Align(
+                    alignment: isSentByUser1
+                        ? Alignment.centerRight
+                        : Alignment.centerLeft,
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxWidth: MediaQuery.of(context).size.width * 0.7,
+                      ),
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 5, horizontal: 10),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 15),
+                        decoration: BoxDecoration(
+                          color: isSentByUser1
+                              ? Colors.grey[300]
+                              : Colors.blue[200],
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(12),
+                            topRight: Radius.circular(12),
+                            bottomLeft: isSentByUser1
+                                ? Radius.zero
+                                : Radius.circular(12),
+                            bottomRight: isSentByUser1
+                                ? Radius.circular(12)
+                                : Radius.zero,
+                          ),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              msg['message'],
+                              style: const TextStyle(fontSize: 16),
+                            ),
+                            const SizedBox(height: 5),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Text(
+                                  DateFormat('hh:mm a').format(
+                                    DateTime.parse(msg['timestamp']).toLocal(),
+                                  ),
+                                  style: const TextStyle(
+                                    fontSize: 10,
+                                    color: Colors.black54,
+                                  ),
+                                ),
+                                const SizedBox(width: 5),
+                                Icon(
+                                  msg['status'] == 0
+                                      ? Icons.watch_later
+                                      : Icons.check,
+                                  size: 13,
+                                  color: Colors.black54,
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            msg['message'],
-                            style: const TextStyle(fontSize: 16),
-                          ),
-                          const SizedBox(height: 5),
-                          Align(
-                            alignment: Alignment.bottomRight,
-                            child: Text(
-                              DateFormat('hh:mm a').format(
-                                  DateTime.parse(msg['timestamp']).toLocal()),
-                              style: const TextStyle(
-                                  fontSize: 10, color: Colors.black54),
-                            ),
-                          ),
-                        ],
-                      ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
-          ),
-          // Input Field for Sending Messages
-          ChatInputBox(
-            messageController: messageController,
-            onSend: sendMessage,
-            messageFocus:_focusNode,
-            emojiOpen: _toggleEmojiPicker,
-          ),
-        ],
+            // Input Box
+            ChatInputBox(
+              messageController: messageController,
+              onSend: sendMessage,
+              messageFocus: _focusNode,
+              emojiOpen: _toggleEmojiPicker,
+            ),
+          ],
+        ),
       ),
-    ),);
+    );
   }
 }

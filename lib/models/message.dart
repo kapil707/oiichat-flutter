@@ -3,6 +3,7 @@ class Message {
   final String user1;
   final String user2;
   final String message;
+  final int status;
   final String timestamp;
 
   Message({
@@ -10,6 +11,7 @@ class Message {
     required this.user1,
     required this.user2,
     required this.message,
+    required this.status,
     required this.timestamp,
   });
 
@@ -20,6 +22,7 @@ class Message {
       'user1': user1,
       'user2': user2,
       'message': message,
+      'status': status,
       'timestamp': timestamp,
     };
   }
@@ -31,6 +34,7 @@ class Message {
       user1: map['user1'],
       user2: map['user2'],
       message: map['message'],
+      status: map['status'],
       timestamp: map['timestamp'],
     );
   }
