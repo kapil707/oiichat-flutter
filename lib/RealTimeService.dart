@@ -4,9 +4,11 @@ import 'database_helper.dart';
 import 'dart:math';
 
 String generateRandomToken(int length) {
-  const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  const chars =
+      'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
   Random random = Random();
-  return List.generate(length, (index) => chars[random.nextInt(chars.length)]).join();
+  return List.generate(length, (index) => chars[random.nextInt(chars.length)])
+      .join();
 }
 
 class RealTimeService {
@@ -18,7 +20,7 @@ class RealTimeService {
 
   void initSocket(String user) {
     // Socket.IO connection setup
-    socket = IO.io('http://192.168.1.6:3000/', <String, dynamic>{
+    socket = IO.io('http://160.30.100.216:3000/', <String, dynamic>{
       'transports': ['websocket'],
       'autoConnect': false,
     });
@@ -27,16 +29,16 @@ class RealTimeService {
 
     // Listen for server events
     socket.on('connect', (_) {
-        print('Connected to the server');
-        socket.emit("register", user);
-        check_offline_message(user);
+      print('Connected to the server');
+      socket.emit("register", user);
+      check_offline_message(user);
     });
     // Handle disconnection
     socket.on('disconnect', (_) => print('Disconnected from server'));
 
     socket.on('receiveMessage', (data) async {
       print("Message received: ${data["user2"]}");
-      
+
       final newMessage = Message(
         user1: data["user1"],
         user2: data["user2"],
@@ -47,16 +49,19 @@ class RealTimeService {
       await dbHelper.insertMessage(newMessage);
 
       if (onMessageReceived != null) {
-        onMessageReceived!(data["message"]); // Pass the raw string to the callback
+        onMessageReceived!(
+            data["message"]); // Pass the raw string to the callback
       }
     });
 
     socket.on('messageSent', (data) async {
       if (data['status'] == 'success') {
-        print('Message sent successfully: ${data['token']} ${data['messageId']}');
+        print(
+            'Message sent successfully: ${data['token']} ${data['messageId']}');
         var id = data['messageId'];
-        await dbHelper.updateMessageStatus(id,1);
-        print('Message sent successfully: ${data['token']} ${data['messageId']}');
+        await dbHelper.updateMessageStatus(id, 1);
+        print(
+            'Message sent successfully: ${data['token']} ${data['messageId']}');
         onMessageSend!("1");
       }
     });
@@ -66,23 +71,23 @@ class RealTimeService {
     socket.emit("manual_disconnect", user);
   }
 
-  void sendMessage(String user1,String user2,String message) async { 
-      final newMessage = Message(
-        user1: user1,
-        user2: user2,
-        message: message,
-        status: 0,
-        timestamp: DateTime.now().toIso8601String(),
-      );
-      int insertedId = await dbHelper.insertMessage(newMessage);
+  void sendMessage(String user1, String user2, String message) async {
+    final newMessage = Message(
+      user1: user1,
+      user2: user2,
+      message: message,
+      status: 0,
+      timestamp: DateTime.now().toIso8601String(),
+    );
+    int insertedId = await dbHelper.insertMessage(newMessage);
 
-      socket.emit('sendMessage', {
-        'user1': user1,
-        'user2': user2,
-        'message': message,
-        'token':generateRandomToken(16),
-        'messageId':insertedId,
-      });
+    socket.emit('sendMessage', {
+      'user1': user1,
+      'user2': user2,
+      'message': message,
+      'token': generateRandomToken(16),
+      'messageId': insertedId,
+    });
   }
 
   // jab message nahi gaya ha oss ko resend karta ha yha
@@ -95,8 +100,8 @@ class RealTimeService {
         'user1': messages.user1,
         'user2': messages.user2,
         'message': messages.message,
-        'token':generateRandomToken(16),
-        'messageId':messages.id,
+        'token': generateRandomToken(16),
+        'messageId': messages.id,
       });
 
       //check_offline_message(user);

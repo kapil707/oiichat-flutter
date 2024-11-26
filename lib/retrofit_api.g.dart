@@ -14,7 +14,7 @@ class _MyApiService implements MyApiService {
     this.baseUrl,
     this.errorLogger,
   }) {
-    baseUrl ??= 'http://192.168.1.6:3000/api/';
+    baseUrl ??= 'http://160.30.100.216:3000/api/';
   }
 
   final Dio _dio;
