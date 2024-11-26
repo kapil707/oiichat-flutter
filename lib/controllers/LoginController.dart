@@ -2,6 +2,7 @@ import 'package:art_sweetalert/art_sweetalert.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
 import 'package:get/route_manager.dart';
@@ -30,11 +31,25 @@ class _LoginControllerState extends State<LoginController> {
   String? passwordError;
   bool _isLoading = false;
   String? mainError;
+  String? _firebaseToken;
 
   @override
   void initState() {
     super.initState();
+    getFirebaseToken();
     loginService = LoginService(apiService);
+  }
+
+  Future<void> getFirebaseToken() async {
+    try {
+      String? token = await FirebaseMessaging.instance.getToken();
+      setState(() {
+        _firebaseToken = token;
+      });
+      print("Firebase Token: $token");
+    } catch (e) {
+      print("Error fetching token: $e");
+    }
   }
 
   Future<void> _handleLogin() async {
@@ -75,13 +90,14 @@ class _LoginControllerState extends State<LoginController> {
     });
 
     final loginResponse =
-        await loginService.login_api(context, username.text, password.text);
+        await loginService.login_api(context, username.text, password.text,_firebaseToken!);
 
     setState(() {
       _isLoading = false;
       mainError = loginResponse.message;
+      print("login res:" + loginResponse.message.toString());
       if (loginResponse.status == "1") {
-        Get.to(HomeController());
+        Navigator.pushReplacementNamed(context, '/');
       }
     });
   }
@@ -90,7 +106,7 @@ class _LoginControllerState extends State<LoginController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Login Page"),
+        title: const Text("Login"),
       ),
       body: Center(
         child: Padding(
@@ -103,7 +119,7 @@ class _LoginControllerState extends State<LoginController> {
               const Icon(
                 Icons.person,
                 size: 80,
-                color: Colors.deepPurple,
+                color: Colors.orange,
               ),
               const SizedBox(height: 40),
 
@@ -138,8 +154,9 @@ class _LoginControllerState extends State<LoginController> {
                 children: [
                   TextButton(
                     onPressed: () {
-                      Get.to(SingUpController());
+                      //Get.to(SingUpController());
                       // Handle register logic here
+                      Navigator.pushNamed(context, '/SingUpPage');
                     },
                     child: const Text('Create Account'),
                   ),

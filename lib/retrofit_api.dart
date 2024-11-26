@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:oiichat/models/FriendPageModel.dart';
 import 'package:oiichat/models/HomePageModel.dart';
 import 'package:oiichat/models/LoginModel.dart';
-import 'package:oiichat/models/NotificationModel.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'retrofit_api.g.dart';
@@ -30,7 +29,7 @@ abstract class MyApiService {
   @FormUrlEncoded()
   Future<FriendPageModel> friend_page_api(@Field("api_key") String apiKey);
 
-  @POST("/my_notification_api")
+  /*@POST("/my_notification_api")
   @FormUrlEncoded()
   Future<NotificationModel> my_notification_api(
       @Field("api_key") String apiKey,
@@ -39,5 +38,5 @@ abstract class MyApiService {
       @Field("user_password") String userPassword,
       @Field("user_nrx") String userNrx,
       @Field("chemist_id") String chemistId,
-      @Field("get_record") String getRecord);
+      @Field("get_record") String getRecord);*/
 }
