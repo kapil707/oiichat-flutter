@@ -1,4 +1,5 @@
 import 'package:oiichat/models/message.dart';
+import 'package:oiichat/models/useri_info_model.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'database_helper.dart';
 import 'dart:math';
@@ -37,7 +38,13 @@ class RealTimeService {
     socket.on('disconnect', (_) => print('Disconnected from server'));
 
     socket.on('receiveMessage', (data) async {
-      print("Message received: ${data["user2"]}");
+      print("user ka naam " + data["name"]);
+      //user ki info insert or update hotai ha yaha say
+      final newUser = UseriInfoModel(
+        user_id: data["user1"],
+        user_name: data["name"],
+      );
+      await dbHelper.insertOrUpdateUserInfo(newUser);
 
       final newMessage = Message(
         user1: data["user1"],

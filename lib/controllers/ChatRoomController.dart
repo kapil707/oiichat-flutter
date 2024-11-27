@@ -3,9 +3,8 @@ import 'package:intl/intl.dart'; // For date formatting
 import 'package:oiichat/AppBar.dart';
 import 'package:oiichat/RealTimeService.dart'; // Your real-time service class
 import 'package:oiichat/database_helper.dart'; // SQLite helper class
-import 'package:oiichat/models/Message.dart';
+import 'package:oiichat/models/useri_info_model.dart';
 import 'package:oiichat/widget/main_widget.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:audioplayers/audioplayers.dart';
 
 class ChatRoomController extends StatefulWidget {
@@ -34,7 +33,7 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
   void initState() {
     super.initState();
     loadMessages();
-
+    insertOrUpdateUserInfo();
     // Focus on the input field initially
     WidgetsBinding.instance.addPostFrameCallback((_) {
       FocusScope.of(context).requestFocus(_focusNode);
@@ -74,6 +73,15 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
     super.dispose();
   }
 
+  void insertOrUpdateUserInfo() async {
+    //user ki info insert or update hotai ha yaha say
+    final newUser = UseriInfoModel(
+      user_id: widget.user2!,
+      user_name: widget.name!,
+    );
+    await dbHelper.insertOrUpdateUserInfo(newUser);
+  }
+
   void playNotificationSound() async {
     try {
       await _audioPlayer.play(AssetSource('notification_sound.mp3'));
@@ -83,14 +91,14 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
   }
 
   Future<void> loadMessages() async {
-    final chatHistory = await dbHelper.getMessages(widget.user1!, widget.user2!);
+    final chatHistory =
+        await dbHelper.getMessages(widget.user1!, widget.user2!);
     setState(() {
       messages = chatHistory
           .map((message) => {
                 'status': message.status,
-                'sender': message.user1 == widget.user1
-                    ? widget.user1
-                    : widget.user2,
+                'sender':
+                    message.user1 == widget.user1 ? widget.user1 : widget.user2,
                 'message': message.message,
                 'timestamp': message.timestamp,
               })
@@ -161,7 +169,7 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: WhatsAppAppBar(
-        userName: widget.user2!,
+        userName: widget.name!,
         userStatus: "Online",
         profileImageUrl: "https://via.placeholder.com/150",
         onCallPressed: () => print("Call button pressed"),

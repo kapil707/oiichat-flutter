@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:oiichat/models/FriendPageModel.dart';
 import 'package:oiichat/models/HomePageModel.dart';
@@ -28,6 +30,13 @@ abstract class MyApiService {
   @POST("user/alluser")
   @FormUrlEncoded()
   Future<FriendPageModel> friend_page_api(@Field("api_key") String apiKey);
+
+  @POST("user/profile_upload")
+  @MultiPart()
+  Future<String> uploadImage(
+    @Field("user_id") String user_id,
+    @Part(name: "image") File image, // Add image file
+  );
 
   /*@POST("/my_notification_api")
   @FormUrlEncoded()

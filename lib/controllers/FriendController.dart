@@ -45,7 +45,7 @@ class _FriendControllerState extends State<FriendController> {
     UserSession userSession = UserSession();
     Map<String, String> userSessionData = await userSession.GetUserSession();
     setState(() {
-      user1 = userSessionData['userName']!;
+      user1 = userSessionData['userId']!;
     });
   }
 
@@ -100,7 +100,7 @@ class _FriendControllerState extends State<FriendController> {
                           builder: (context) => ChatRoomController(
                             name: user['name'],
                             user1: user1,
-                            user2: user['name'], // Pass user ID or name
+                            user2: user['_id'], // Pass user ID or name
                           ),
                         ),
                       );
