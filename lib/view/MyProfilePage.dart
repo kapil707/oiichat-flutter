@@ -56,7 +56,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
     } catch (e) {
       print("Upload failed: $e");
       ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("Upload failed!")));
+          .showSnackBar(SnackBar(content: Text("Upload failed: $e")));
     }
   }
 
