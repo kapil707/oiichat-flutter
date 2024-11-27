@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:oiichat/main_functions.dart';
@@ -15,7 +15,7 @@ class MyProfilePage extends StatefulWidget {
 class _MyProfilePageState extends State<MyProfilePage> {
   final ImagePicker _picker = ImagePicker();
   File? _selectedImage;
-  late final MyApiService apiService;
+  final apiService = MyApiService(Dio());
   String? user1;
   @override
   void initState() {
@@ -48,7 +48,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
     }
 
     try {
-      final response = await apiService.uploadImage(user1!, _selectedImage!);
+      final response = await apiService.uploadImage(_selectedImage!);
       print("Upload successful: $response");
 
       ScaffoldMessenger.of(context).showSnackBar(

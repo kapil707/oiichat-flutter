@@ -136,14 +136,18 @@ class _MyApiService implements MyApiService {
   }
 
   @override
-  Future<String> uploadImage(
-    String user_id,
-    File image,
-  ) async {
+  Future<String> uploadImage(File image) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = {'user_id': user_id};
+    final _data = FormData();
+    _data.files.add(MapEntry(
+      'image',
+      MultipartFile.fromFileSync(
+        image.path,
+        filename: image.path.split(Platform.pathSeparator).last,
+      ),
+    ));
     final _options = _setStreamType<String>(Options(
       method: 'POST',
       headers: _headers,

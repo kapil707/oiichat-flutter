@@ -34,7 +34,6 @@ abstract class MyApiService {
   @POST("user/profile_upload")
   @MultiPart()
   Future<String> uploadImage(
-    @Field("user_id") String user_id,
     @Part(name: "image") File image, // Add image file
   );
 
