@@ -8,11 +8,13 @@ import 'package:oiichat/widget/main_widget.dart';
 import 'package:audioplayers/audioplayers.dart';
 
 class ChatRoomController extends StatefulWidget {
-  final String? name;
+  final String? user_name;
+  final String? user_image;
   final String? user1;
   final String? user2;
 
-  const ChatRoomController({super.key, this.name, this.user1, this.user2});
+  const ChatRoomController(
+      {super.key, this.user_name, this.user_image, this.user1, this.user2});
 
   @override
   State<ChatRoomController> createState() => _ChatRoomControllerState();
@@ -26,8 +28,10 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
   final AudioPlayer _audioPlayer = AudioPlayer();
   final dbHelper = DatabaseHelper();
 
+  String? UserStatus;
   List<Map<String, dynamic>> messages = [];
   bool _isEmojiPickerOpen = false;
+  int typingStatus = 0;
 
   @override
   void initState() {
@@ -38,9 +42,31 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       FocusScope.of(context).requestFocus(_focusNode);
     });
+    setState(() {
+      UserStatus = "Loading...";
+    });
 
     // Initialize Socket connection
     _realTimeService.initSocket(widget.user1!);
+    _realTimeService.GetUserInfo(widget.user2!);
+
+    _realTimeService.onUserInfoReceived = (data) {
+      if (data["user_id"] == widget.user2) {
+        setState(() {
+          UserStatus = data["status"];
+        });
+      }
+    };
+
+    _realTimeService.onUserTypingReceived = (data) {
+      if (data["status"] == "1") {
+        setState(() {
+          UserStatus = "typing...";
+        });
+      } else {
+        _realTimeService.GetUserInfo(widget.user2!);
+      }
+    };
 
     // Handle incoming messages
     _realTimeService.onMessageReceived = (data) {
@@ -73,13 +99,28 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
     super.dispose();
   }
 
+  void _handleTypingStatus(int status) {
+    setState(() {
+      typingStatus = status;
+    });
+
+    // Optionally, send the typing status to the server
+    if (status == 1) {
+      print("User is typing...");
+      _realTimeService.userTyping(widget.user1!, widget.user2!, "1");
+    } else {
+      print("User stopped typing.");
+      _realTimeService.userTyping(widget.user1!, widget.user2!, "0");
+    }
+  }
+
   void insertOrUpdateUserInfo() async {
     //user ki info insert or update hotai ha yaha say
-    final newUser = UseriInfoModel(
-      user_id: widget.user2!,
-      user_name: widget.name!,
-    );
-    await dbHelper.insertOrUpdateUserInfo(newUser);
+    // final newUser = UseriInfoModel(
+    //   user_id: widget.user2!,
+    //   user_name: widget.name!,
+    // );
+    // await dbHelper.insertOrUpdateUserInfo(newUser);
   }
 
   void playNotificationSound() async {
@@ -119,6 +160,7 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
 
   void sendMessage() async {
     if (messageController.text.isNotEmpty) {
+      _realTimeService.userTyping(widget.user1!, widget.user2!, "0");
       setState(() {
         messages.add({
           'status': 0, // Sent but not delivered yet
@@ -169,9 +211,9 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: WhatsAppAppBar(
-        userName: widget.name!,
-        userStatus: "Online",
-        profileImageUrl: "https://via.placeholder.com/150",
+        userName: widget.user_name!,
+        userStatus: UserStatus!,
+        profileImageUrl: widget.user_image!,
         onCallPressed: () => print("Call button pressed"),
         onVideoCallPressed: () => print("Video call button pressed"),
         onMorePressed: () => print("More options pressed"),
@@ -261,6 +303,7 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
               onSend: sendMessage,
               messageFocus: _focusNode,
               emojiOpen: _toggleEmojiPicker,
+              onTypingStatus: _handleTypingStatus,
             ),
           ],
         ),

@@ -20,7 +20,7 @@ class WhatsAppAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      leadingWidth: 70,
+      leadingWidth: 80,
       backgroundColor: Colors.teal, // WhatsApp's typical color
       elevation: 1.0,
       leading: Row(
@@ -31,8 +31,11 @@ class WhatsAppAppBar extends StatelessWidget implements PreferredSizeWidget {
               Navigator.pop(context);
             },
           ),
-          CircleAvatar(
-            backgroundImage: NetworkImage(profileImageUrl), // Profile picture
+          Container(
+            height: 60,
+            child: CircleAvatar(
+              backgroundImage: NetworkImage(profileImageUrl), // Profile picture
+            ),
           ),
         ],
       ),

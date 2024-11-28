@@ -30,7 +30,7 @@ class DatabaseHelper {
             'CREATE TABLE messages (id INTEGER PRIMARY KEY AUTOINCREMENT, user1 TEXT NOT NULL, user2 TEXT NOT NULL, message TEXT NOT NULL,status INTEGER, timestamp TEXT NOT NULL)');
 
         db.execute(
-            'CREATE TABLE user_info (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id TEXT NOT NULL, user_name TEXT NOT NULL)');
+            'CREATE TABLE user_info (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id TEXT NOT NULL, user_name TEXT NOT NULL, user_image TEXT NOT NULL)');
       },
     );
   }
@@ -49,9 +49,10 @@ class DatabaseHelper {
       // Update the record if it already exists
       return await db.rawUpdate('''
         UPDATE user_info 
-        SET user_name = ? 
+        SET user_name = ? ,
+        user_image = ? 
         WHERE user_id = ?
-      ''', [model.user_name, model.user_id]);
+      ''', [model.user_name, model.user_image, model.user_id]);
     } else {
       // Insert a new record if it doesn't exist
       return await db.insert('user_info', model.toMap());
@@ -101,7 +102,8 @@ class DatabaseHelper {
         END AS chatUser, 
         MAX(timestamp) AS lastMessageTime, 
         message,
-        user_info.user_name AS chatUserName
+        user_info.user_name AS chatUserName,
+        user_info.user_image AS chatUserImage
       FROM messages
       LEFT JOIN user_info ON user_info.user_id = (
         CASE 

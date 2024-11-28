@@ -107,13 +107,47 @@ class MainErrorLabel extends StatelessWidget {
   }
 }
 
-class ChatInputBox extends StatelessWidget {
+class ChatInputBox extends StatefulWidget {
   final TextEditingController messageController;
   final Function onSend;
   final FocusNode messageFocus;
   final Function emojiOpen;
+  final Function(int typingStatus) onTypingStatus; // Callback for typing status
 
-  ChatInputBox({required this.messageController, required this.onSend, required this.messageFocus, required this.emojiOpen});
+  ChatInputBox({
+    required this.messageController,
+    required this.onSend,
+    required this.messageFocus,
+    required this.emojiOpen,
+    required this.onTypingStatus,
+  });
+
+  @override
+  State<ChatInputBox> createState() => _ChatInputBoxState();
+}
+
+class _ChatInputBoxState extends State<ChatInputBox> {
+  @override
+  void initState() {
+    super.initState();
+    // Add listener to monitor changes in the text field
+    widget.messageController.addListener(_handleTypingStatus);
+  }
+
+  @override
+  void dispose() {
+    // Remove listener to avoid memory leaks
+    widget.messageController.removeListener(_handleTypingStatus);
+    super.dispose();
+  }
+
+  void _handleTypingStatus() {
+    if (widget.messageController.text.isNotEmpty) {
+      widget.onTypingStatus(1); // User is typing
+    } else {
+      widget.onTypingStatus(0); // Text field is empty
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -144,8 +178,8 @@ class ChatInputBox extends StatelessWidget {
                   SizedBox(width: 8.0),
                   Expanded(
                     child: TextField(
-                      focusNode: messageFocus,
-                      controller: messageController,
+                      focusNode: widget.messageFocus,
+                      controller: widget.messageController,
                       decoration: InputDecoration(
                         hintText: "Type a message",
                         border: InputBorder.none,
@@ -154,9 +188,10 @@ class ChatInputBox extends StatelessWidget {
                   ),
                   // Emoji Icon
                   IconButton(
-                    icon: Icon(Icons.emoji_emotions, color: Colors.grey.shade600),
+                    icon:
+                        Icon(Icons.emoji_emotions, color: Colors.grey.shade600),
                     onPressed: () {
-                      emojiOpen();
+                      widget.emojiOpen();
                     },
                   ),
                 ],
@@ -167,8 +202,8 @@ class ChatInputBox extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.send, color: Colors.blue),
             onPressed: () {
-              if (messageController.text.isNotEmpty) {
-                onSend(); // Call the send function
+              if (widget.messageController.text.isNotEmpty) {
+                widget.onSend(); // Call the send function
               }
             },
           ),

@@ -2,11 +2,13 @@ class UseriInfoModel {
   final int? id; // Primary key
   final String user_id;
   final String user_name;
+  final String user_image;
 
   UseriInfoModel({
     this.id,
     required this.user_id,
     required this.user_name,
+    required this.user_image,
   });
 
   // Convert a Message object to a Map
@@ -15,6 +17,7 @@ class UseriInfoModel {
       'id': id,
       'user_id': user_id,
       'user_name': user_name,
+      'user_image': user_image,
     };
   }
 
@@ -24,6 +27,7 @@ class UseriInfoModel {
       id: map['id'],
       user_id: map['user_id'],
       user_name: map['user_name'],
+      user_image: map['user_image'],
     );
   }
 }

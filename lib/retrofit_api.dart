@@ -34,7 +34,8 @@ abstract class MyApiService {
   @POST("user/profile_upload")
   @MultiPart()
   Future<String> uploadImage(
-    @Part(name: "image") File image, // Add image file
+    @Part(name: "profileImage") File image, // Add image file
+    @Part(name: "user_id") String userId,
   );
 
   /*@POST("/my_notification_api")

@@ -18,6 +18,8 @@ class RealTimeService {
 
   Function(String)? onMessageSend;
   Function(String)? onMessageReceived;
+  Function(dynamic)? onUserInfoReceived;
+  Function(dynamic)? onUserTypingReceived;
 
   void initSocket(String user) {
     // Socket.IO connection setup
@@ -38,11 +40,12 @@ class RealTimeService {
     socket.on('disconnect', (_) => print('Disconnected from server'));
 
     socket.on('receiveMessage', (data) async {
-      print("user ka naam " + data["name"]);
+      print("user ka naam " + data["user_image"]);
       //user ki info insert or update hotai ha yaha say
       final newUser = UseriInfoModel(
         user_id: data["user1"],
-        user_name: data["name"],
+        user_name: data["user_name"],
+        user_image: data["user_image"],
       );
       await dbHelper.insertOrUpdateUserInfo(newUser);
 
@@ -72,6 +75,24 @@ class RealTimeService {
         onMessageSend!("1");
       }
     });
+
+    socket.on("get_user_info_response", (data) {
+      print("User status: ${data['user_id']}");
+      if (onUserInfoReceived != null) {
+        onUserInfoReceived!(data);
+      }
+    });
+
+    socket.on('receiveTyping', (data) async {
+      //print("receiveTyping" + data["status"]);
+      if (onUserTypingReceived != null) {
+        onUserTypingReceived!(data);
+      }
+    });
+  }
+
+  void GetUserInfo(String user_id) {
+    socket.emit("get_user_info", user_id);
   }
 
   void manual_disconnect(String user) {
@@ -113,6 +134,14 @@ class RealTimeService {
 
       //check_offline_message(user);
     }
+  }
+
+  void userTyping(String user1, String user2, String status) async {
+    socket.emit('userTyping', {
+      'user1': user1,
+      'user2': user2,
+      'status': status,
+    });
   }
 
   void dispose() {

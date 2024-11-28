@@ -97,10 +97,17 @@ class _HomeControllerState extends State<HomeController> {
                             ? user1
                             : chat['chatUser'];
 
+                        String userImageUrl = "http://160.30.100.216:3000/" +
+                            chat['chatUserImage'];
+
                         return ListTile(
-                          leading: const CircleAvatar(
-                            backgroundImage: AssetImage(
-                                'default_avatar.webp'), // Replace with profile photo
+                          leading: CircleAvatar(
+                            backgroundImage: userImageUrl != null &&
+                                    userImageUrl.isNotEmpty
+                                ? NetworkImage(
+                                    userImageUrl) // Load image from the URL
+                                : const AssetImage('assets/default_avatar.webp')
+                                    as ImageProvider, // Default fallback image
                             radius: 25,
                           ),
                           title: Text(
@@ -123,7 +130,8 @@ class _HomeControllerState extends State<HomeController> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => ChatRoomController(
-                                  name: chatuser,
+                                  user_name: chat['chatUserName'],
+                                  user_image: userImageUrl,
                                   user1: user1,
                                   user2: chatuser,
                                 ),
