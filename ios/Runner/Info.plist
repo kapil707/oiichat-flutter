@@ -45,5 +45,17 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
+	</array>
+	<key>FirebaseAppDelegateProxyEnabled</key>
+	<true/>
+	<key>NSPushNotificationsUsageDescription</key>
+	<string>We need your permission to send notifications.</string>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>We need your permission to track activity for better notifications.</string>
+
 </dict>
 </plist>

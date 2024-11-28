@@ -10,9 +10,30 @@ class FirebaseApi {
   final _firebaseMessaging = FirebaseMessaging.instance;
 
   Future<void> initNotifications() async {
-    await _firebaseMessaging.requestPermission();
-    final FCMToken = await _firebaseMessaging.getToken();
-    print('token: $FCMToken');
+
+    // Request permissions
+    NotificationSettings settings = await _firebaseMessaging.requestPermission(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print("User granted permission");
+    } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
+      print("User granted provisional permission");
+    } else {
+      print("User denied permission");
+    }
+
+    // Setup foreground notifications
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print("Message received in foreground: ${message.notification?.title}");
+    });
+
+    //await _firebaseMessaging.requestPermission();
+    //final FCMToken = await _firebaseMessaging.getToken();
+    //print('token: $FCMToken');
     //FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
 
     initPushNotifications();
