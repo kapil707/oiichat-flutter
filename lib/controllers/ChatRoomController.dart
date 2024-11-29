@@ -224,28 +224,43 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
         onMorePressed: () => print("More options pressed"),
       ),
       body: Container(
-        color: const Color(0xFFECE5DD), // WhatsApp-like background
-        child: Column(
+        color: const Color(0xFFECE5DD),
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        child: Stack(
           children: [
-            // Messages List
-            Expanded(
-              child: ListView.builder(
+            Container(
+              height: MediaQuery.of(context).size.height - 140,
+              width: MediaQuery.of(context).size.width,
+              child:
+                  // Messages List
+                  ListView.builder(
+                shrinkWrap: true,
                 controller: _scrollController,
                 itemCount: messages.length,
                 itemBuilder: (context, index) {
-                  return ChatRoomCard(
-                    chatRoomModel: messages[index],
-                  );
+                  if (messages[index].user_id == widget.user1) {
+                    return ChatRoomCardRight(
+                      chatRoomModel: messages[index],
+                    );
+                  } else {
+                    return ChatRoomCardLeft(
+                      chatRoomModel: messages[index],
+                    );
+                  }
                 },
               ),
             ),
             // Input Box
-            ChatInputBox(
-              messageController: messageController,
-              onSend: sendMessage,
-              messageFocus: _focusNode,
-              emojiOpen: _toggleEmojiPicker,
-              onTypingStatus: _handleTypingStatus,
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: ChatInputBox(
+                messageController: messageController,
+                onSend: sendMessage,
+                messageFocus: _focusNode,
+                emojiOpen: _toggleEmojiPicker,
+                onTypingStatus: _handleTypingStatus,
+              ),
             ),
           ],
         ),

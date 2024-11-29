@@ -1,3 +1,4 @@
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 
 class MainButton extends StatelessWidget {
@@ -151,64 +152,69 @@ class _ChatInputBoxState extends State<ChatInputBox> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border(top: BorderSide(color: Colors.grey.shade300)),
-      ),
-      child: Row(
-        children: [
-          // Attachment Icon
-          IconButton(
-            icon: Icon(Icons.attach_file, color: Colors.grey.shade600),
-            onPressed: () {
-              // Handle attachment
-            },
-          ),
-          // Text Field
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.grey.shade200,
-                borderRadius: BorderRadius.circular(20.0),
-              ),
-              child: Row(
-                children: [
-                  SizedBox(width: 8.0),
-                  Expanded(
-                    child: TextField(
-                      focusNode: widget.messageFocus,
-                      controller: widget.messageController,
-                      decoration: InputDecoration(
-                        hintText: "Type a message",
-                        border: InputBorder.none,
-                      ),
+    return Row(
+      children: [
+        Container(
+          width: MediaQuery.of(context).size.width - 60,
+          child: Card(
+            margin: EdgeInsets.only(left: 2, right: 2, bottom: 8),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(25),
+            ),
+            child: TextFormField(
+              textAlignVertical: TextAlignVertical.center,
+              keyboardType: TextInputType.multiline,
+              maxLines: 5,
+              minLines: 1,
+              focusNode: widget.messageFocus,
+              controller: widget.messageController,
+              decoration: InputDecoration(
+                hintText: "Type a message",
+                border: InputBorder.none,
+                contentPadding: EdgeInsets.all(5),
+                prefixIcon: IconButton(
+                  onPressed: () {},
+                  icon: Icon(Icons.emoji_emotions),
+                ),
+                suffixIcon: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      onPressed: () {},
+                      icon: Icon(Icons.attach_file),
                     ),
-                  ),
-                  // Emoji Icon
-                  IconButton(
-                    icon:
-                        Icon(Icons.emoji_emotions, color: Colors.grey.shade600),
-                    onPressed: () {
-                      widget.emojiOpen();
-                    },
-                  ),
-                ],
+                    IconButton(
+                      onPressed: () {},
+                      icon: Icon(Icons.camera_alt),
+                    )
+                  ],
+                ),
               ),
             ),
           ),
-          // Send Button
-          IconButton(
-            icon: Icon(Icons.send, color: Colors.blue),
-            onPressed: () {
-              if (widget.messageController.text.isNotEmpty) {
-                widget.onSend(); // Call the send function
-              }
-            },
+        ),
+
+        // Send Button
+        Padding(
+          padding: const EdgeInsets.only(
+            bottom: 8,
+            right: 5,
+            left: 2,
           ),
-        ],
-      ),
+          child: CircleAvatar(
+            backgroundColor: Color(0xFF128C7E),
+            radius: 25,
+            child: IconButton(
+              icon: Icon(Icons.send, color: Colors.white),
+              onPressed: () {
+                if (widget.messageController.text.isNotEmpty) {
+                  widget.onSend(); // Call the send function
+                }
+              },
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
