@@ -1,13 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:oiichat/controllers/ChatRoomController.dart';
 import 'package:oiichat/models/ChatModel.dart';
 
 class ChatCard extends StatelessWidget {
-  const ChatCard({super.key, required this.chatModel});
+  const ChatCard({super.key, required this.chatModel, required this.your_id});
   final ChatModel chatModel;
+  final String your_id;
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ChatRoomController(
+              user_name: chatModel.name,
+              user_image: "",
+              user1: your_id,
+              user2: chatModel.user_id, // Pass user ID or name
+            ),
+          ),
+        );
+      },
       child: Column(
         children: [
           ListTile(

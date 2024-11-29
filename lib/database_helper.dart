@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:oiichat/models/ChatModel.dart';
+import 'package:oiichat/models/ChatRoomModel.dart';
 import 'package:oiichat/models/useri_info_model.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
@@ -66,17 +67,19 @@ class DatabaseHelper {
     return await db.insert('messages', message.toMap());
   }
 
-  Future<List<Message>> getMessages(String user1, String user2) async {
+  Future<List<ChatRoomModel>> ChatRoomMessage(
+      String user1, String user2) async {
     final db = await database;
-    final List<Map<String, dynamic>> maps = await db.query(
-      'messages',
-      where: '(user1 = ? AND user2 = ?) OR (user1 = ? AND user2 = ?)',
-      whereArgs: [user1, user2, user2, user1],
-      orderBy: 'timestamp ASC',
-    );
+    final List<Map<String, dynamic>> maps = await db.rawQuery('''
+    SELECT message, timestamp as time, user1 AS user_id 
+    FROM messages 
+    WHERE (user1 = ? AND user2 = ?) 
+       OR (user1 = ? AND user2 = ?)
+    ORDER BY timestamp ASC
+  ''', [user1, user2, user2, user1]);
 
-    // Convert the List<Map<String, dynamic>> to List<Message>
-    return maps.map((map) => Message.fromMap(map)).toList();
+    // Convert the List<Map<String, dynamic>> to List<ChatRoomModel>
+    return maps.map((map) => ChatRoomModel.fromMap(map)).toList();
   }
 
   Future<void> deleteMessages(String user1, String user2) async {

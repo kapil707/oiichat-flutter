@@ -3,7 +3,9 @@ import 'package:intl/intl.dart'; // For date formatting
 import 'package:oiichat/AppBar.dart';
 import 'package:oiichat/RealTimeService.dart'; // Your real-time service class
 import 'package:oiichat/database_helper.dart'; // SQLite helper class
+import 'package:oiichat/models/ChatRoomModel.dart';
 import 'package:oiichat/models/useri_info_model.dart';
+import 'package:oiichat/widget/ChatRoomCard.dart';
 import 'package:oiichat/widget/main_widget.dart';
 import 'package:audioplayers/audioplayers.dart';
 
@@ -29,7 +31,7 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
   final dbHelper = DatabaseHelper();
 
   String? UserStatus;
-  List<Map<String, dynamic>> messages = [];
+  List<ChatRoomModel> messages = [];
   bool _isEmojiPickerOpen = false;
   int typingStatus = 0;
 
@@ -71,12 +73,12 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
     // Handle incoming messages
     _realTimeService.onMessageReceived = (data) {
       setState(() {
-        messages.add({
-          'status': 1, // Message delivered
-          'sender': widget.user2!,
-          'message': data,
-          'timestamp': DateTime.now().toString(),
-        });
+        // messages.add({
+        //   'status': 1, // Message delivered
+        //   'sender': widget.user2!,
+        //   'message': data,
+        //   'timestamp': DateTime.now().toString(),
+        // });
       });
       playNotificationSound();
       scrollToBottom();
@@ -132,18 +134,21 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
   }
 
   Future<void> loadMessages() async {
+    print('chatlist call');
     final chatHistory =
-        await dbHelper.getMessages(widget.user1!, widget.user2!);
+        await dbHelper.ChatRoomMessage(widget.user1!, widget.user2!);
+    print('chatlist $chatHistory');
     setState(() {
-      messages = chatHistory
-          .map((message) => {
-                'status': message.status,
-                'sender':
-                    message.user1 == widget.user1 ? widget.user1 : widget.user2,
-                'message': message.message,
-                'timestamp': message.timestamp,
-              })
-          .toList();
+      messages = chatHistory;
+      //   // messages = chatHistory
+      //   //     .map((message) => {
+      //   //           'status': message.status,
+      //   //           'sender':
+      //   //               message.user1 == widget.user1 ? widget.user1 : widget.user2,
+      //   //           'message': message.message,
+      //   //           'timestamp': message.timestamp,
+      //   //         })
+      //   //     .toList();
     });
   }
 
@@ -162,12 +167,12 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
     if (messageController.text.isNotEmpty) {
       _realTimeService.userTyping(widget.user1!, widget.user2!, "0");
       setState(() {
-        messages.add({
-          'status': 0, // Sent but not delivered yet
-          'sender': widget.user1,
-          'message': messageController.text,
-          'timestamp': DateTime.now().toString(),
-        });
+        // messages.add({
+        //   'status': 0, // Sent but not delivered yet
+        //   'sender': widget.user1,
+        //   'message': messageController.text,
+        //   'timestamp': DateTime.now().toString(),
+        // });
       });
 
       _realTimeService.sendMessage(
@@ -228,71 +233,8 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
                 controller: _scrollController,
                 itemCount: messages.length,
                 itemBuilder: (context, index) {
-                  final msg = messages[index];
-                  final isSentByUser1 = msg['sender'] == widget.user1;
-
-                  return Align(
-                    alignment: isSentByUser1
-                        ? Alignment.centerRight
-                        : Alignment.centerLeft,
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(
-                        maxWidth: MediaQuery.of(context).size.width * 0.7,
-                      ),
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(
-                            vertical: 5, horizontal: 10),
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 15),
-                        decoration: BoxDecoration(
-                          color: isSentByUser1
-                              ? Colors.grey[300]
-                              : Colors.blue[200],
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(12),
-                            topRight: Radius.circular(12),
-                            bottomLeft: isSentByUser1
-                                ? Radius.zero
-                                : Radius.circular(12),
-                            bottomRight: isSentByUser1
-                                ? Radius.circular(12)
-                                : Radius.zero,
-                          ),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              msg['message'],
-                              style: const TextStyle(fontSize: 16),
-                            ),
-                            const SizedBox(height: 5),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text(
-                                  DateFormat('hh:mm a').format(
-                                    DateTime.parse(msg['timestamp']).toLocal(),
-                                  ),
-                                  style: const TextStyle(
-                                    fontSize: 10,
-                                    color: Colors.black54,
-                                  ),
-                                ),
-                                const SizedBox(width: 5),
-                                Icon(
-                                  msg['status'] == 0
-                                      ? Icons.watch_later
-                                      : Icons.check,
-                                  size: 13,
-                                  color: Colors.black54,
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                  return ChatRoomCard(
+                    chatRoomModel: messages[index],
                   );
                 },
               ),

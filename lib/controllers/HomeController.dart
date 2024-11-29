@@ -9,7 +9,7 @@ import 'package:oiichat/main_functions.dart';
 import 'package:oiichat/models/ChatModel.dart';
 import 'package:oiichat/retrofit_api.dart';
 import 'package:oiichat/service/HomeService.dart';
-import 'package:oiichat/widget/Chatcard.dart';
+import 'package:oiichat/widget/ChatCard.dart';
 
 class HomeController extends StatefulWidget {
   const HomeController({super.key});
@@ -24,7 +24,7 @@ class _HomeControllerState extends State<HomeController>
   final dbHelper = DatabaseHelper();
   List<ChatModel> chats = [];
 
-  String? user1;
+  String? your_id;
 
   late TabController _controller;
 
@@ -46,7 +46,7 @@ class _HomeControllerState extends State<HomeController>
 
   @override
   void dispose() {
-    _realTimeService.manual_disconnect(user1!);
+    _realTimeService.manual_disconnect(your_id!);
     _realTimeService.dispose();
     super.dispose();
   }
@@ -55,10 +55,10 @@ class _HomeControllerState extends State<HomeController>
     UserSession userSession = UserSession();
     Map<String, String> userSessionData = await userSession.GetUserSession();
     setState(() {
-      user1 = userSessionData['userId']!;
+      your_id = userSessionData['userId']!;
       loadChats();
       // Initialize the real-time service
-      _realTimeService.initSocket(user1!);
+      _realTimeService.initSocket(your_id!);
       // Listen for new messages and refresh the chat list
       _realTimeService.onMessageReceived = (data) {
         loadChats();
@@ -67,7 +67,7 @@ class _HomeControllerState extends State<HomeController>
   }
 
   Future<void> loadChats() async {
-    final chatList = await dbHelper.getChatList(user1!);
+    final chatList = await dbHelper.getChatList(your_id!);
     print('chatlist $chatList');
     setState(() {
       chats = chatList;
@@ -141,6 +141,7 @@ class _HomeControllerState extends State<HomeController>
                             //     "http://160.30.100.216:3000/" + chat['image'];
 
                             return ChatCard(
+                              your_id: your_id!,
                               chatModel: chats[index],
                             );
                           },
