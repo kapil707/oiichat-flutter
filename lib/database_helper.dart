@@ -71,7 +71,7 @@ class DatabaseHelper {
       String user1, String user2) async {
     final db = await database;
     final List<Map<String, dynamic>> maps = await db.rawQuery('''
-    SELECT message, timestamp as time, user1 AS user_id 
+    SELECT message, timestamp as time, user1 AS user_id,status
     FROM messages 
     WHERE (user1 = ? AND user2 = ?) 
        OR (user1 = ? AND user2 = ?)
@@ -102,8 +102,10 @@ class DatabaseHelper {
           WHEN user1 = ? THEN user2 
           ELSE user1 
         END AS user_id, 
+        user2 as user_id2,
         MAX(timestamp) AS time, 
         message,
+        messages.status,
         user_info.user_name AS name,
         user_info.user_image AS image
       FROM messages

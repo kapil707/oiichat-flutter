@@ -43,10 +43,15 @@ class ChatRoomCardRight extends StatelessWidget {
                       style: TextStyle(fontSize: 10),
                     ),
                     SizedBox(width: 5),
-                    Icon(
-                      Icons.done_all,
-                      size: 14,
-                    ),
+                    if(chatRoomModel.status==0)...{ 
+                    Icon(Icons.watch_later_outlined,size: 12),
+                  },  
+                  if(chatRoomModel.status==1)...{ 
+                    Icon(Icons.done,size: 12),
+                  },
+                  if(chatRoomModel.status==2)...{ 
+                    Icon(Icons.done_all,size: 12),
+                  },
                   ],
                 ),
               )

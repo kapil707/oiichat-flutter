@@ -76,6 +76,7 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
           message: data,
           time: DateTime.now().toString(),
           user_id: widget.user2!,
+          status: 0,
         );
       setState(() {
         messages.add(newMessage);
@@ -186,13 +187,11 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
   }
 
   void scrollToBottom() {
-    if (_scrollController.hasClients) {
-      _scrollController.animateTo(
-        _scrollController.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeOut,
-      );
-    }
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+    );
   }
 
   @override
@@ -210,11 +209,11 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
         color: const Color(0xFFECE5DD),
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        child: Stack(
+        child: Column(
           children: [
-            Container(
-              height: MediaQuery.of(context).size.height - 140,
-              width: MediaQuery.of(context).size.width,
+            Expanded(
+              // height: MediaQuery.of(context).size.height - 140,
+              // width: MediaQuery.of(context).size.width,
               child:
                   // Messages List
                   ListView.builder(

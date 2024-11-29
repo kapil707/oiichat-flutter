@@ -11,7 +11,6 @@ import 'package:oiichat/controllers/SingUpController.dart';
 import 'package:oiichat/controllers/StoriesController.dart';
 import 'package:oiichat/splash_screen.dart';
 import 'package:oiichat/view/Notification.dart';
-import 'package:oiichat/wrapper.dart';
 
 
 final navigatorKey = GlobalKey<NavigatorState>();

@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:oiichat/AppDrawer.dart';
 import 'package:oiichat/RealTimeService.dart';
 import 'package:oiichat/controllers/ChatRoomController.dart';
+import 'package:oiichat/controllers/StatusPage.dart';
 import 'package:oiichat/database_helper.dart';
 import 'package:oiichat/main_functions.dart';
 import 'package:oiichat/models/ChatModel.dart';
@@ -107,6 +108,8 @@ class _HomeControllerState extends State<HomeController>
         bottom: TabBar(
           controller: _controller,
           indicatorColor: Colors.white,
+          labelColor: Colors.white,
+          unselectedLabelColor: const Color.fromARGB(255, 207, 205, 205),
           tabs: [
             Tab(icon: Icon(Icons.camera_alt)),
             Tab(
@@ -149,6 +152,7 @@ class _HomeControllerState extends State<HomeController>
                     ],
                   ),
                 ),
+                Statuspage(),
         ],
       ),
     );
