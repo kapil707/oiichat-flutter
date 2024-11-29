@@ -141,6 +141,7 @@ class _HomeControllerState extends State<HomeController>
                             return ChatCard(
                               your_id: your_id!,
                               chatModel: chats[index],
+                              onRefresh: refreshChatList,
                             );
                           },
                         ),
