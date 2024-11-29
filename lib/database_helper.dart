@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:oiichat/models/ChatModel.dart';
 import 'package:oiichat/models/useri_info_model.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
@@ -90,20 +91,18 @@ class DatabaseHelper {
   }
 
   // Query to get the last message for each user
-  Future<List<Map<String, dynamic>>> getChatList(String currentUser) async {
+  Future<List<ChatModel>> getChatList(String currentUser) async {
     final db = await database;
-
-    // Query to get the last message for each user
-    return await db.rawQuery('''
+    final List<Map<String, dynamic>> maps = await db.rawQuery('''
       SELECT 
         CASE 
           WHEN user1 = ? THEN user2 
           ELSE user1 
-        END AS chatUser, 
-        MAX(timestamp) AS lastMessageTime, 
+        END AS user_id, 
+        MAX(timestamp) AS time, 
         message,
-        user_info.user_name AS chatUserName,
-        user_info.user_image AS chatUserImage
+        user_info.user_name AS name,
+        user_info.user_image AS image
       FROM messages
       LEFT JOIN user_info ON user_info.user_id = (
         CASE 
@@ -112,9 +111,10 @@ class DatabaseHelper {
         END
       )
       WHERE user1 = ? OR user2 = ?
-      GROUP BY chatUser
-      ORDER BY lastMessageTime DESC
+      GROUP BY user_id
+      ORDER BY time DESC
     ''', [currentUser, currentUser, currentUser, currentUser]);
+    return maps.map((map) => ChatModel.fromMap(map)).toList();
   }
 
   Future<int> updateMessageStatus(int id, int newStatus) async {

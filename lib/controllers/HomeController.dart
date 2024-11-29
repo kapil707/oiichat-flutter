@@ -1,19 +1,15 @@
 import 'package:dio/dio.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:get/instance_manager.dart';
-import 'package:get/route_manager.dart';
 import 'package:intl/intl.dart';
 import 'package:oiichat/AppDrawer.dart';
 import 'package:oiichat/RealTimeService.dart';
 import 'package:oiichat/controllers/ChatRoomController.dart';
 import 'package:oiichat/database_helper.dart';
 import 'package:oiichat/main_functions.dart';
-import 'package:oiichat/models/HomePageModel.dart';
+import 'package:oiichat/models/ChatModel.dart';
 import 'package:oiichat/retrofit_api.dart';
 import 'package:oiichat/service/HomeService.dart';
-import 'package:oiichat/widget/main_widget.dart';
+import 'package:oiichat/widget/Chatcard.dart';
 
 class HomeController extends StatefulWidget {
   const HomeController({super.key});
@@ -22,12 +18,15 @@ class HomeController extends StatefulWidget {
   State<HomeController> createState() => _HomeControllerState();
 }
 
-class _HomeControllerState extends State<HomeController> {
+class _HomeControllerState extends State<HomeController>
+    with SingleTickerProviderStateMixin {
   final RealTimeService _realTimeService = RealTimeService();
   final dbHelper = DatabaseHelper();
-  List<Map<String, dynamic>> chats = [];
+  List<ChatModel> chats = [];
 
   String? user1;
+
+  late TabController _controller;
 
   final apiService = MyApiService(Dio());
   late final HomeService homeService;
@@ -36,6 +35,7 @@ class _HomeControllerState extends State<HomeController> {
     super.initState();
     //homeService = HomeService(apiService);
     //_handlePageLoad();
+    _controller = TabController(length: 4, vsync: this, initialIndex: 1);
   }
 
   @override
@@ -68,7 +68,7 @@ class _HomeControllerState extends State<HomeController> {
 
   Future<void> loadChats() async {
     final chatList = await dbHelper.getChatList(user1!);
-    //print('chatlist $chatList');
+    print('chatlist $chatList');
     setState(() {
       chats = chatList;
     });
@@ -77,74 +77,80 @@ class _HomeControllerState extends State<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(backgroundColor: Colors.teal, title: const Text("Chats")),
+      appBar: AppBar(
+        backgroundColor: Colors.teal,
+        title: const Text("OiiChat"),
+        actions: [
+          IconButton(onPressed: () {}, icon: Icon(Icons.search)),
+          PopupMenuButton(onSelected: (value) {
+            print(value);
+          }, itemBuilder: (BuildContext context) {
+            return [
+              PopupMenuItem(
+                child: Text("New Group"),
+                value: "New Group",
+              ),
+              PopupMenuItem(
+                child: Text("Setting"),
+                value: "Setting",
+              ),
+            ];
+          })
+        ],
+        bottom: TabBar(
+          controller: _controller,
+          indicatorColor: Colors.white,
+          tabs: [
+            Tab(icon: Icon(Icons.camera_alt)),
+            Tab(
+              text: "Chat",
+            ),
+            Tab(
+              text: "Status",
+            ),
+            Tab(
+              text: "Call",
+            ),
+          ],
+        ),
+      ),
       drawer: AppDrawer(),
-      body: chats.isEmpty
-          ? const Center(child: Text("No chats available"))
-          : Container(
-              color: const Color(0xFFECE5DD), // WhatsApp-like background color
-              child: Column(
-                children: [
-                  // Chat Messages List
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: chats.length,
-                      itemBuilder: (context, index) {
-                        final chat = chats[index];
-                        final lastMessageTime =
-                            DateTime.parse(chat['lastMessageTime']);
-                        String chatuser = chat['chatUser'] == user1
-                            ? user1
-                            : chat['chatUser'];
+      body: TabBarView(
+        controller: _controller,
+        children: [
+          Text("camra"),
+          chats.isEmpty
+              ? const Center(child: Text("No chats available"))
+              : Container(
+                  color:
+                      const Color(0xFFECE5DD), // WhatsApp-like background color
+                  child: Column(
+                    children: [
+                      // Chat Messages List
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: chats.length,
+                          itemBuilder: (context, index) {
+                            //final chat = chats[index];
+                            // final lastMessageTime =
+                            //     DateTime.parse(chat['time']);
+                            // String chatuser =
+                            //     chat['name'] == user1 ? user1 : chat['name'];
 
-                        String userImageUrl = "http://160.30.100.216:3000/" +
-                            chat['chatUserImage'];
+                            // String userImageUrl =
+                            //     "http://160.30.100.216:3000/" + chat['image'];
 
-                        return ListTile(
-                          leading: CircleAvatar(
-                            backgroundImage: userImageUrl != null &&
-                                    userImageUrl.isNotEmpty
-                                ? NetworkImage(
-                                    userImageUrl) // Load image from the URL
-                                : const AssetImage('assets/default_avatar.webp')
-                                    as ImageProvider, // Default fallback image
-                            radius: 25,
-                          ),
-                          title: Text(
-                            chat['chatUserName']!,
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          subtitle: Text(
-                            chat['message'],
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          trailing: Text(
-                            DateFormat('hh:mm a').format(lastMessageTime),
-                            style: const TextStyle(
-                                fontSize: 12, color: Colors.grey),
-                          ),
-                          onTap: () {
-                            // Navigate to Chat Room
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ChatRoomController(
-                                  user_name: chat['chatUserName'],
-                                  user_image: userImageUrl,
-                                  user1: user1,
-                                  user2: chatuser,
-                                ),
-                              ),
+                            return ChatCard(
+                              chatModel: chats[index],
                             );
                           },
-                        );
-                      },
-                    ),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
+                ),
+        ],
+      ),
     );
   }
 }
