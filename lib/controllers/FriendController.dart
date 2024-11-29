@@ -100,6 +100,7 @@ class _FriendControllerState extends State<FriendController> {
                           builder: (context) => ChatRoomController(
                             user_name: user['name'],
                             user_image: "",
+                            user1: user1,
                             user2: user['_id'], // Pass user ID or name
                           ),
                         ),

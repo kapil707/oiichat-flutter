@@ -38,14 +38,14 @@ class ChatRoomCardRight extends StatelessWidget {
                 child: Row(
                   children: [
                     Text(
-                      DateFormat('hh:mm a')
+                      DateFormat('hh:mma')
                           .format(DateTime.parse(chatRoomModel.time).toLocal()),
-                      style: TextStyle(fontSize: 12),
+                      style: TextStyle(fontSize: 10),
                     ),
                     SizedBox(width: 5),
                     Icon(
                       Icons.done_all,
-                      size: 16,
+                      size: 14,
                     ),
                   ],
                 ),

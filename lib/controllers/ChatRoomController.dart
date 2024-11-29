@@ -72,13 +72,13 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
 
     // Handle incoming messages
     _realTimeService.onMessageReceived = (data) {
+        final newMessage = ChatRoomModel(
+          message: data,
+          time: DateTime.now().toString(),
+          user_id: widget.user2!,
+        );
       setState(() {
-        // messages.add({
-        //   'status': 1, // Message delivered
-        //   'sender': widget.user2!,
-        //   'message': data,
-        //   'timestamp': DateTime.now().toString(),
-        // });
+        messages.add(newMessage);
       });
       playNotificationSound();
       scrollToBottom();
@@ -140,15 +140,6 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
     print('chatlist $chatHistory');
     setState(() {
       messages = chatHistory;
-      //   // messages = chatHistory
-      //   //     .map((message) => {
-      //   //           'status': message.status,
-      //   //           'sender':
-      //   //               message.user1 == widget.user1 ? widget.user1 : widget.user2,
-      //   //           'message': message.message,
-      //   //           'timestamp': message.timestamp,
-      //   //         })
-      //   //     .toList();
     });
   }
 
@@ -165,15 +156,7 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
 
   void sendMessage() async {
     if (messageController.text.isNotEmpty) {
-      _realTimeService.userTyping(widget.user1!, widget.user2!, "0");
-      setState(() {
-        // messages.add({
-        //   'status': 0, // Sent but not delivered yet
-        //   'sender': widget.user1,
-        //   'message': messageController.text,
-        //   'timestamp': DateTime.now().toString(),
-        // });
-      });
+      _realTimeService.userTyping(widget.user1!, widget.user2!, "0");      
 
       _realTimeService.sendMessage(
         widget.user1!,

@@ -42,7 +42,14 @@ class _HomeControllerState extends State<HomeController>
   void didChangeDependencies() {
     super.didChangeDependencies();
     _handlePageLoad(); // Reload the chats when returning to this screen
+    print("call me");
   }
+
+  void refreshChatList() {
+    // Simulate refreshing the chat list
+    print("Refreshing chat list...");
+    _handlePageLoad();
+  }  
 
   @override
   void dispose() {
@@ -131,15 +138,6 @@ class _HomeControllerState extends State<HomeController>
                         child: ListView.builder(
                           itemCount: chats.length,
                           itemBuilder: (context, index) {
-                            //final chat = chats[index];
-                            // final lastMessageTime =
-                            //     DateTime.parse(chat['time']);
-                            // String chatuser =
-                            //     chat['name'] == user1 ? user1 : chat['name'];
-
-                            // String userImageUrl =
-                            //     "http://160.30.100.216:3000/" + chat['image'];
-
                             return ChatCard(
                               your_id: your_id!,
                               chatModel: chats[index],
