@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:oiichat/Controllers/HomeController.dart';
 import 'package:oiichat/Themes/themeClass.dart';
 import 'package:oiichat/View/LandingPage.dart';
-import 'package:oiichat/config/RealTimeService.dart';
+import 'package:oiichat/Config/RealTimeService.dart';
 import 'package:oiichat/Config/firebase_api.dart';
 import 'package:oiichat/Controllers/FriendController.dart';
 import 'package:oiichat/Controllers/LoginController.dart';

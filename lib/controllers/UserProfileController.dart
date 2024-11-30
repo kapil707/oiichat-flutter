@@ -39,11 +39,20 @@ class _UserProfileControllerState extends State<UserProfileController> {
       body: CustomScrollView(
         slivers: [
           SliverPersistentHeader(
-            delegate: CustomSliverHeaderDelegate(),
+            delegate: CustomSliverHeaderDelegate(widget.user_image),
+            pinned: true,
           ),
           SliverToBoxAdapter(
             child: Column(
               children: [
+                Container(
+                  child: Column(
+                    children: [
+                      Text(widget.user_name!,style: TextStyle(fontSize: 24),),
+                       Text(widget.user_name!,style: TextStyle(fontSize: 24),),
+                    ],
+                  ),
+                ),
                 SizedBox(height: 300),
                 SizedBox(height: 300),
                 SizedBox(height: 300),
@@ -62,28 +71,81 @@ class _UserProfileControllerState extends State<UserProfileController> {
 }
 
 class CustomSliverHeaderDelegate extends SliverPersistentHeaderDelegate {
-  final double minHeight = 180;
-  final double maxHeight = kToolbarHeight + 35;
+  final double maxHeaderHeight = 180;
+  final double minHeaderHeight = kToolbarHeight + 20;
+  final double maxImageSize = 130;
+  final double minImageSize = 40;
+  final user_image;
+
+  CustomSliverHeaderDelegate(this.user_image);
 
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return Container(
-      color: Colors.black,
-      child: Stack(
-        children: [Positioned(child: Icon(Icons.back_hand_outlined))],
-      ),
+        final size = MediaQuery.of(context).size;
+    final percent = shrinkOffset / (maxHeaderHeight - 35);
+    final percent2 = shrinkOffset / (maxHeaderHeight);
+    final currentImageSize = (maxImageSize * (1 - percent)).clamp(
+      minImageSize,
+      maxImageSize,
     );
+    final currentImagePosition = ((size.width / 2 - 65) * (1 - percent)).clamp(
+      minImageSize,
+      maxImageSize,
+    );
+    return Container(
+      color: Theme.of(context).primaryColor,
+      child: Container(
+        color: Theme.of(context)
+            .appBarTheme
+            .backgroundColor!
+            .withOpacity(percent2 * 2 < 1 ? percent2 * 2 : 1),
+        child:  Stack(
+        children: [
+          Positioned(
+          left: currentImagePosition + 50,
+          top:MediaQuery.of(context).viewPadding.top + 15,
+          child: Text("Vedant",style: TextStyle(color: Colors.white),)),
+
+          Positioned(
+          left: 0,
+          top:MediaQuery.of(context).viewPadding.top + 2,
+          child: IconButton(
+            icon:Icon(Icons.arrow_back,color: percent2 > .3 ? Colors.white.withOpacity(percent2) : null,),onPressed: () {
+              Navigator.pop(context, true);
+            })),
+          
+          Positioned(
+          right: 0,
+          top:MediaQuery.of(context).viewPadding.top + 5,
+          child: Icon(Icons.more_vert,color: Colors.white,),),
+
+          Positioned(
+            left: currentImagePosition,
+            top:MediaQuery.of(context).viewPadding.top + 5,
+            bottom: 0,
+          child: Container(
+            width: currentImageSize,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              image: DecorationImage(image: 
+              NetworkImage(user_image))
+            ),
+          )
+            ),
+          ],
+      ),
+    ),);
   }
 
-  @override
-  double get maxExtent => maxHeight;
+   @override
+  double get maxExtent => maxHeaderHeight;
 
   @override
-  double get minExtent => minHeight;
+  double get minExtent => minHeaderHeight;
 
   @override
-  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
     return false;
   }
 }
