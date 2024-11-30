@@ -7,10 +7,10 @@ import 'package:oiichat/Config/main_functions.dart';
 import 'package:oiichat/models/ChatModel.dart';
 import 'package:oiichat/config/retrofit_api.dart';
 import 'package:oiichat/service/HomeService.dart';
-import 'package:oiichat/widget/ChatCard.dart';
 
 import '../Config/database_helper.dart';
 import '../View/AppDrawer.dart';
+import '../View/Chatcard.dart';
 
 class HomeController extends StatefulWidget {
   const HomeController({super.key});

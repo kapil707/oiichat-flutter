@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart'; // For date formatting
 import 'package:oiichat/models/ChatRoomModel.dart';
-import 'package:oiichat/models/useri_info_model.dart';
 import 'package:audioplayers/audioplayers.dart';
 
 import '../Config/database_helper.dart';

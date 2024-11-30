@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'package:oiichat/models/ChatModel.dart';
 import 'package:oiichat/models/ChatRoomModel.dart';
-import 'package:oiichat/models/useri_info_model.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
+import '../Models/UserInfoModel.dart';
 import '../Models/message.dart';
 
 class DatabaseHelper {
@@ -38,7 +38,7 @@ class DatabaseHelper {
     );
   }
 
-  Future<int> insertOrUpdateUserInfo(UseriInfoModel model) async {
+  Future<int> insertOrUpdateUserInfo(UserInfoModel model) async {
     final db = await database;
 
     // Check if the user already exists

@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:oiichat/Controllers/HomeController.dart';
+import 'package:oiichat/Themes/themeClass.dart';
 import 'package:oiichat/View/LandingPage.dart';
 import 'package:oiichat/config/RealTimeService.dart';
 import 'package:oiichat/Config/firebase_api.dart';
@@ -37,16 +38,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange.shade50),
-        appBarTheme: const AppBarTheme(
-          foregroundColor: Colors.white, // AppBar text color
-          backgroundColor:
-              Color.fromARGB(255, 178, 160, 132), // AppBar background color
-        ),
-        useMaterial3: true,
-      ),
-//home: RealTimeScreen(),
+      theme: lightTheme,
+      darkTheme: darkTheme,
+      //home: RealTimeScreen(),
       initialRoute: '/',
       navigatorKey: navigatorKey,
       routes: {
