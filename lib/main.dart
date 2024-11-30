@@ -1,17 +1,15 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
-import 'package:oiichat/RealTimeService.dart';
-import 'package:oiichat/api/firebase_api.dart';
-import 'package:oiichat/controllers/FriendController.dart';
-import 'package:oiichat/controllers/HomeController.dart';
-import 'package:oiichat/controllers/LoginController.dart';
-import 'package:oiichat/controllers/MyProfileController.dart';
-import 'package:oiichat/controllers/SingUpController.dart';
-import 'package:oiichat/controllers/StoriesController.dart';
-import 'package:oiichat/splash_screen.dart';
-import 'package:oiichat/view/Notification.dart';
-
+import 'package:oiichat/Controllers/HomeController.dart';
+import 'package:oiichat/View/LandingPage.dart';
+import 'package:oiichat/config/RealTimeService.dart';
+import 'package:oiichat/Config/firebase_api.dart';
+import 'package:oiichat/Controllers/FriendController.dart';
+import 'package:oiichat/Controllers/LoginController.dart';
+import 'package:oiichat/Controllers/MyProfileController.dart';
+import 'package:oiichat/Controllers/SingUpController.dart';
+import 'package:oiichat/View/SplashScreen.dart';
+import 'package:oiichat/View/Notification.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 
@@ -43,7 +41,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange.shade50),
         appBarTheme: const AppBarTheme(
           foregroundColor: Colors.white, // AppBar text color
-          backgroundColor: Color.fromARGB(255, 178, 160, 132), // AppBar background color
+          backgroundColor:
+              Color.fromARGB(255, 178, 160, 132), // AppBar background color
         ),
         useMaterial3: true,
       ),
@@ -52,10 +51,10 @@ class MyApp extends StatelessWidget {
       navigatorKey: navigatorKey,
       routes: {
         '/': (context) => const SplashScreenClass(),
+        '/Landingpage': (context) => const Landingpage(),
         '/LoginPage': (context) => LoginController(),
         '/SingUpPage': (context) => SingUpController(),
         '/HomePage': (context) => HomeController(),
-        '/StoriesPage': (context) => StoriesController(),
         '/MyProfilePage': (context) => MyProfileController(),
         '/Notification': (context) => MyNotification(),
         '/MyFriends': (context) => FriendController(),

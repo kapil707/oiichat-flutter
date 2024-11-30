@@ -1,9 +1,9 @@
-import 'package:oiichat/main_functions.dart';
 import 'package:oiichat/models/FriendPageModel.dart';
-import 'package:oiichat/retrofit_api.dart';
+import 'package:oiichat/config/retrofit_api.dart';
 
-class FriendService {  
-  
+import '../Config/main_functions.dart';
+
+class FriendService {
   final MyApiService apiService;
   FriendService(this.apiService);
 

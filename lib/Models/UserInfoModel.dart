@@ -1,10 +1,10 @@
-class UseriInfoModel {
+class UserInfoModel {
   final int? id; // Primary key
   final String user_id;
   final String user_name;
   final String user_image;
 
-  UseriInfoModel({
+  UserInfoModel({
     this.id,
     required this.user_id,
     required this.user_name,
@@ -22,8 +22,8 @@ class UseriInfoModel {
   }
 
   // Create a Message object from a Map
-  factory UseriInfoModel.fromMap(Map<String, dynamic> map) {
-    return UseriInfoModel(
+  factory UserInfoModel.fromMap(Map<String, dynamic> map) {
+    return UserInfoModel(
       id: map['id'],
       user_id: map['user_id'],
       user_name: map['user_name'],

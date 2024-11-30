@@ -3,15 +3,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
-import 'package:get/route_manager.dart';
-import 'package:oiichat/AppDrawer.dart';
-import 'package:oiichat/RealTimeService.dart';
 import 'package:oiichat/controllers/ChatRoomController.dart';
-import 'package:oiichat/main_functions.dart';
 import 'package:oiichat/models/HomePageModel.dart';
-import 'package:oiichat/retrofit_api.dart';
+import 'package:oiichat/config/retrofit_api.dart';
 import 'package:oiichat/service/HomeService.dart';
-import 'package:oiichat/widget/main_widget.dart';
+
+import '../Config/main_functions.dart';
+import '../View/AppDrawer.dart';
+import '../config/RealTimeService.dart';
 
 class FriendController extends StatefulWidget {
   const FriendController({super.key});

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart'; // For date formatting
-import 'package:oiichat/AppBar.dart';
-import 'package:oiichat/RealTimeService.dart'; // Your real-time service class
-import 'package:oiichat/database_helper.dart'; // SQLite helper class
 import 'package:oiichat/models/ChatRoomModel.dart';
 import 'package:oiichat/models/useri_info_model.dart';
-import 'package:oiichat/widget/ChatRoomCard.dart';
-import 'package:oiichat/widget/main_widget.dart';
 import 'package:audioplayers/audioplayers.dart';
+
+import '../Config/database_helper.dart';
+import '../View/AppBar.dart';
+import '../View/ChatRoomCard.dart';
+import '../View/main_widget.dart';
+import '../config/RealTimeService.dart';
 
 class ChatRoomController extends StatefulWidget {
   final String? user_name;
@@ -72,12 +73,12 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
 
     // Handle incoming messages
     _realTimeService.onMessageReceived = (data) {
-        final newMessage = ChatRoomModel(
-          message: data,
-          time: DateTime.now().toString(),
-          user_id: widget.user2!,
-          status: 0,
-        );
+      final newMessage = ChatRoomModel(
+        message: data,
+        time: DateTime.now().toString(),
+        user_id: widget.user2!,
+        status: 0,
+      );
       setState(() {
         messages.add(newMessage);
       });
@@ -157,7 +158,7 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
 
   void sendMessage() async {
     if (messageController.text.isNotEmpty) {
-      _realTimeService.userTyping(widget.user1!, widget.user2!, "0");      
+      _realTimeService.userTyping(widget.user1!, widget.user2!, "0");
 
       _realTimeService.sendMessage(
         widget.user1!,

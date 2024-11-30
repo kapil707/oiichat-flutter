@@ -1,8 +1,10 @@
-import 'package:oiichat/models/message.dart';
-import 'package:oiichat/models/useri_info_model.dart';
+import 'package:oiichat/Models/UserInfoModel.dart';
+import 'package:oiichat/config/main_config.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
-import 'database_helper.dart';
 import 'dart:math';
+
+import '../Config/database_helper.dart';
+import '../Models/message.dart';
 
 String generateRandomToken(int length) {
   const chars =
@@ -23,7 +25,7 @@ class RealTimeService {
 
   void initSocket(String user) {
     // Socket.IO connection setup
-    socket = IO.io('http://160.30.100.216:3000/', <String, dynamic>{
+    socket = IO.io(MainConfig.host_url, <String, dynamic>{
       'transports': ['websocket'],
       'autoConnect': false,
     });
@@ -42,12 +44,12 @@ class RealTimeService {
     socket.on('receiveMessage', (data) async {
       print("user ka naam " + data["user_image"]);
       //user ki info insert or update hotai ha yaha say
-      final newUser = UseriInfoModel(
-        user_id: data["user1"],
-        user_name: data["user_name"],
-        user_image: data["user_image"],
-      );
-      await dbHelper.insertOrUpdateUserInfo(newUser);
+      // final newUser = UserInfoModel(
+      //   user_id: data["user1"],
+      //   user_name: data["user_name"],
+      //   user_image: data["user_image"],
+      // );
+      // await dbHelper.insertOrUpdateUserInfo(newUser);
 
       final newMessage = Message(
         user1: data["user1"],

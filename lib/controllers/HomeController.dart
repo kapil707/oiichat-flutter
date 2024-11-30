@@ -1,16 +1,16 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:oiichat/AppDrawer.dart';
-import 'package:oiichat/RealTimeService.dart';
-import 'package:oiichat/controllers/ChatRoomController.dart';
+import 'package:oiichat/config/RealTimeService.dart';
 import 'package:oiichat/controllers/StatusPage.dart';
-import 'package:oiichat/database_helper.dart';
-import 'package:oiichat/main_functions.dart';
+import 'package:oiichat/Config/main_functions.dart';
 import 'package:oiichat/models/ChatModel.dart';
-import 'package:oiichat/retrofit_api.dart';
+import 'package:oiichat/config/retrofit_api.dart';
 import 'package:oiichat/service/HomeService.dart';
 import 'package:oiichat/widget/ChatCard.dart';
+
+import '../Config/database_helper.dart';
+import '../View/AppDrawer.dart';
 
 class HomeController extends StatefulWidget {
   const HomeController({super.key});
@@ -50,7 +50,7 @@ class _HomeControllerState extends State<HomeController>
     // Simulate refreshing the chat list
     print("Refreshing chat list...");
     _handlePageLoad();
-  }  
+  }
 
   @override
   void dispose() {
@@ -86,7 +86,7 @@ class _HomeControllerState extends State<HomeController>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.teal,
+        backgroundColor: Colors.deepOrangeAccent[200],
         title: const Text("OiiChat"),
         actions: [
           IconButton(onPressed: () {}, icon: Icon(Icons.search)),
@@ -152,7 +152,7 @@ class _HomeControllerState extends State<HomeController>
                     ],
                   ),
                 ),
-                Statuspage(),
+          Statuspage(),
         ],
       ),
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:oiichat/retrofit_api.dart';
-import 'package:oiichat/session.dart';
+import 'package:oiichat/config/retrofit_api.dart';
+
+import '../Config/session.dart';
 
 class LoginResponse {
   final String status;
@@ -13,12 +14,13 @@ class LoginService {
   final MyApiService apiService;
   LoginService(this.apiService);
 
-  Future<LoginResponse> login_api(
-      BuildContext context, String username, String password,String _firebaseToken) async {
+  Future<LoginResponse> login_api(BuildContext context, String username,
+      String password, String _firebaseToken) async {
     try {
-      final response = await apiService.login_api("xx", username, password, _firebaseToken);
+      final response =
+          await apiService.login_api("xx", username, password, _firebaseToken);
       //print('login_api:' + response.message.toString());
-      
+
       final status = response.status.toString();
       final statusMessage = response.message.toString();
 

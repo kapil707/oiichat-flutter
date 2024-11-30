@@ -9,9 +9,7 @@ import 'package:retrofit/retrofit.dart';
 part 'retrofit_api.g.dart';
 
 //flutter pub run build_runner build
-@RestApi(
-    //baseUrl: "https://www.drdistributors.co.in/drd-live/flutter_api/Api01/")
-    baseUrl: "http://160.30.100.216:3000/api/")
+@RestApi(baseUrl: "http://160.30.100.216:3000/api/")
 abstract class MyApiService {
   factory MyApiService(Dio dio, {String baseUrl}) = _MyApiService;
 

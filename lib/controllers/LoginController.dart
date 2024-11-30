@@ -1,18 +1,11 @@
 import 'package:art_sweetalert/art_sweetalert.dart';
 import 'package:dio/dio.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:get/instance_manager.dart';
-import 'package:get/route_manager.dart';
-import 'package:oiichat/RealTimeService.dart';
-import 'package:oiichat/controllers/HomeController.dart';
-import 'package:oiichat/controllers/SingUpController.dart';
-import 'package:oiichat/retrofit_api.dart';
-import 'package:oiichat/service/LoginService.dart';
-import 'package:oiichat/session.dart';
-import 'package:oiichat/widget/main_widget.dart';
+
+import '../View/main_widget.dart';
+import '../config/retrofit_api.dart';
+import '../service/LoginService.dart';
 
 class LoginController extends StatefulWidget {
   const LoginController({super.key});
@@ -89,8 +82,8 @@ class _LoginControllerState extends State<LoginController> {
       _isLoading = true;
     });
 
-    final loginResponse =
-        await loginService.login_api(context, username.text, password.text,_firebaseToken!);
+    final loginResponse = await loginService.login_api(
+        context, username.text, password.text, _firebaseToken!);
 
     setState(() {
       _isLoading = false;

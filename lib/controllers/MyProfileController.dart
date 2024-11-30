@@ -3,9 +3,10 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:oiichat/AppDrawer.dart';
-import 'package:oiichat/main_functions.dart';
-import 'package:oiichat/retrofit_api.dart';
+import 'package:oiichat/config/retrofit_api.dart';
+
+import '../Config/main_functions.dart';
+import '../View/AppDrawer.dart';
 
 class MyProfileController extends StatefulWidget {
   const MyProfileController({super.key});

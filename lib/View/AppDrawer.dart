@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
 import 'package:get/route_manager.dart';
 import 'package:oiichat/controllers/SingUpController.dart';
-import 'package:oiichat/main_functions.dart';
-import 'package:oiichat/session.dart';
-import 'package:oiichat/splash_screen.dart';
+import 'package:oiichat/Config/main_functions.dart';
+import 'package:oiichat/View/SplashScreen.dart';
+
+import '../Config/session.dart';
 
 class MyDrawerTile extends StatelessWidget {
   final IconData icon;
@@ -30,13 +31,11 @@ class MyDrawerTile extends StatelessWidget {
 }
 
 class AppDrawer extends StatefulWidget {
-
   @override
   State<AppDrawer> createState() => _AppDrawerState();
 }
 
 class _AppDrawerState extends State<AppDrawer> {
-  
   String? _display_name;
 
   @override
@@ -47,10 +46,10 @@ class _AppDrawerState extends State<AppDrawer> {
 
   Future<void> _handlePageLoad() async {
     UserSession userSession = UserSession();
-      Map<String, String> userSessionData = await userSession.GetUserSession();
-      setState(() {
-        _display_name = userSessionData['userName']!;
-      });
+    Map<String, String> userSessionData = await userSession.GetUserSession();
+    setState(() {
+      _display_name = userSessionData['userName']!;
+    });
   }
 
   singOut(context) async {

@@ -1,9 +1,9 @@
-import 'package:oiichat/main_functions.dart';
 import 'package:oiichat/models/HomePageModel.dart';
-import 'package:oiichat/retrofit_api.dart';
+import 'package:oiichat/config/retrofit_api.dart';
 
-class HomeService {  
-  
+import '../Config/main_functions.dart';
+
+class HomeService {
   final MyApiService apiService;
   HomeService(this.apiService);
 
