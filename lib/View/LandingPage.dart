@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:oiichat/Config/Colors.dart';
 
 class Landingpage extends StatelessWidget {
   const Landingpage({super.key});
@@ -12,11 +13,11 @@ class Landingpage extends StatelessWidget {
         child: SafeArea(
           child: Column(
             children: [
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Text(
                 "Welcome to OiiChat",
                 style: TextStyle(
-                    color: Colors.orange,
+                    color: mainLblColor,
                     fontSize: 29,
                     fontWeight: FontWeight.w600),
               ),
@@ -28,15 +29,15 @@ class Landingpage extends StatelessWidget {
                 child: RichText(
                   textAlign: TextAlign.center,
                   text: TextSpan(
-                    style: TextStyle(color: Colors.black, fontSize: 17),
+                    style: const TextStyle(fontSize: 17),
                     children: [
                       TextSpan(
                         text: "Agree and Continue to accept the",
-                        style: TextStyle(color: Colors.grey[600]),
+                        style: TextStyle(color: mainTxtColor),
                       ),
                       TextSpan(
                         text: " OiiChat Trems of Service and Privacy Policy",
-                        style: TextStyle(color: Colors.orange),
+                        style: TextStyle(color: mainLinkColor),
                       ),
                     ],
                   ),
@@ -53,11 +54,11 @@ class Landingpage extends StatelessWidget {
                   child: Card(
                     margin: EdgeInsets.all(0),
                     elevation: 8,
-                    color: Colors.orange,
+                    color: mainBtnColor,
                     child: Center(
                       child: Text(
                         "Agree And Continue",
-                        style: TextStyle(color: Colors.white, fontSize: 20),
+                        style: TextStyle(color: mainBtnTxtColor, fontSize: 20),
                       ),
                     ),
                   ),

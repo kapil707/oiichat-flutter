@@ -20,22 +20,17 @@ class WhatsAppAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      leadingWidth: 80,
-      backgroundColor: Colors.teal, // WhatsApp's typical color
-      elevation: 1.0,
+      leadingWidth: 90,
       leading: Row(
         children: [
           IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.white),
+            icon: Icon(Icons.arrow_back),
             onPressed: () {
-              Navigator.pop(context,true);
+              Navigator.pop(context, true);
             },
           ),
-          Container(
-            height: 60,
-            child: CircleAvatar(
-              backgroundImage: NetworkImage(profileImageUrl), // Profile picture
-            ),
+          CircleAvatar(
+            backgroundImage: NetworkImage(profileImageUrl),
           ),
         ],
       ),
@@ -47,7 +42,6 @@ class WhatsAppAppBar extends StatelessWidget implements PreferredSizeWidget {
             Text(
               userName,
               style: TextStyle(
-                color: Colors.white,
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
               ),
@@ -55,7 +49,6 @@ class WhatsAppAppBar extends StatelessWidget implements PreferredSizeWidget {
             Text(
               userStatus, // e.g., "Online" or "Last seen at..."
               style: TextStyle(
-                color: Colors.white.withOpacity(0.8),
                 fontSize: 12,
               ),
             ),
@@ -64,15 +57,15 @@ class WhatsAppAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       actions: [
         IconButton(
-          icon: Icon(Icons.call, color: Colors.white),
+          icon: Icon(Icons.call),
           onPressed: onCallPressed, // Action for voice call
         ),
         IconButton(
-          icon: Icon(Icons.videocam, color: Colors.white),
+          icon: Icon(Icons.videocam),
           onPressed: onVideoCallPressed, // Action for video call
         ),
         IconButton(
-          icon: Icon(Icons.more_vert, color: Colors.white),
+          icon: Icon(Icons.more_vert),
           onPressed: onMorePressed, // Action for more options
         ),
       ],

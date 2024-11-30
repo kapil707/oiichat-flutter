@@ -8,9 +8,10 @@ import 'package:oiichat/models/ChatModel.dart';
 import 'package:oiichat/config/retrofit_api.dart';
 import 'package:oiichat/service/HomeService.dart';
 
+import '../Config/Colors.dart';
 import '../Config/database_helper.dart';
 import '../View/AppDrawer.dart';
-import '../View/Chatcard.dart';
+import '../View/ChatCard.dart';
 
 class HomeController extends StatefulWidget {
   const HomeController({super.key});
@@ -86,7 +87,6 @@ class _HomeControllerState extends State<HomeController>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.deepOrangeAccent[200],
         title: const Text("OiiChat"),
         actions: [
           IconButton(onPressed: () {}, icon: Icon(Icons.search)),
@@ -107,9 +107,9 @@ class _HomeControllerState extends State<HomeController>
         ],
         bottom: TabBar(
           controller: _controller,
-          indicatorColor: Colors.white,
-          labelColor: Colors.white,
-          unselectedLabelColor: const Color.fromARGB(255, 207, 205, 205),
+          indicatorColor: mainTabTxtColor,
+          labelColor: mainTabTxtColor,
+          unselectedLabelColor: mainUnTabTxtColor,
           tabs: [
             Tab(icon: Icon(Icons.camera_alt)),
             Tab(
@@ -132,8 +132,6 @@ class _HomeControllerState extends State<HomeController>
           chats.isEmpty
               ? const Center(child: Text("No chats available"))
               : Container(
-                  color:
-                      const Color(0xFFECE5DD), // WhatsApp-like background color
                   child: Column(
                     children: [
                       // Chat Messages List

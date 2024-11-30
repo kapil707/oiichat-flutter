@@ -7,8 +7,8 @@ final ThemeData lightTheme = ThemeData(
     primaryColor: Colors.blue,
     scaffoldBackgroundColor: Colors.white,
     appBarTheme: AppBarTheme(
-      backgroundColor: Colors.blue,
-      foregroundColor: Colors.white,
+      backgroundColor: lightHeaderBgColor,
+      foregroundColor: lightHeaderTxtColor,
     ));
 
 final ThemeData darkTheme = ThemeData(
@@ -17,6 +17,6 @@ final ThemeData darkTheme = ThemeData(
     primaryColor: Colors.grey[800],
     scaffoldBackgroundColor: Colors.black,
     appBarTheme: AppBarTheme(
-      backgroundColor: Colors.grey[900],
-      foregroundColor: Colors.white,
+      backgroundColor: darkHeaderBgColor,
+      foregroundColor: darkHeaderTxtColor,
     ));

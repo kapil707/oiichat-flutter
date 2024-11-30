@@ -1,5 +1,6 @@
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:oiichat/Config/Colors.dart';
 
 class MainButton extends StatelessWidget {
   final String btnName;
@@ -16,14 +17,14 @@ class MainButton extends StatelessWidget {
       },
       style: ElevatedButton.styleFrom(
         padding: const EdgeInsets.symmetric(vertical: 15),
-        backgroundColor: Colors.deepPurple,
+        backgroundColor: mainBtnColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ), // Background color
       ),
       child: Text(
         btnName,
-        style: const TextStyle(fontSize: 18, color: Colors.white),
+        style: TextStyle(fontSize: 18, color: mainBtnTxtColor),
       ),
     );
   }
@@ -202,7 +203,7 @@ class _ChatInputBoxState extends State<ChatInputBox> {
             left: 2,
           ),
           child: CircleAvatar(
-            backgroundColor: Color(0xFF128C7E),
+            backgroundColor: mainBtnColor,
             radius: 25,
             child: IconButton(
               icon: Icon(Icons.send, color: Colors.white),

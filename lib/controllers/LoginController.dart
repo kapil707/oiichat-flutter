@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
+import '../Config/Colors.dart';
 import '../View/main_widget.dart';
 import '../config/retrofit_api.dart';
 import '../service/LoginService.dart';
@@ -151,13 +152,19 @@ class _LoginControllerState extends State<LoginController> {
                       // Handle register logic here
                       Navigator.pushNamed(context, '/SingUpPage');
                     },
-                    child: const Text('Create Account'),
+                    child: Text(
+                      'Create Account',
+                      style: TextStyle(color: mainLinkColor),
+                    ),
                   ),
                   TextButton(
                     onPressed: () {
                       // Handle forgot password logic here
                     },
-                    child: const Text('Forgot Password?'),
+                    child: Text(
+                      'Forgot Password?',
+                      style: TextStyle(color: mainLinkColor),
+                    ),
                   ),
                 ],
               ),
