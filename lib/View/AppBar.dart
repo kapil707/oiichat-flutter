@@ -4,6 +4,7 @@ class WhatsAppAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String userName;
   final String userStatus;
   final String profileImageUrl;
+  final VoidCallback onProfilePressed;
   final VoidCallback onCallPressed;
   final VoidCallback onVideoCallPressed;
   final VoidCallback onMorePressed;
@@ -12,6 +13,7 @@ class WhatsAppAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.userName,
     required this.userStatus,
     required this.profileImageUrl,
+    required this.onProfilePressed,
     required this.onCallPressed,
     required this.onVideoCallPressed,
     required this.onMorePressed,
@@ -34,25 +36,28 @@ class WhatsAppAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ],
       ),
-      title: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              userName,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
+      title: InkWell(
+        onTap: onProfilePressed,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                userName,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
               ),
-            ),
-            Text(
-              userStatus, // e.g., "Online" or "Last seen at..."
-              style: TextStyle(
-                fontSize: 12,
+              Text(
+                userStatus, // e.g., "Online" or "Last seen at..."
+                style: TextStyle(
+                  fontSize: 12,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
       actions: [

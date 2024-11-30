@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart'; // For date formatting
+import 'package:oiichat/Controllers/UserProfileController.dart';
 import 'package:oiichat/models/ChatRoomModel.dart';
 import 'package:audioplayers/audioplayers.dart';
 
@@ -201,6 +202,19 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
         userName: widget.user_name!,
         userStatus: UserStatus!,
         profileImageUrl: widget.user_image!,
+        onProfilePressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => UserProfileController(
+                user_name: widget.user_name,
+                user_image: widget.user_image,
+                user1: widget.user1!,
+                user2: widget.user2,
+              ),
+            ),
+          );
+        },
         onCallPressed: () => print("Call button pressed"),
         onVideoCallPressed: () => print("Video call button pressed"),
         onMorePressed: () => print("More options pressed"),
