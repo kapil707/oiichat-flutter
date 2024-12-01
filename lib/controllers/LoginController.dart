@@ -89,7 +89,7 @@ class _LoginControllerState extends State<LoginController> {
     setState(() {
       _isLoading = false;
       mainError = loginResponse.message;
-      print("login res:" + loginResponse.message.toString());
+      print("login res:${loginResponse.message}");
       if (loginResponse.status == "1") {
         Navigator.pushReplacementNamed(context, '/');
       }

@@ -7,7 +7,7 @@ class Landingpage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
+      body: SizedBox(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         child: SafeArea(
@@ -43,16 +43,16 @@ class Landingpage extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               InkWell(
                 onTap: () {
                   Navigator.pushReplacementNamed(context, '/LoginPage');
                 },
-                child: Container(
+                child: SizedBox(
                   width: MediaQuery.of(context).size.width - 110,
                   height: 55,
                   child: Card(
-                    margin: EdgeInsets.all(0),
+                    margin: const EdgeInsets.all(0),
                     elevation: 8,
                     color: mainBtnColor,
                     child: Center(

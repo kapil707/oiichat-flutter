@@ -16,7 +16,7 @@ class ChatCard extends StatelessWidget {
   final VoidCallback onRefresh;
   @override
   Widget build(BuildContext context) {
-    String user_image = MainConfig.image_url + chatModel.image;
+    String userImage = MainConfig.image_url + chatModel.image;
     return InkWell(
       onTap: () async {
         final refresh = await Navigator.push(
@@ -24,7 +24,7 @@ class ChatCard extends StatelessWidget {
           MaterialPageRoute(
             builder: (context) => ChatRoomController(
               user_name: chatModel.name,
-              user_image: user_image,
+              user_image: userImage,
               user1: your_id,
               user2: chatModel.user_id,
             ),
@@ -38,7 +38,7 @@ class ChatCard extends StatelessWidget {
         children: [
           ListTile(
             leading: CircleAvatar(
-              backgroundImage: NetworkImage(user_image),
+              backgroundImage: NetworkImage(userImage),
               radius: 28,
             ),
             title: Text(
@@ -52,19 +52,19 @@ class ChatCard extends StatelessWidget {
               children: [
                 if (chatModel.user_id2 != your_id) ...{
                   if (chatModel.status == 0) ...{
-                    Icon(Icons.watch_later_outlined, size: 12),
+                    const Icon(Icons.watch_later_outlined, size: 12),
                   },
                   if (chatModel.status == 1) ...{
-                    Icon(Icons.done, size: 12),
+                    const Icon(Icons.done, size: 12),
                   },
                   if (chatModel.status == 2) ...{
-                    Icon(Icons.done_all, size: 12),
+                    const Icon(Icons.done_all, size: 12),
                   },
-                  SizedBox(width: 3),
+                  const SizedBox(width: 3),
                 },
                 Text(
                   chatModel.message,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 14,
                   ),
                 ),
@@ -73,8 +73,8 @@ class ChatCard extends StatelessWidget {
             trailing: Text(DateFormat('hh:mm a')
                 .format(DateTime.parse(chatModel.time).toLocal())),
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 30, right: 30),
+          const Padding(
+            padding: EdgeInsets.only(left: 30, right: 30),
             child: Divider(
               thickness: 1,
             ),

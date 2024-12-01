@@ -1,14 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:oiichat/config/RealTimeService.dart';
-import 'package:oiichat/controllers/StatusPage.dart';
 import 'package:oiichat/Config/main_functions.dart';
+import 'package:oiichat/Controllers/StatusPage.dart';
 import 'package:oiichat/models/ChatModel.dart';
 import 'package:oiichat/config/retrofit_api.dart';
 import 'package:oiichat/service/HomeService.dart';
 
 import '../Config/Colors.dart';
+import '../Config/RealTimeService.dart';
 import '../Config/database_helper.dart';
 import '../View/AppDrawer.dart';
 import '../View/ChatCard.dart';
@@ -27,6 +26,8 @@ class _HomeControllerState extends State<HomeController>
   List<ChatModel> chats = [];
 
   String? your_id;
+  String? user_name;
+  String? user_image;
 
   late TabController _controller;
 
@@ -64,10 +65,13 @@ class _HomeControllerState extends State<HomeController>
     UserSession userSession = UserSession();
     Map<String, String> userSessionData = await userSession.GetUserSession();
     setState(() {
-      your_id = userSessionData['userId']!;
+      your_id = userSessionData['userId'];
+      user_name = userSessionData['userName'];
+      user_image = userSessionData['userImage'];
       loadChats();
       // Initialize the real-time service
       _realTimeService.initSocket(your_id!);
+      _realTimeService.GetOldMessage(your_id!);
       // Listen for new messages and refresh the chat list
       _realTimeService.onMessageReceived = (data) {
         loadChats();
@@ -89,18 +93,18 @@ class _HomeControllerState extends State<HomeController>
       appBar: AppBar(
         title: const Text("OiiChat"),
         actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.search)),
+          IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
           PopupMenuButton(onSelected: (value) {
             print(value);
           }, itemBuilder: (BuildContext context) {
             return [
-              PopupMenuItem(
-                child: Text("New Group"),
+              const PopupMenuItem(
                 value: "New Group",
+                child: Text("New Group"),
               ),
-              PopupMenuItem(
-                child: Text("Setting"),
+              const PopupMenuItem(
                 value: "Setting",
+                child: Text("Setting"),
               ),
             ];
           })
@@ -110,7 +114,7 @@ class _HomeControllerState extends State<HomeController>
           indicatorColor: mainTabTxtColor,
           labelColor: mainTabTxtColor,
           unselectedLabelColor: mainUnTabTxtColor,
-          tabs: [
+          tabs: const [
             Tab(icon: Icon(Icons.camera_alt)),
             Tab(
               text: "Chat",
@@ -124,11 +128,14 @@ class _HomeControllerState extends State<HomeController>
           ],
         ),
       ),
-      drawer: AppDrawer(),
+      drawer: AppDrawer(
+        user_image: user_image,
+        user_name: user_name,
+      ),
       body: TabBarView(
         controller: _controller,
         children: [
-          Text("camra"),
+          const Text("camra"),
           chats.isEmpty
               ? const Center(child: Text("No chats available"))
               : Container(

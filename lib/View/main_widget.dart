@@ -116,7 +116,8 @@ class ChatInputBox extends StatefulWidget {
   final Function emojiOpen;
   final Function(int typingStatus) onTypingStatus; // Callback for typing status
 
-  ChatInputBox({
+  const ChatInputBox({
+    super.key,
     required this.messageController,
     required this.onSend,
     required this.messageFocus,
@@ -155,10 +156,10 @@ class _ChatInputBoxState extends State<ChatInputBox> {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Container(
+        SizedBox(
           width: MediaQuery.of(context).size.width - 60,
           child: Card(
-            margin: EdgeInsets.only(left: 2, right: 2, bottom: 8),
+            margin: const EdgeInsets.only(left: 2, right: 2, bottom: 8),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(25),
             ),
@@ -172,21 +173,21 @@ class _ChatInputBoxState extends State<ChatInputBox> {
               decoration: InputDecoration(
                 hintText: "Type a message",
                 border: InputBorder.none,
-                contentPadding: EdgeInsets.all(5),
+                contentPadding: const EdgeInsets.all(5),
                 prefixIcon: IconButton(
                   onPressed: () {},
-                  icon: Icon(Icons.emoji_emotions),
+                  icon: const Icon(Icons.emoji_emotions),
                 ),
                 suffixIcon: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     IconButton(
                       onPressed: () {},
-                      icon: Icon(Icons.attach_file),
+                      icon: const Icon(Icons.attach_file),
                     ),
                     IconButton(
                       onPressed: () {},
-                      icon: Icon(Icons.camera_alt),
+                      icon: const Icon(Icons.camera_alt),
                     )
                   ],
                 ),
@@ -206,7 +207,7 @@ class _ChatInputBoxState extends State<ChatInputBox> {
             backgroundColor: mainBtnColor,
             radius: 25,
             child: IconButton(
-              icon: Icon(Icons.send, color: Colors.white),
+              icon: const Icon(Icons.send, color: Colors.white),
               onPressed: () {
                 if (widget.messageController.text.isNotEmpty) {
                   widget.onSend(); // Call the send function

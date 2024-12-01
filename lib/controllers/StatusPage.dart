@@ -18,7 +18,7 @@ class Statuspage extends StatelessWidget {
             onPressed: () {},
             child: Icon(Icons.edit, color: Colors.blueGrey[900]),
           ),
-          SizedBox(height: 13),
+          const SizedBox(height: 13),
           FloatingActionButton(
             backgroundColor: Colors.blueGrey[100],
             elevation: 8,
@@ -30,31 +30,31 @@ class Statuspage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            AddStatus(),
+            const AddStatus(),
             Container(
               height: 33,
               width: MediaQuery.of(context).size.width,
               color: Colors.grey[300],
-              child: Padding(
+              child: const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 13, vertical: 7),
                 child: Text("Recent Updates"),
               ),
             ),
-            UserStatus(),
-            UserStatus(),
-            UserStatus(),
+            const UserStatus(),
+            const UserStatus(),
+            const UserStatus(),
             Container(
               height: 33,
               width: MediaQuery.of(context).size.width,
               color: Colors.grey[300],
-              child: Padding(
+              child: const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 13, vertical: 7),
                 child: Text("Viewed Updates"),
               ),
             ),
-            UserStatus(),
-            UserStatus(),
-            UserStatus(),
+            const UserStatus(),
+            const UserStatus(),
+            const UserStatus(),
           ],
         ),
       ),

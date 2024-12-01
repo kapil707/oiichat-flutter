@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
 import 'package:get/route_manager.dart';
+import 'package:oiichat/Config/main_config.dart';
 import 'package:oiichat/controllers/SingUpController.dart';
 import 'package:oiichat/Config/main_functions.dart';
 import 'package:oiichat/View/SplashScreen.dart';
@@ -31,27 +32,17 @@ class MyDrawerTile extends StatelessWidget {
 }
 
 class AppDrawer extends StatefulWidget {
+  final String? user_name;
+  final String? user_image;
+
+  const AppDrawer(
+      {super.key, required this.user_name, required this.user_image});
+
   @override
   State<AppDrawer> createState() => _AppDrawerState();
 }
 
 class _AppDrawerState extends State<AppDrawer> {
-  String? _display_name;
-
-  @override
-  void initState() {
-    super.initState();
-    _handlePageLoad();
-  }
-
-  Future<void> _handlePageLoad() async {
-    UserSession userSession = UserSession();
-    Map<String, String> userSessionData = await userSession.GetUserSession();
-    setState(() {
-      _display_name = userSessionData['userName']!;
-    });
-  }
-
   singOut(context) async {
     //await FirebaseAuth.instance.signOut();
     Shared.logout();
@@ -67,16 +58,19 @@ class _AppDrawerState extends State<AppDrawer> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Padding(
-                  padding: EdgeInsets.all(25.0),
+                  padding: const EdgeInsets.only(left: 5, top: 5),
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Icon(
-                        Icons.person,
-                        size: 80,
-                      ),
-                      Text(_display_name ?? "Loading..."),
+                      if (widget.user_image != "") ...{
+                        CircleAvatar(
+                            backgroundImage: NetworkImage(
+                                MainConfig.image_url + widget.user_image!)),
+                      },
+                      Text(widget.user_name ?? "Loading..."),
                     ],
                   ),
                 ),
@@ -99,9 +93,9 @@ class _AppDrawerState extends State<AppDrawer> {
                 ),
                 MyDrawerTile(
                   title: "My Friends",
-                  icon: Icons.ice_skating,
+                  icon: Icons.contact_page,
                   onTap: () {
-                    Navigator.pushReplacementNamed(context, '/MyFriends');
+                    Navigator.pushNamed(context, '/MyFriends');
                   },
                 ),
                 MyDrawerTile(

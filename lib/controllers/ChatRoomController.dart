@@ -211,6 +211,7 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
                 user_image: widget.user_image,
                 user1: widget.user1!,
                 user2: widget.user2,
+                user_status: UserStatus,
               ),
             ),
           );
@@ -226,15 +227,17 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
         child: Column(
           children: [
             Expanded(
-              // height: MediaQuery.of(context).size.height - 140,
-              // width: MediaQuery.of(context).size.width,
+              //height: MediaQuery.of(context).size.height + 150,
               child:
                   // Messages List
                   ListView.builder(
                 shrinkWrap: true,
                 controller: _scrollController,
-                itemCount: messages.length,
+                itemCount: messages.length + 1,
                 itemBuilder: (context, index) {
+                  if (index == messages.length) {
+                    return Container(height: 70);
+                  }
                   if (messages[index].user_id == widget.user1) {
                     return ChatRoomCardRight(
                       chatRoomModel: messages[index],
@@ -250,12 +253,15 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
             // Input Box
             Align(
               alignment: Alignment.bottomCenter,
-              child: ChatInputBox(
-                messageController: messageController,
-                onSend: sendMessage,
-                messageFocus: _focusNode,
-                emojiOpen: _toggleEmojiPicker,
-                onTypingStatus: _handleTypingStatus,
+              child: SizedBox(
+                height: 70,
+                child: ChatInputBox(
+                  messageController: messageController,
+                  onSend: sendMessage,
+                  messageFocus: _focusNode,
+                  emojiOpen: _toggleEmojiPicker,
+                  onTypingStatus: _handleTypingStatus,
+                ),
               ),
             ),
           ],

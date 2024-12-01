@@ -49,7 +49,7 @@ class _MyProfileControllerState extends State<MyProfileController> {
   Future<void> _uploadImage() async {
     if (_selectedImage == null) {
       ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("No image selected!")));
+          .showSnackBar(const SnackBar(content: Text("No image selected!")));
       return;
     }
 
@@ -58,7 +58,7 @@ class _MyProfileControllerState extends State<MyProfileController> {
       print("Upload successful: $response");
 
       ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Image uploaded successfully!")));
+          const SnackBar(content: Text("Image uploaded successfully!")));
     } catch (e) {
       print("Upload failed: $e");
       ScaffoldMessenger.of(context)
@@ -77,7 +77,6 @@ class _MyProfileControllerState extends State<MyProfileController> {
         elevation: 0,
         actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.person))],
       ),
-      drawer: AppDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

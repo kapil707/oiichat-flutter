@@ -15,10 +15,10 @@ class LoginService {
   LoginService(this.apiService);
 
   Future<LoginResponse> login_api(BuildContext context, String username,
-      String password, String _firebaseToken) async {
+      String password, String firebaseToken) async {
     try {
       final response =
-          await apiService.login_api("xx", username, password, _firebaseToken);
+          await apiService.login_api("xx", username, password, firebaseToken);
       //print('login_api:' + response.message.toString());
 
       final status = response.status.toString();
@@ -31,10 +31,12 @@ class LoginService {
       if (status == "1") {
         var userId = response.users?.userId;
         var userName = response.users?.userName;
+        var userImage = response.users?.userImage;
 
-        print('login_api userId:' + userId.toString());
+        print('login_api userId:$userId');
 
-        await Shared.saveLoginSharedPreference(true, userId, userName);
+        await Shared.saveLoginSharedPreference(
+            true, userId, userName, userImage);
         return LoginResponse(status: status, message: "Login successful!");
       }
     } catch (e) {

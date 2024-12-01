@@ -1,15 +1,11 @@
 import 'package:dio/dio.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:get/instance_manager.dart';
+import 'package:oiichat/View/AppBar.dart';
 import 'package:oiichat/controllers/ChatRoomController.dart';
-import 'package:oiichat/models/HomePageModel.dart';
 import 'package:oiichat/config/retrofit_api.dart';
 import 'package:oiichat/service/HomeService.dart';
 
 import '../Config/main_functions.dart';
-import '../View/AppDrawer.dart';
 import '../config/RealTimeService.dart';
 
 class FriendController extends StatefulWidget {
@@ -72,13 +68,7 @@ class _FriendControllerState extends State<FriendController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("HomePage"),
-        backgroundColor: Colors.deepPurple,
-        elevation: 0,
-        actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.person))],
-      ),
-      drawer: AppDrawer(),
+      appBar: UserProfileAppBar(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: users.isEmpty

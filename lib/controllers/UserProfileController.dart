@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:oiichat/models/ChatRoomModel.dart';
-import 'package:audioplayers/audioplayers.dart';
 
 import '../Config/database_helper.dart';
 import '../View/AppBar.dart';
@@ -13,9 +11,15 @@ class UserProfileController extends StatefulWidget {
   final String? user_image;
   final String? user1;
   final String? user2;
+  final String? user_status;
 
   const UserProfileController(
-      {super.key, this.user_name, this.user_image, this.user1, this.user2});
+      {super.key,
+      this.user_name,
+      this.user_image,
+      this.user1,
+      this.user2,
+      this.user_status});
 
   @override
   State<UserProfileController> createState() => _UserProfileControllerState();
@@ -36,116 +40,30 @@ class _UserProfileControllerState extends State<UserProfileController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverPersistentHeader(
-            delegate: CustomSliverHeaderDelegate(widget.user_image),
-            pinned: true,
-          ),
-          SliverToBoxAdapter(
-            child: Column(
-              children: [
-                Container(
-                  child: Column(
-                    children: [
-                      Text(widget.user_name!,style: TextStyle(fontSize: 24),),
-                       Text(widget.user_name!,style: TextStyle(fontSize: 24),),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 300),
-                SizedBox(height: 300),
-                SizedBox(height: 300),
-                SizedBox(height: 300),
-                SizedBox(height: 300),
-                SizedBox(height: 300),
-                SizedBox(height: 300),
-                SizedBox(height: 300)
-              ],
+      appBar: UserProfileAppBar(),
+      body: Center(
+        child: Column(
+          children: [
+            const SizedBox(height: 20),
+            SizedBox(
+              width: 200,
+              height: 200,
+              child: CircleAvatar(
+                backgroundImage: NetworkImage(widget.user_image!),
+              ),
             ),
-          )
-        ],
-      ),
-    );
-  }
-}
-
-class CustomSliverHeaderDelegate extends SliverPersistentHeaderDelegate {
-  final double maxHeaderHeight = 180;
-  final double minHeaderHeight = kToolbarHeight + 20;
-  final double maxImageSize = 130;
-  final double minImageSize = 40;
-  final user_image;
-
-  CustomSliverHeaderDelegate(this.user_image);
-
-  @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
-        final size = MediaQuery.of(context).size;
-    final percent = shrinkOffset / (maxHeaderHeight - 35);
-    final percent2 = shrinkOffset / (maxHeaderHeight);
-    final currentImageSize = (maxImageSize * (1 - percent)).clamp(
-      minImageSize,
-      maxImageSize,
-    );
-    final currentImagePosition = ((size.width / 2 - 65) * (1 - percent)).clamp(
-      minImageSize,
-      maxImageSize,
-    );
-    return Container(
-      color: Theme.of(context).primaryColor,
-      child: Container(
-        color: Theme.of(context)
-            .appBarTheme
-            .backgroundColor!
-            .withOpacity(percent2 * 2 < 1 ? percent2 * 2 : 1),
-        child:  Stack(
-        children: [
-          Positioned(
-          left: currentImagePosition + 50,
-          top:MediaQuery.of(context).viewPadding.top + 15,
-          child: Text("Vedant",style: TextStyle(color: Colors.white),)),
-
-          Positioned(
-          left: 0,
-          top:MediaQuery.of(context).viewPadding.top + 2,
-          child: IconButton(
-            icon:Icon(Icons.arrow_back,color: percent2 > .3 ? Colors.white.withOpacity(percent2) : null,),onPressed: () {
-              Navigator.pop(context, true);
-            })),
-          
-          Positioned(
-          right: 0,
-          top:MediaQuery.of(context).viewPadding.top + 5,
-          child: Icon(Icons.more_vert,color: Colors.white,),),
-
-          Positioned(
-            left: currentImagePosition,
-            top:MediaQuery.of(context).viewPadding.top + 5,
-            bottom: 0,
-          child: Container(
-            width: currentImageSize,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              image: DecorationImage(image: 
-              NetworkImage(user_image))
+            const SizedBox(height: 5),
+            Text(
+              widget.user_name!,
+              style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
             ),
-          )
+            Text(
+              widget.user_status!,
+              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
             ),
           ],
+        ),
       ),
-    ),);
-  }
-
-   @override
-  double get maxExtent => maxHeaderHeight;
-
-  @override
-  double get minExtent => minHeaderHeight;
-
-  @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
-    return false;
+    );
   }
 }

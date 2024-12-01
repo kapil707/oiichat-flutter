@@ -111,7 +111,7 @@ class _SingUpControllerState extends State<SingUpController> {
                   TextButton(
                     onPressed: () {
                       // Handle register logic here
-                      Get.to(LoginController());
+                      Get.to(const LoginController());
                     },
                     child: const Text('Login Account'),
                   ),

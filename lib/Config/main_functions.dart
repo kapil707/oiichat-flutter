@@ -1,4 +1,3 @@
-
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserSession {
@@ -7,11 +6,13 @@ class UserSession {
 
     var userId = prefs.getString('userId') ?? '';
     var userName = prefs.getString('userName') ?? '';
+    var userImage = prefs.getString('userImage') ?? '';
 
     Map<String, String> strings = {};
 
     strings['userId'] = userId;
     strings['userName'] = userName;
+    strings['userImage'] = userImage;
 
     return strings;
   }

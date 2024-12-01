@@ -9,7 +9,8 @@ class WhatsAppAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback onVideoCallPressed;
   final VoidCallback onMorePressed;
 
-  WhatsAppAppBar({
+  const WhatsAppAppBar({
+    super.key,
     required this.userName,
     required this.userStatus,
     required this.profileImageUrl,
@@ -26,7 +27,7 @@ class WhatsAppAppBar extends StatelessWidget implements PreferredSizeWidget {
       leading: Row(
         children: [
           IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back),
             onPressed: () {
               Navigator.pop(context, true);
             },
@@ -45,14 +46,14 @@ class WhatsAppAppBar extends StatelessWidget implements PreferredSizeWidget {
             children: [
               Text(
                 userName,
-                style: TextStyle(
+                style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
                 ),
               ),
               Text(
                 userStatus, // e.g., "Online" or "Last seen at..."
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 12,
                 ),
               ),
@@ -62,15 +63,15 @@ class WhatsAppAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       actions: [
         IconButton(
-          icon: Icon(Icons.call),
+          icon: const Icon(Icons.call),
           onPressed: onCallPressed, // Action for voice call
         ),
         IconButton(
-          icon: Icon(Icons.videocam),
+          icon: const Icon(Icons.videocam),
           onPressed: onVideoCallPressed, // Action for video call
         ),
         IconButton(
-          icon: Icon(Icons.more_vert),
+          icon: const Icon(Icons.more_vert),
           onPressed: onMorePressed, // Action for more options
         ),
       ],
@@ -78,5 +79,30 @@ class WhatsAppAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+}
+
+class UserProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const UserProfileAppBar({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      leadingWidth: 50,
+      leading: Row(
+        children: [
+          IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context, true);
+            },
+          ),
+        ],
+      ),
+      title: const Text("User Profile"),
+    );
+  }
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }

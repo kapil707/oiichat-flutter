@@ -42,14 +42,14 @@ class RealTimeService {
     socket.on('disconnect', (_) => print('Disconnected from server'));
 
     socket.on('receiveMessage', (data) async {
-      print("user ka naam " + data["user_image"]);
+      //print("user ka naam " + data["user_image"]);
       //user ki info insert or update hotai ha yaha say
-      // final newUser = UserInfoModel(
-      //   user_id: data["user1"],
-      //   user_name: data["user_name"],
-      //   user_image: data["user_image"],
-      // );
-      // await dbHelper.insertOrUpdateUserInfo(newUser);
+      final newUser = UserInfoModel(
+        user_id: data["user1"],
+        user_name: data["user_name"],
+        user_image: data["user_image"],
+      );
+      await dbHelper.insertOrUpdateUserInfo(newUser);
 
       final newMessage = Message(
         user1: data["user1"],
@@ -91,10 +91,18 @@ class RealTimeService {
         onUserTypingReceived!(data);
       }
     });
+
+    socket.on('get_old_message_response', (data) async {
+      print("get_old_message_response" + data["message"]);
+    });
   }
 
-  void GetUserInfo(String user_id) {
-    socket.emit("get_user_info", user_id);
+  void GetUserInfo(String userId) {
+    socket.emit("get_user_info", userId);
+  }
+
+  void GetOldMessage(String userId) {
+    socket.emit("get_old_message", userId);
   }
 
   void manual_disconnect(String user) {
@@ -125,7 +133,7 @@ class RealTimeService {
     print("call check_offline_message");
     final chatHistory = await dbHelper.check_offline_message(user);
     for (var messages in chatHistory) {
-      print("msg " + messages.id.toString());
+      print("msg ${messages.id}");
       socket.emit('sendMessage', {
         'user1': messages.user1,
         'user2': messages.user2,

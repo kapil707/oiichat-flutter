@@ -22,7 +22,7 @@ class ChatRoomCardRight extends StatelessWidget {
           elevation: 1,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           color: mainCardRightBgClr,
-          margin: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+          margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
           child: Stack(
             children: [
               Padding(
@@ -42,17 +42,17 @@ class ChatRoomCardRight extends StatelessWidget {
                     Text(
                       DateFormat('hh:mma')
                           .format(DateTime.parse(chatRoomModel.time).toLocal()),
-                      style: TextStyle(fontSize: 10),
+                      style: const TextStyle(fontSize: 10),
                     ),
-                    SizedBox(width: 5),
+                    const SizedBox(width: 5),
                     if (chatRoomModel.status == 0) ...{
-                      Icon(Icons.watch_later_outlined, size: 12),
+                      const Icon(Icons.watch_later_outlined, size: 12),
                     },
                     if (chatRoomModel.status == 1) ...{
-                      Icon(Icons.done, size: 12),
+                      const Icon(Icons.done, size: 12),
                     },
                     if (chatRoomModel.status == 2) ...{
-                      Icon(Icons.done_all, size: 12),
+                      const Icon(Icons.done_all, size: 12),
                     },
                   ],
                 ),
@@ -83,7 +83,7 @@ class ChatRoomCardLeft extends StatelessWidget {
           elevation: 1,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           color: mainCardLeftBgClr,
-          margin: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+          margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
           child: Stack(
             children: [
               Padding(
@@ -101,7 +101,7 @@ class ChatRoomCardLeft extends StatelessWidget {
                 child: Text(
                   DateFormat('hh:mm a')
                       .format(DateTime.parse(chatRoomModel.time).toLocal()),
-                  style: TextStyle(fontSize: 12),
+                  style: const TextStyle(fontSize: 12),
                 ),
               )
             ],

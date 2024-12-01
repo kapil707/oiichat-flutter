@@ -40,8 +40,8 @@ class _SplashScreenClassState extends State<SplashScreenClass> {
         child: SafeArea(
           child: Column(
             children: [
-              SizedBox(height: 20),
-              Text(
+              const SizedBox(height: 20),
+              const Text(
                 "Welcome to OiiChat",
                 style: TextStyle(
                     color: Colors.orange,
@@ -56,13 +56,13 @@ class _SplashScreenClassState extends State<SplashScreenClass> {
                 child: RichText(
                   textAlign: TextAlign.center,
                   text: TextSpan(
-                    style: TextStyle(color: Colors.black, fontSize: 17),
+                    style: const TextStyle(color: Colors.black, fontSize: 17),
                     children: [
                       TextSpan(
                         text: "Agree and Continue to accept the",
                         style: TextStyle(color: Colors.grey[600]),
                       ),
-                      TextSpan(
+                      const TextSpan(
                         text: " OiiChat Trems of Service and Privacy Policy",
                         style: TextStyle(color: Colors.orange),
                       ),
@@ -70,8 +70,8 @@ class _SplashScreenClassState extends State<SplashScreenClass> {
                   ),
                 ),
               ),
-              SizedBox(height: 20),
-              CircularProgressIndicator(),
+              const SizedBox(height: 20),
+              const CircularProgressIndicator(),
             ],
           ),
         ),

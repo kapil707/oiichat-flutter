@@ -5,7 +5,7 @@ class UserStatus extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
+    return const ListTile(
       leading: Stack(
         children: [
           CircleAvatar(

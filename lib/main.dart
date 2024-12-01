@@ -27,7 +27,7 @@ void main() async {
   //WidgetsFlutterBinding.ensureInitialized();
   //await Firebase.initializeApp();
   await FirebaseApi().initNotifications();
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -46,12 +46,12 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const SplashScreenClass(),
         '/Landingpage': (context) => const Landingpage(),
-        '/LoginPage': (context) => LoginController(),
-        '/SingUpPage': (context) => SingUpController(),
-        '/HomePage': (context) => HomeController(),
-        '/MyProfilePage': (context) => MyProfileController(),
-        '/Notification': (context) => MyNotification(),
-        '/MyFriends': (context) => FriendController(),
+        '/LoginPage': (context) => const LoginController(),
+        '/SingUpPage': (context) => const SingUpController(),
+        '/HomePage': (context) => const HomeController(),
+        '/MyProfilePage': (context) => const MyProfileController(),
+        '/Notification': (context) => const MyNotification(),
+        '/MyFriends': (context) => const FriendController(),
       },
     );
   }

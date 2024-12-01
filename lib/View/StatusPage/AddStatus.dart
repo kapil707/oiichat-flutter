@@ -8,7 +8,7 @@ class AddStatus extends StatelessWidget {
     return ListTile(
       leading: Stack(
         children: [
-          CircleAvatar(
+          const CircleAvatar(
             radius: 27,
             backgroundColor: Colors.black,
           ),
@@ -18,7 +18,7 @@ class AddStatus extends StatelessWidget {
             child: CircleAvatar(
               backgroundColor: Colors.greenAccent[700],
               radius: 10,
-              child: Icon(
+              child: const Icon(
                 Icons.add,
                 size: 20,
                 color: Colors.white,
@@ -27,8 +27,8 @@ class AddStatus extends StatelessWidget {
           ),
         ],
       ),
-      title: Text("My Status"),
-      subtitle: Text("Tab to add status update"),
+      title: const Text("My Status"),
+      subtitle: const Text("Tab to add status update"),
     );
   }
 }
