@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:oiichat/models/FriendPageModel.dart';
+import 'package:oiichat/models/FriendPageModelApi.dart';
 import 'package:oiichat/view/AppBar.dart';
 import 'package:oiichat/controllers/ChatRoomController.dart';
 import 'package:oiichat/config/retrofit_api.dart';
@@ -17,7 +19,7 @@ class FriendController extends StatefulWidget {
 
 class _FriendControllerState extends State<FriendController> {
   final RealTimeService _realTimeService = RealTimeService();
-  List<Map<String, dynamic>> users = []; // Store users list
+  List<FriendPageModelApi> users = []; // Store users list
 
   String? user1;
 
@@ -47,16 +49,10 @@ class _FriendControllerState extends State<FriendController> {
   Future<void> fetchData() async {
     try {
       print("Fetching home page data...");
-      final res = await apiService.home_page_api("xx"); // Fetch data from API
+      final res = await apiService.friend_page_api("xx"); // Fetch data from API
 
       setState(() {
-        users = res.users!
-            .map((user) => {
-                  'name': user.name,
-                  'email': user.email,
-                  '_id': user.sId,
-                })
-            .toList();
+        //users = res;
       });
 
       print("Data fetched successfully: ${users.length} users found");
@@ -78,24 +74,7 @@ class _FriendControllerState extends State<FriendController> {
             : ListView.builder(
                 itemCount: users.length,
                 itemBuilder: (context, index) {
-                  final user = users[index];
-                  return ListTile(
-                    title: Text(user['name'] ?? 'No Name'),
-                    subtitle: Text(user['email'] ?? 'No Email'),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ChatRoomController(
-                            user_name: user['name'],
-                            user_image: "",
-                            user1: user1,
-                            user2: user['_id'], // Pass user ID or name
-                          ),
-                        ),
-                      );
-                    },
-                  );
+                  return Container();
                 },
               ),
       ),

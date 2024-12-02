@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:oiichat/models/FriendPageModelApi.dart';
-import 'package:oiichat/models/FriendPageModel.dart';
 import 'package:oiichat/models/HomePageModel.dart';
 import 'package:oiichat/models/LoginModel.dart';
 import 'package:retrofit/retrofit.dart';
