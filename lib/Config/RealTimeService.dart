@@ -93,7 +93,25 @@ class RealTimeService {
     });
 
     socket.on('get_old_message_response', (data) async {
-      print("get_old_message_response" + data["message"]);
+      final List<dynamic> messages = data["messages"];
+      for (var message in messages) {
+        print("message " + message["user1_info"]["name"]);
+        final newMessage = Message(
+          user1: message["user1"],
+          user2: message["user2"],
+          message: message["message"],
+          status: 1,
+          timestamp: DateTime.now().toIso8601String(),
+        );
+        await dbHelper.insertMessage(newMessage);
+
+        final newUser = UserInfoModel(
+          user_id: message["user1"],
+          user_name: message["user1_info"]["name"],
+          user_image: message["user1_info"]["user_image"],
+        );
+        await dbHelper.insertOrUpdateUserInfo(newUser);
+      }
     });
   }
 
@@ -102,6 +120,7 @@ class RealTimeService {
   }
 
   void GetOldMessage(String userId) {
+    print("call get_old_message");
     socket.emit("get_old_message", userId);
   }
 

@@ -45,7 +45,6 @@ class _HomeControllerState extends State<HomeController>
   void didChangeDependencies() {
     super.didChangeDependencies();
     _handlePageLoad(); // Reload the chats when returning to this screen
-    print("call me");
   }
 
   void refreshChatList() {
@@ -66,6 +65,7 @@ class _HomeControllerState extends State<HomeController>
     Map<String, String> userSessionData = await userSession.GetUserSession();
     setState(() {
       your_id = userSessionData['userId'];
+      print("your id " + your_id!);
       user_name = userSessionData['userName'];
       user_image = userSessionData['userImage'];
       loadChats();
@@ -157,6 +157,7 @@ class _HomeControllerState extends State<HomeController>
                     ],
                   ),
                 ),
+          Statuspage(),
           Statuspage(),
         ],
       ),
