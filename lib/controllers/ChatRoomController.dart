@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:oiichat/Controllers/UserProfileController.dart';
-import 'package:oiichat/controllers/VoiceCallScreen.dart';
+import 'package:oiichat/controllers/VoiceCall.dart';
 import 'package:oiichat/models/ChatRoomModel.dart';
 import 'package:audioplayers/audioplayers.dart';
 
