@@ -16,7 +16,7 @@ class FriendsCard extends StatelessWidget {
   final VoidCallback onRefresh;
   @override
   Widget build(BuildContext context) {
-    String userImage = MainConfig.image_url + friendPageModel.image;
+    String userImage = MainConfig.image_url + friendPageModel.user_image;
     return InkWell(
       onTap: () async {
         final refresh = await Navigator.push(
@@ -26,7 +26,7 @@ class FriendsCard extends StatelessWidget {
               user_name: friendPageModel.name,
               user_image: userImage,
               user1: your_id,
-              user2: friendPageModel.user_id,
+              user2: friendPageModel.sId,
             ),
           ),
         );

@@ -1,14 +1,19 @@
 class FriendPageModelApi {
   int? status;
   String? message;
-  Users? users;
+  List<Users>? users;
 
   FriendPageModelApi({this.status, this.message, this.users});
 
   FriendPageModelApi.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
-    users = json['users'] != null ? Users.fromJson(json['users']) : null;
+    if (json['users'] != null) {
+      users = <Users>[];
+      json['users'].forEach((v) {
+        users!.add(Users.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -16,7 +21,7 @@ class FriendPageModelApi {
     data['status'] = status;
     data['message'] = message;
     if (users != null) {
-      data['users'] = users!.toJson();
+      data['users'] = users!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -25,21 +30,21 @@ class FriendPageModelApi {
 class Users {
   String? sId;
   String? name;
-  String? userImage;
+  String? user_image;
 
-  Users({this.sId, this.name, this.userImage});
+  Users({this.sId, this.name, this.user_image});
 
   Users.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     name = json['name'];
-    userImage = json['user_image'];
+    user_image = json['user_image'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.sId;
-    data['name'] = this.name;
-    data['user_image'] = this.userImage;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['_id'] = sId;
+    data['name'] = name;
+    data['user_image'] = user_image;
     return data;
   }
 }
