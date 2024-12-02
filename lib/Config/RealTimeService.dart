@@ -77,8 +77,19 @@ class RealTimeService {
       }
     });
 
-    socket.on("get_user_info_response", (data) {
-      print("User status: ${data['user_id']}");
+    socket.on("get_user_info_response", (data) async {
+      // print("User status: ${data['user_id']}");
+      // print("User status: ${data['user_name']}");
+      // print("User status: ${data['user_image']}");
+
+      //insert update user info
+      final newUser = UserInfoModel(
+        user_id: data["user_id"],
+        user_name: data["user_name"],
+        user_image: data["user_image"],
+      );
+      await dbHelper.insertOrUpdateUserInfo(newUser);
+
       if (onUserInfoReceived != null) {
         onUserInfoReceived!(data);
       }
