@@ -52,7 +52,13 @@ class _FriendControllerState extends State<FriendController> {
       final res = await apiService.friend_page_api("xx"); // Fetch data from API
 
       setState(() {
-        //users = res;
+        users = res.users!
+            .map((user) => {
+                  'name': user.name,
+                  'user_image': user.user_image,
+                  '_id': user.sId,
+                })
+            .toList();
       });
 
       print("Data fetched successfully: ${users.length} users found");
