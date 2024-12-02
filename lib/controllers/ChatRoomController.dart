@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:oiichat/Controllers/UserProfileController.dart';
+import 'package:oiichat/controllers/VoiceCallScreen.dart';
 import 'package:oiichat/models/ChatRoomModel.dart';
 import 'package:audioplayers/audioplayers.dart';
 
@@ -215,7 +216,12 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
             ),
           );
         },
-        onCallPressed: () => print("Call button pressed"),
+        onCallPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CallScreen(userId: widget.user1!,otherUserId: widget.user2!)));
+        },
         onVideoCallPressed: () => print("Video call button pressed"),
         onMorePressed: () => print("More options pressed"),
       ),
