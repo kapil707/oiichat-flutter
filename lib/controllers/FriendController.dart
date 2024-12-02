@@ -1,11 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:oiichat/View/AppBar.dart';
+import 'package:oiichat/view/AppBar.dart';
 import 'package:oiichat/controllers/ChatRoomController.dart';
 import 'package:oiichat/config/retrofit_api.dart';
 import 'package:oiichat/service/HomeService.dart';
 
-import '../Config/main_functions.dart';
+import '../config/main_functions.dart';
 import '../config/RealTimeService.dart';
 
 class FriendController extends StatefulWidget {

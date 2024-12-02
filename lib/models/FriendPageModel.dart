@@ -1,69 +1,29 @@
 class FriendPageModel {
-  int? status;
-  String? message;
-  List<Users>? users;
+  String user_id;
+  String name;
+  String image;
 
-  FriendPageModel({this.status, this.message, this.users});
+  FriendPageModel({
+    required this.user_id,
+    required this.name,
+    required this.image,
+  });
 
-  FriendPageModel.fromJson(Map<String, dynamic> json) {
-    status = json['status'];
-    message = json['message'];
-    if (json['users'] != null) {
-      users = <Users>[];
-      json['users'].forEach((v) {
-        users!.add(Users.fromJson(v));
-      });
-    }
+  // Convert a Message object to a Map
+  Map<String, dynamic> toMap() {
+    return {
+      'user_id': user_id,
+      'name': name,
+      'image': image,
+    };
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['status'] = status;
-    data['message'] = message;
-    if (users != null) {
-      data['users'] = users!.map((v) => v.toJson()).toList();
-    }
-    return data;
-  }
-}
-
-class Users {
-  String? sId;
-  String? name;
-  String? email;
-  String? password;
-  String? createdAt;
-  String? updatedAt;
-  int? iV;
-
-  Users(
-      {this.sId,
-      this.name,
-      this.email,
-      this.password,
-      this.createdAt,
-      this.updatedAt,
-      this.iV});
-
-  Users.fromJson(Map<String, dynamic> json) {
-    sId = json['_id'];
-    name = json['name'];
-    email = json['email'];
-    password = json['password'];
-    createdAt = json['createdAt'];
-    updatedAt = json['updatedAt'];
-    iV = json['__v'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['_id'] = sId;
-    data['name'] = name;
-    data['email'] = email;
-    data['password'] = password;
-    data['createdAt'] = createdAt;
-    data['updatedAt'] = updatedAt;
-    data['__v'] = iV;
-    return data;
+  // Create a Message object from a Map
+  factory FriendPageModel.fromMap(Map<String, dynamic> map) {
+    return FriendPageModel(
+      user_id: map['user_id'],
+      name: map['name'],
+      image: map['image'],
+    );
   }
 }

@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:oiichat/config/retrofit_api.dart';
 
-import '../Config/main_functions.dart';
-import '../View/AppDrawer.dart';
+import '../config/main_functions.dart';
+import '../view/AppDrawer.dart';
 
 class MyProfileController extends StatefulWidget {
   const MyProfileController({super.key});

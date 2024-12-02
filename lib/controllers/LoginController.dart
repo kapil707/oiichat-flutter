@@ -3,8 +3,8 @@ import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
-import '../Config/Colors.dart';
-import '../View/main_widget.dart';
+import '../config/Colors.dart';
+import '../view/main_widget.dart';
 import '../config/retrofit_api.dart';
 import '../service/LoginService.dart';
 
@@ -40,9 +40,9 @@ class _LoginControllerState extends State<LoginController> {
       setState(() {
         _firebaseToken = token;
       });
-      print("Firebase Token: $token");
+      print("Firebase Token : $token");
     } catch (e) {
-      print("Error fetching token: $e");
+      print("Firebase Token Error fetching: $e");
     }
   }
 

@@ -4,13 +4,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/simple/get_responsive.dart';
-import 'package:get/instance_manager.dart';
 import 'package:get/route_manager.dart';
 import 'package:oiichat/config/RealTimeService.dart';
 import 'package:oiichat/controllers/LoginController.dart';
 import 'package:oiichat/config/retrofit_api.dart';
 
-import '../View/main_widget.dart';
+import '../view/main_widget.dart';
 
 class SingUpController extends StatefulWidget {
   const SingUpController({super.key});

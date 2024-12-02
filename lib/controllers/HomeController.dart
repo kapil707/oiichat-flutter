@@ -1,16 +1,16 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:oiichat/Config/main_functions.dart';
-import 'package:oiichat/Controllers/StatusPage.dart';
+import 'package:oiichat/config/main_functions.dart';
+import 'package:oiichat/controllers/StatusPage.dart';
 import 'package:oiichat/models/ChatModel.dart';
 import 'package:oiichat/config/retrofit_api.dart';
 import 'package:oiichat/service/HomeService.dart';
 
-import '../Config/Colors.dart';
-import '../Config/RealTimeService.dart';
-import '../Config/database_helper.dart';
-import '../View/AppDrawer.dart';
-import '../View/ChatCard.dart';
+import '../config/Colors.dart';
+import '../config/RealTimeService.dart';
+import '../config/database_helper.dart';
+import '../view/AppDrawer.dart';
+import '../view/ChatCard.dart';
 
 class HomeController extends StatefulWidget {
   const HomeController({super.key});
@@ -65,10 +65,10 @@ class _HomeControllerState extends State<HomeController>
     Map<String, String> userSessionData = await userSession.GetUserSession();
     setState(() {
       your_id = userSessionData['userId'];
-      print("your id " + your_id!);
       user_name = userSessionData['userName'];
       user_image = userSessionData['userImage'];
       loadChats();
+
       // Initialize the real-time service
       _realTimeService.initSocket(your_id!);
       _realTimeService.GetOldMessage(your_id!);
@@ -76,12 +76,16 @@ class _HomeControllerState extends State<HomeController>
       _realTimeService.onMessageReceived = (data) {
         loadChats();
       };
+      _realTimeService.onMessageReceivedNew = (data) {
+        print("get_old_message_response 2ok");
+        loadChats();
+      };
     });
   }
 
   Future<void> loadChats() async {
     final chatList = await dbHelper.getChatList(your_id!);
-    print('chatlist $chatList');
+    print('get_old_message_response chatlist $chatList');
     setState(() {
       chats = chatList;
     });

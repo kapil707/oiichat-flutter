@@ -1,14 +1,14 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:oiichat/Controllers/HomeController.dart';
-import 'package:oiichat/Themes/themeClass.dart';
+import 'package:oiichat/controllers/HomeController.dart';
+import 'package:oiichat/themes/themeClass.dart';
 import 'package:oiichat/View/LandingPage.dart';
 import 'package:oiichat/Config/RealTimeService.dart';
 import 'package:oiichat/Config/firebase_api.dart';
-import 'package:oiichat/Controllers/FriendController.dart';
-import 'package:oiichat/Controllers/LoginController.dart';
-import 'package:oiichat/Controllers/MyProfileController.dart';
-import 'package:oiichat/Controllers/SingUpController.dart';
+import 'package:oiichat/controllers/FriendController.dart';
+import 'package:oiichat/controllers/LoginController.dart';
+import 'package:oiichat/controllers/MyProfileController.dart';
+import 'package:oiichat/controllers/SingUpController.dart';
 import 'package:oiichat/View/SplashScreen.dart';
 import 'package:oiichat/View/Notification.dart';
 

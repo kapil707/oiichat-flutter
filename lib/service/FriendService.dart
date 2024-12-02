@@ -1,13 +1,14 @@
 import 'package:oiichat/models/FriendPageModel.dart';
 import 'package:oiichat/config/retrofit_api.dart';
+import 'package:oiichat/models/FriendPageModelApi.dart';
 
-import '../Config/main_functions.dart';
+import '../config/main_functions.dart';
 
 class FriendService {
   final MyApiService apiService;
   FriendService(this.apiService);
 
-  Future<FriendPageModel> fetchFriendPage() async {
+  Future<FriendPageModelApi> fetchFriendPage() async {
     try {
       UserSession userSession = UserSession();
       Map<String, String> userSessionData = await userSession.GetUserSession();

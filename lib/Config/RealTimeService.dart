@@ -1,10 +1,10 @@
-import 'package:oiichat/Models/UserInfoModel.dart';
+import 'package:oiichat/models/UserInfoModel.dart';
 import 'package:oiichat/config/main_config.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'dart:math';
 
-import '../Config/database_helper.dart';
-import '../Models/message.dart';
+import '../config/database_helper.dart';
+import '../models/message.dart';
 
 String generateRandomToken(int length) {
   const chars =
@@ -20,6 +20,7 @@ class RealTimeService {
 
   Function(String)? onMessageSend;
   Function(String)? onMessageReceived;
+  Function(String)? onMessageReceivedNew;
   Function(dynamic)? onUserInfoReceived;
   Function(dynamic)? onUserTypingReceived;
 
@@ -41,39 +42,37 @@ class RealTimeService {
     // Handle disconnection
     socket.on('disconnect', (_) => print('Disconnected from server'));
 
-    socket.on('receiveMessage', (data) async {
+    socket.on('receiveMessage', (message) async {
       //print("user ka naam " + data["user_image"]);
-      //user ki info insert or update hotai ha yaha say
-      final newUser = UserInfoModel(
-        user_id: data["user1"],
-        user_name: data["user_name"],
-        user_image: data["user_image"],
-      );
-      await dbHelper.insertOrUpdateUserInfo(newUser);
 
+      //insert new chat
       final newMessage = Message(
-        user1: data["user1"],
-        user2: data["user2"],
-        message: data["message"],
+        user1: message["user1"],
+        user2: message["user2"],
+        message: message["message"],
         status: 1,
         timestamp: DateTime.now().toIso8601String(),
       );
       await dbHelper.insertMessage(newMessage);
 
+      //insert update user info
+      final newUser = UserInfoModel(
+        user_id: message["user1"],
+        user_name: message["user_name"],
+        user_image: message["user_image"],
+      );
+      await dbHelper.insertOrUpdateUserInfo(newUser);
+
       if (onMessageReceived != null) {
-        onMessageReceived!(
-            data["message"]); // Pass the raw string to the callback
+        onMessageReceived!(message["message"]);
       }
     });
 
-    socket.on('messageSent', (data) async {
-      if (data['status'] == 'success') {
-        print(
-            'Message sent successfully: ${data['token']} ${data['messageId']}');
-        var id = data['messageId'];
+    socket.on('messageSent', (message) async {
+      //update message status send or not
+      if (message['status'] == 'success') {
+        var id = message['messageId'];
         await dbHelper.updateMessageStatus(id, 1);
-        print(
-            'Message sent successfully: ${data['token']} ${data['messageId']}');
         onMessageSend!("1");
       }
     });
@@ -94,8 +93,10 @@ class RealTimeService {
 
     socket.on('get_old_message_response', (data) async {
       final List<dynamic> messages = data["messages"];
+      print("get_old_message_response " + messages.length.toString());
       for (var message in messages) {
-        print("message " + message["user1_info"]["name"]);
+        print("get_old_message_response " + message["user_name"]);
+        //insert new chat
         final newMessage = Message(
           user1: message["user1"],
           user2: message["user2"],
@@ -105,12 +106,15 @@ class RealTimeService {
         );
         await dbHelper.insertMessage(newMessage);
 
+        //insert update user info
         final newUser = UserInfoModel(
           user_id: message["user1"],
-          user_name: message["user1_info"]["name"],
-          user_image: message["user1_info"]["user_image"],
+          user_name: message["user_name"],
+          user_image: message["user_image"],
         );
         await dbHelper.insertOrUpdateUserInfo(newUser);
+
+        onMessageReceivedNew!("1");
       }
     });
   }

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../Config/database_helper.dart';
-import '../View/AppBar.dart';
-import '../View/ChatRoomCard.dart';
-import '../View/main_widget.dart';
+import '../config/database_helper.dart';
+import '../view/AppBar.dart';
+import '../view/ChatRoomCard.dart';
+import '../view/main_widget.dart';
 import '../config/RealTimeService.dart';
 
 class UserProfileController extends StatefulWidget {

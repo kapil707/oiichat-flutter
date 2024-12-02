@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:oiichat/config/retrofit_api.dart';
 
-import '../Config/session.dart';
+import '../config/session.dart';
 
 class LoginResponse {
   final String status;

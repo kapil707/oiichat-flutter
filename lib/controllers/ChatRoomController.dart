@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart'; // For date formatting
 import 'package:oiichat/Controllers/UserProfileController.dart';
 import 'package:oiichat/models/ChatRoomModel.dart';
 import 'package:audioplayers/audioplayers.dart';
 
-import '../Config/database_helper.dart';
-import '../View/AppBar.dart';
-import '../View/ChatRoomCard.dart';
-import '../View/main_widget.dart';
+import '../config/database_helper.dart';
+import '../view/AppBar.dart';
+import '../view/ChatRoomCard.dart';
+import '../view/main_widget.dart';
 import '../config/RealTimeService.dart';
 
 class ChatRoomController extends StatefulWidget {

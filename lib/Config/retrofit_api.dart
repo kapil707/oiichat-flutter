@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:oiichat/models/FriendPageModelApi.dart';
 import 'package:oiichat/models/FriendPageModel.dart';
 import 'package:oiichat/models/HomePageModel.dart';
 import 'package:oiichat/models/LoginModel.dart';
@@ -27,7 +28,7 @@ abstract class MyApiService {
 
   @POST("user/alluser")
   @FormUrlEncoded()
-  Future<FriendPageModel> friend_page_api(@Field("api_key") String apiKey);
+  Future<FriendPageModelApi> friend_page_api(@Field("api_key") String apiKey);
 
   @POST("user/profile_upload")
   @MultiPart()
@@ -35,15 +36,4 @@ abstract class MyApiService {
     @Part(name: "profileImage") File image, // Add image file
     @Part(name: "user_id") String userId,
   );
-
-  /*@POST("/my_notification_api")
-  @FormUrlEncoded()
-  Future<NotificationModel> my_notification_api(
-      @Field("api_key") String apiKey,
-      @Field("user_type") String userType,
-      @Field("user_altercode") String userAltercode,
-      @Field("user_password") String userPassword,
-      @Field("user_nrx") String userNrx,
-      @Field("chemist_id") String chemistId,
-      @Field("get_record") String getRecord);*/
 }

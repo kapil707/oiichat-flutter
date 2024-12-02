@@ -102,12 +102,12 @@ class _MyApiService implements MyApiService {
   }
 
   @override
-  Future<FriendPageModel> friend_page_api(String apiKey) async {
+  Future<FriendPageModelApi> friend_page_api(String apiKey) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = {'api_key': apiKey};
-    final _options = _setStreamType<FriendPageModel>(Options(
+    final _options = _setStreamType<FriendPageModelApi>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
@@ -125,9 +125,9 @@ class _MyApiService implements MyApiService {
           baseUrl,
         )));
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late FriendPageModel _value;
+    late FriendPageModelApi _value;
     try {
-      _value = FriendPageModel.fromJson(_result.data!);
+      _value = FriendPageModelApi.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;

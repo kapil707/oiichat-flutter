@@ -4,8 +4,8 @@ import 'package:oiichat/models/ChatRoomModel.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
-import '../Models/UserInfoModel.dart';
-import '../Models/message.dart';
+import '../models/UserInfoModel.dart';
+import '../models/message.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._internal();
