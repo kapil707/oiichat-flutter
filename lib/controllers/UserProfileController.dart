@@ -40,7 +40,7 @@ class _UserProfileControllerState extends State<UserProfileController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: UserProfileAppBar(),
+      appBar: OtherPageAppBar(your_title: "User Profile"),
       body: Center(
         child: Column(
           children: [

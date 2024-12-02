@@ -1,11 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:oiichat/models/FriendPageModel.dart';
-import 'package:oiichat/models/FriendPageModelApi.dart';
 import 'package:oiichat/view/AppBar.dart';
-import 'package:oiichat/controllers/ChatRoomController.dart';
 import 'package:oiichat/config/retrofit_api.dart';
 import 'package:oiichat/service/HomeService.dart';
+import 'package:oiichat/view/FriendsCard.dart';
 
 import '../config/main_functions.dart';
 import '../config/RealTimeService.dart';
@@ -19,9 +18,10 @@ class FriendController extends StatefulWidget {
 
 class _FriendControllerState extends State<FriendController> {
   final RealTimeService _realTimeService = RealTimeService();
-  List<FriendPageModelApi> users = []; // Store users list
+  List<FriendPageModel> users = []; // Store users list
+  //List<Map<String, dynamic>> users = [];
 
-  String? user1;
+  String? your_id;
 
   final apiService = MyApiService(Dio());
   late final HomeService homeService;
@@ -42,48 +42,56 @@ class _FriendControllerState extends State<FriendController> {
     UserSession userSession = UserSession();
     Map<String, String> userSessionData = await userSession.GetUserSession();
     setState(() {
-      user1 = userSessionData['userId']!;
+      your_id = userSessionData['userId']!;
     });
   }
 
   Future<void> fetchData() async {
     try {
-      print("Fetching home page data...");
-      final res = await apiService.friend_page_api("xx"); // Fetch data from API
+      //print("Fetching home page data...");
+      final friendpageapi =
+          await apiService.friend_page_api("xx"); // Fetch data from API
 
       setState(() {
-        users = res.users!
-            .map((user) => {
-                  'name': user.name,
-                  'user_image': user.user_image,
-                  '_id': user.sId,
-                })
+        users = friendpageapi.users!
+            .map((user) => FriendPageModel(
+                  name: user.name ?? '',
+                  userImage: user.user_image ?? '',
+                  id: user.sId ?? '',
+                ))
             .toList();
       });
 
-      print("Data fetched successfully: ${users.length} users found");
+      //print("Data fetched successfully: ${users.length} users found");
     } catch (e) {
       print("Error fetching data: $e");
     }
   }
 
+  void onRefresh() {
+    // Simulate refreshing the chat list
+    print("Refreshing chat list...");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: UserProfileAppBar(),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: users.isEmpty
-            ? const Center(
-                child:
-                    CircularProgressIndicator()) // Show loading indicator if no data
-            : ListView.builder(
-                itemCount: users.length,
-                itemBuilder: (context, index) {
-                  return Container();
-                },
-              ),
-      ),
+      appBar: OtherPageAppBar(your_title: "Friends"),
+      body: users.isEmpty
+          ? const Center(
+              child: Padding(
+              padding: EdgeInsets.all(8.0),
+              child: CircularProgressIndicator(),
+            )) // Show loading indicator if no data
+          : ListView.builder(
+              itemCount: users.length,
+              itemBuilder: (context, index) {
+                return FriendsCard(
+                    friendPageModel: users[index],
+                    your_id: your_id!,
+                    onRefresh: onRefresh);
+              },
+            ),
     );
   }
 }

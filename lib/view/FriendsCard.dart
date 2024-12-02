@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:oiichat/config/main_config.dart';
 import 'package:oiichat/controllers/ChatRoomController.dart';
-import 'package:oiichat/Models/FriendPageModel.dart';
+import 'package:oiichat/models/FriendPageModel.dart';
 
 class FriendsCard extends StatelessWidget {
   const FriendsCard({
@@ -16,7 +15,7 @@ class FriendsCard extends StatelessWidget {
   final VoidCallback onRefresh;
   @override
   Widget build(BuildContext context) {
-    String userImage = MainConfig.image_url + friendPageModel.user_image;
+    String userImage = MainConfig.image_url + friendPageModel.userImage;
     return InkWell(
       onTap: () async {
         final refresh = await Navigator.push(
@@ -26,7 +25,7 @@ class FriendsCard extends StatelessWidget {
               user_name: friendPageModel.name,
               user_image: userImage,
               user1: your_id,
-              user2: friendPageModel.sId,
+              user2: friendPageModel.id,
             ),
           ),
         );

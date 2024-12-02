@@ -1,29 +1,27 @@
 class FriendPageModel {
-  String sId;
-  String name;
-  String user_image;
+  final String name;
+  final String userImage;
+  final String id;
 
   FriendPageModel({
-    required this.sId,
     required this.name,
-    required this.user_image,
+    required this.userImage,
+    required this.id,
   });
 
-  // Convert a Message object to a Map
-  Map<String, dynamic> toMap() {
-    return {
-      '_id': sId,
-      'name': name,
-      'user_image': user_image,
-    };
+  factory FriendPageModel.fromJson(Map<String, dynamic> json) {
+    return FriendPageModel(
+      name: json['name'] ?? '',
+      userImage: json['user_image'] ?? '',
+      id: json['_id'] ?? '',
+    );
   }
 
-  // Create a Message object from a Map
-  factory FriendPageModel.fromMap(Map<String, dynamic> map) {
-    return FriendPageModel(
-      sId: map['_id'],
-      name: map['name'],
-      user_image: map['user_image'],
-    );
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'user_image': userImage,
+      'id': id,
+    };
   }
 }

@@ -82,8 +82,9 @@ class WhatsAppAppBar extends StatelessWidget implements PreferredSizeWidget {
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
 
-class UserProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const UserProfileAppBar({super.key});
+class OtherPageAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final String? your_title;
+  const OtherPageAppBar({super.key, required this.your_title});
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +100,7 @@ class UserProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ],
       ),
-      title: const Text("User Profile"),
+      title: Text(your_title!),
     );
   }
 
