@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       navigatorKey: navigatorKey,
       routes: {
-        '/': (context) =>  VoiceCallScreen(),
+        '/': (context) => const SplashScreenClass(),
         '/Landingpage': (context) => const Landingpage(),
         '/LoginPage': (context) => const LoginController(),
         '/SingUpPage': (context) => const SingUpController(),
