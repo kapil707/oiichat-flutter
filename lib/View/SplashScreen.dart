@@ -41,6 +41,10 @@ class _SplashScreenClassState extends State<SplashScreenClass> {
           child: Column(
             children: [
               const SizedBox(height: 20),
+              
+              SizedBox(height: MediaQuery.of(context).size.height / 5),
+              
+              Image.asset("assets/logo.png",width: 200,height: 200,),const SizedBox(height: 50),
               const Text(
                 "Welcome to OiiChat",
                 style: TextStyle(
@@ -48,30 +52,9 @@ class _SplashScreenClassState extends State<SplashScreenClass> {
                     fontSize: 29,
                     fontWeight: FontWeight.w600),
               ),
-              SizedBox(height: MediaQuery.of(context).size.height / 10),
-              Image.asset("assets/landingpage.jpg"),
-              SizedBox(height: MediaQuery.of(context).size.height / 10),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: RichText(
-                  textAlign: TextAlign.center,
-                  text: TextSpan(
-                    style: const TextStyle(color: Colors.black, fontSize: 17),
-                    children: [
-                      TextSpan(
-                        text: "Agree and Continue to accept the",
-                        style: TextStyle(color: Colors.grey[600]),
-                      ),
-                      const TextSpan(
-                        text: " OiiChat Trems of Service and Privacy Policy",
-                        style: TextStyle(color: Colors.orange),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              SizedBox(height: MediaQuery.of(context).size.height / 5),
+             
               const SizedBox(height: 20),
-              const CircularProgressIndicator(),
             ],
           ),
         ),

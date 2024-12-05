@@ -95,7 +95,7 @@ class _HomeControllerState extends State<HomeController>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("OiiChat"),
+        title: const Text("Oii Chat"),
         actions: [
           IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
           PopupMenuButton(onSelected: (value) {
@@ -111,7 +111,7 @@ class _HomeControllerState extends State<HomeController>
                 child: Text("Setting"),
               ),
             ];
-          })
+          },),
         ],
         bottom: TabBar(
           controller: _controller,
