@@ -3,28 +3,36 @@ import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:oiichat/Config/main_config.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
-class VoiceCallScreen extends StatefulWidget {
+class VideoCallScreen extends StatefulWidget {
   final String user1;
   final String user2;
 
-  const VoiceCallScreen({super.key, required this.user1, required this.user2});
+  const VideoCallScreen({super.key, required this.user1, required this.user2});
 
   @override
-  _VoiceCallScreenState createState() => _VoiceCallScreenState();
+  _VideoCallScreenState createState() => _VideoCallScreenState();
 }
 
-class _VoiceCallScreenState extends State<VoiceCallScreen> {
+class _VideoCallScreenState extends State<VideoCallScreen> {
   late IO.Socket socket;
   late RTCPeerConnection peerConnection;
   MediaStream? localStream;
   MediaStream? remoteStream;
+  RTCVideoRenderer localRenderer = RTCVideoRenderer();
+  RTCVideoRenderer remoteRenderer = RTCVideoRenderer();
   String? targetSocketId;
 
   @override
   void initState() {
     super.initState();
+    initRenderers();
     initSocket();
     get_user_2_socket_id(widget.user2);
+  }
+
+  Future<void> initRenderers() async {
+    await localRenderer.initialize();
+    await remoteRenderer.initialize();
   }
 
   Future<void> initSocket() async {
@@ -50,7 +58,7 @@ class _VoiceCallScreenState extends State<VoiceCallScreen> {
         if (data['signal']['description']['type'] == 'offer') {
           final answer = await peerConnection.createAnswer();
           await peerConnection.setLocalDescription(answer);
-          print("get_user_2_socket_id sender " + data['sender']);
+
           socket.emit('signal', {
             'target': data['sender'],
             'signal': {'description': answer.toMap()}
@@ -70,7 +78,6 @@ class _VoiceCallScreenState extends State<VoiceCallScreen> {
     });
 
     socket.on('get_user_2_socket_id_response', (data) async {
-      //print("get_user_2_socket_id_response " + data["user2"]);
       setState(() {
         targetSocketId = data["user2"];
       });
@@ -80,15 +87,17 @@ class _VoiceCallScreenState extends State<VoiceCallScreen> {
   }
 
   void get_user_2_socket_id(String user2) {
-    //print("get_user_2_socket_id");
     socket.emit("get_user_2_socket_id", user2);
   }
 
   Future<void> setupWebRTC() async {
-    // Get local audio stream
+    // Get local audio and video stream
     localStream = await navigator.mediaDevices.getUserMedia({
       'audio': true,
+      'video': true,
     });
+
+    localRenderer.srcObject = localStream;
 
     // Configure STUN servers
     final configuration = {
@@ -100,17 +109,17 @@ class _VoiceCallScreenState extends State<VoiceCallScreen> {
     // Create peer connection
     peerConnection = await createPeerConnection(configuration);
 
-    // Add local audio stream
+    // Add local audio and video tracks
     localStream!.getTracks().forEach((track) {
       peerConnection.addTrack(track, localStream!);
     });
 
-    // Handle remote audio stream
+    // Handle remote audio and video streams
     peerConnection.onTrack = (event) {
       setState(() {
         remoteStream = event.streams[0];
+        remoteRenderer.srcObject = remoteStream;
       });
-      print('Remote track received');
     };
 
     // Handle ICE candidates
@@ -135,7 +144,6 @@ class _VoiceCallScreenState extends State<VoiceCallScreen> {
     final offer = await peerConnection.createOffer();
     await peerConnection.setLocalDescription(offer);
     print('Call started 2');
-
     socket.emit('signal', {
       'your_id': widget.user1,
       'target': targetSocketId,
@@ -148,19 +156,42 @@ class _VoiceCallScreenState extends State<VoiceCallScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Voice Call'),
+        title: const Text('Video Call'),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              onPressed: startCall,
-              child: const Text('Start Call'),
+      body: Column(
+        children: [
+          Expanded(
+            child: Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    margin: const EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.blue),
+                    ),
+                    child: RTCVideoView(localRenderer, mirror: true),
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    margin: const EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.green),
+                    ),
+                    child: remoteStream != null
+                        ? RTCVideoView(remoteRenderer)
+                        : const Center(
+                            child: Text("Waiting for remote video...")),
+                  ),
+                ),
+              ],
             ),
-            if (remoteStream != null) const Text('Connected to remote stream'),
-          ],
-        ),
+          ),
+          ElevatedButton(
+            onPressed: startCall,
+            child: const Text('Start Call'),
+          ),
+        ],
       ),
     );
   }
@@ -171,6 +202,8 @@ class _VoiceCallScreenState extends State<VoiceCallScreen> {
     peerConnection.close();
     localStream?.dispose();
     remoteStream?.dispose();
+    localRenderer.dispose();
+    remoteRenderer.dispose();
     super.dispose();
   }
 }
