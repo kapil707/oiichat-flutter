@@ -1,17 +1,17 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:oiichat/config/RealTimeService.dart';
+import 'package:oiichat/config/main_functions.dart';
 import 'package:oiichat/models/FriendPageModel.dart';
 import 'package:oiichat/view/AppBar.dart';
 import 'package:oiichat/config/retrofit_api.dart';
 import 'package:oiichat/service/HomeService.dart';
 import 'package:oiichat/view/FriendsCard.dart';
 
-import '../config/main_functions.dart';
-import '../config/RealTimeService.dart';
+
 
 class FriendController extends StatefulWidget {
-  const FriendController({super.key});
-
+  
   @override
   State<FriendController> createState() => _FriendControllerState();
 }

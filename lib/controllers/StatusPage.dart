@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:oiichat/view/StatusPage/AddStatus.dart';
+import 'package:oiichat/view/StatusPage/UserStatus.dart';
 
-import '../view/StatusPage/AddStatus.dart';
-import '../view/StatusPage/UserStatus.dart';
 
 class Statuspage extends StatelessWidget {
-  const Statuspage({super.key});
+  final String? your_id;
+  final String? your_name;
+  final String? your_image;
+
+  const Statuspage({super.key, this.your_id, this.your_name, this.your_image});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +34,11 @@ class Statuspage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const AddStatus(),
+            AddStatus(
+              your_id:your_id,
+        your_name: your_name,
+        your_image: your_image,
+            ),
             Container(
               height: 33,
               width: MediaQuery.of(context).size.width,

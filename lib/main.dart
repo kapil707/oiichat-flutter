@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget {
         '/HomePage': (context) => const HomeController(),
         '/MyProfilePage': (context) => const MyProfileController(),
         '/Notification': (context) => const MyNotification(),
-        '/MyFriends': (context) => const FriendController(),
+        '/MyFriends': (context) => FriendController(),
       },
     );
   }

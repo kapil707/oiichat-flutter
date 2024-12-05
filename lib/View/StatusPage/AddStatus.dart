@@ -1,22 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:oiichat/config/main_config.dart';
 
 class AddStatus extends StatelessWidget {
-  const AddStatus({super.key});
+  final String? your_id;
+  final String? your_name;
+  final String? your_image;
+
+  const AddStatus({super.key, required this.your_id, required this.your_name, required this.your_image});
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       leading: Stack(
         children: [
-          const CircleAvatar(
+          CircleAvatar(
             radius: 27,
-            backgroundColor: Colors.black,
+            backgroundImage: NetworkImage(
+                                MainConfig.image_url + your_image!),
           ),
           Positioned(
             bottom: 0,
             right: 0,
             child: CircleAvatar(
-              backgroundColor: Colors.greenAccent[700],
+                backgroundColor: Colors.black,
               radius: 10,
               child: const Icon(
                 Icons.add,
@@ -27,7 +33,7 @@ class AddStatus extends StatelessWidget {
           ),
         ],
       ),
-      title: const Text("My Status"),
+      title: Text(your_name!),
       subtitle: const Text("Tab to add status update"),
     );
   }

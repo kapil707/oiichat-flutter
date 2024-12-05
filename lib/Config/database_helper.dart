@@ -1,11 +1,9 @@
-import 'dart:async';
 import 'package:oiichat/models/ChatModel.dart';
 import 'package:oiichat/models/ChatRoomModel.dart';
+import 'package:oiichat/models/UserInfoModel.dart';
+import 'package:oiichat/models/message.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-
-import '../models/UserInfoModel.dart';
-import '../models/message.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._internal();

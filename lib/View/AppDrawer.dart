@@ -1,13 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:get/instance_manager.dart';
-import 'package:get/route_manager.dart';
-import 'package:oiichat/Config/main_config.dart';
-import 'package:oiichat/controllers/SingUpController.dart';
-import 'package:oiichat/Config/main_functions.dart';
-import 'package:oiichat/View/SplashScreen.dart';
-
-import '../Config/session.dart';
+import 'package:oiichat/config/main_config.dart';
+import 'package:oiichat/config/session.dart';
 
 class MyDrawerTile extends StatelessWidget {
   final IconData icon;
@@ -32,11 +25,12 @@ class MyDrawerTile extends StatelessWidget {
 }
 
 class AppDrawer extends StatefulWidget {
-  final String? user_name;
-  final String? user_image;
+  final String? your_id;
+  final String? your_name;
+  final String? your_image;
 
   const AppDrawer(
-      {super.key, required this.user_name, required this.user_image});
+      {super.key, required this.your_id, this.your_name, required this.your_image});
 
   @override
   State<AppDrawer> createState() => _AppDrawerState();
@@ -65,12 +59,12 @@ class _AppDrawerState extends State<AppDrawer> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      if (widget.user_image != "") ...{
+                      if (widget.your_image != "") ...{
                         CircleAvatar(
                             backgroundImage: NetworkImage(
-                                MainConfig.image_url + widget.user_image!)),
+                                MainConfig.image_url + widget.your_image!)),
                       },
-                      Text(widget.user_name ?? "Loading..."),
+                      Text(widget.your_name ?? "Loading..."),
                     ],
                   ),
                 ),

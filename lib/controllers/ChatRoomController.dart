@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:oiichat/Controllers/UserProfileController.dart';
-import 'package:oiichat/config/main_functions.dart';
+import 'package:oiichat/config/RealTimeService.dart';
+import 'package:oiichat/config/database_helper.dart';
 import 'package:oiichat/controllers/call.dart';
 import 'package:oiichat/controllers/call2.dart';
 import 'package:oiichat/models/ChatRoomModel.dart';
 import 'package:audioplayers/audioplayers.dart';
-
-import '../config/database_helper.dart';
-import '../view/AppBar.dart';
-import '../view/ChatRoomCard.dart';
-import '../view/main_widget.dart';
-import '../config/RealTimeService.dart';
+import 'package:oiichat/view/AppBar.dart';
+import 'package:oiichat/view/ChatRoomCard.dart';
+import 'package:oiichat/view/main_widget.dart';
 
 class ChatRoomController extends StatefulWidget {
   final String? user_name;
@@ -131,7 +129,7 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
     print('chatlist call');
     final chatHistory =
         await dbHelper.ChatRoomMessage(widget.user1!, widget.user2!);
-    print('chatlist $chatHistory');
+    //print('chatlist $chatHistory');
     setState(() {
       messages = chatHistory;
     });
@@ -157,6 +155,17 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
         widget.user2!,
         messageController.text,
       );
+
+        setState(() {
+          messages.add(
+            ChatRoomModel(
+              user_id: widget.user1!, 
+              message: messageController.text, 
+              time: DateTime.now().toIso8601String(), 
+              status: 0,
+            ),
+          );
+        });
 
       messageController.clear();
       scrollToBottom();

@@ -1,16 +1,16 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:oiichat/View/StatusPage/AddStatus.dart';
+import 'package:oiichat/config/Colors.dart';
+import 'package:oiichat/config/RealTimeService.dart';
+import 'package:oiichat/config/database_helper.dart';
 import 'package:oiichat/config/main_functions.dart';
 import 'package:oiichat/controllers/StatusPage.dart';
 import 'package:oiichat/models/ChatModel.dart';
 import 'package:oiichat/config/retrofit_api.dart';
 import 'package:oiichat/service/HomeService.dart';
-
-import '../config/Colors.dart';
-import '../config/RealTimeService.dart';
-import '../config/database_helper.dart';
-import '../view/AppDrawer.dart';
-import '../view/ChatCard.dart';
+import 'package:oiichat/view/AppDrawer.dart';
+import 'package:oiichat/view/ChatCard.dart';
 
 class HomeController extends StatefulWidget {
   const HomeController({super.key});
@@ -26,8 +26,8 @@ class _HomeControllerState extends State<HomeController>
   List<ChatModel> chats = [];
 
   String? your_id;
-  String? user_name;
-  String? user_image;
+  String? your_name;
+  String? your_image;
 
   late TabController _controller;
 
@@ -65,8 +65,8 @@ class _HomeControllerState extends State<HomeController>
     Map<String, String> userSessionData = await userSession.GetUserSession();
     setState(() {
       your_id = userSessionData['userId'];
-      user_name = userSessionData['userName'];
-      user_image = userSessionData['userImage'];
+      your_name = userSessionData['userName'];
+      your_image = userSessionData['userImage'];
       loadChats();
 
       // Initialize the real-time service
@@ -118,7 +118,7 @@ class _HomeControllerState extends State<HomeController>
           indicatorColor: mainTabTxtColor,
           labelColor: mainTabTxtColor,
           unselectedLabelColor: mainUnTabTxtColor,
-          tabs: const [
+          tabs: [
             Tab(icon: Icon(Icons.camera_alt)),
             Tab(
               text: "Chat",
@@ -133,13 +133,14 @@ class _HomeControllerState extends State<HomeController>
         ),
       ),
       drawer: AppDrawer(
-        user_image: user_image,
-        user_name: user_name,
+        your_id:your_id,
+        your_name: your_name,
+        your_image: your_image,
       ),
       body: TabBarView(
         controller: _controller,
         children: [
-          const Text("camra"),
+          Text("camra"),
           chats.isEmpty
               ? const Center(child: Text("No chats available"))
               : Container(
@@ -161,8 +162,16 @@ class _HomeControllerState extends State<HomeController>
                     ],
                   ),
                 ),
-          Statuspage(),
-          Statuspage(),
+          Statuspage(
+            your_id:your_id,
+        your_name: your_name,
+        your_image: your_image,
+          ),
+          Statuspage(
+            your_id:your_id,
+        your_name: your_name,
+        your_image: your_image,
+          ),
         ],
       ),
     );

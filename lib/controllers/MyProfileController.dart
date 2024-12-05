@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:oiichat/View/AppBar.dart';
 import 'package:oiichat/config/retrofit_api.dart';
 
 import '../config/main_functions.dart';
@@ -71,12 +72,7 @@ class _MyProfileControllerState extends State<MyProfileController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Edit Profile"),
-        backgroundColor: Colors.deepPurple,
-        elevation: 0,
-        actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.person))],
-      ),
+     appBar: OtherPageAppBar(your_title: "My Profile"),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
