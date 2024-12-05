@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:oiichat/Controllers/UserProfileController.dart';
+import 'package:oiichat/config/main_functions.dart';
 import 'package:oiichat/controllers/call.dart';
 import 'package:oiichat/models/ChatRoomModel.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -40,7 +41,6 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
   void initState() {
     super.initState();
     loadMessages();
-    insertOrUpdateUserInfo();
     // Focus on the input field initially
     WidgetsBinding.instance.addPostFrameCallback((_) {
       FocusScope.of(context).requestFocus(_focusNode);
@@ -116,15 +116,6 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
       print("User stopped typing.");
       _realTimeService.userTyping(widget.user1!, widget.user2!, "0");
     }
-  }
-
-  void insertOrUpdateUserInfo() async {
-    //user ki info insert or update hotai ha yaha say
-    // final newUser = UseriInfoModel(
-    //   user_id: widget.user2!,
-    //   user_name: widget.name!,
-    // );
-    // await dbHelper.insertOrUpdateUserInfo(newUser);
   }
 
   void playNotificationSound() async {
@@ -221,8 +212,8 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
               context,
               MaterialPageRoute(
                   builder: (context) => VoiceCallScreen(
-                        your_id: widget.user1!,
-                        user_id: widget.user2!,
+                        user1: widget.user1!,
+                        user2: widget.user2!,
                       )));
         },
         onVideoCallPressed: () => print("Video call button pressed"),

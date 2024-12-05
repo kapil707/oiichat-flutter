@@ -4,11 +4,10 @@ import 'package:oiichat/Config/main_config.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class VoiceCallScreen extends StatefulWidget {
-  final String your_id;
-  final String user_id;
+  final String user1;
+  final String user2;
 
-  const VoiceCallScreen(
-      {super.key, required this.your_id, required this.user_id});
+  const VoiceCallScreen({super.key, required this.user1, required this.user2});
 
   @override
   _VoiceCallScreenState createState() => _VoiceCallScreenState();
@@ -19,17 +18,19 @@ class _VoiceCallScreenState extends State<VoiceCallScreen> {
   late RTCPeerConnection peerConnection;
   MediaStream? localStream;
   MediaStream? remoteStream;
-  String? mySocketId;
   String? targetSocketId;
 
   @override
   void initState() {
     super.initState();
     initSocket();
-    setState(() {
-      mySocketId = widget.your_id;
-      targetSocketId = widget.user_id;
-    });
+
+    get_user_2_socket_id(widget.user2);
+
+    // setState(() {
+    //   mySocketId = widget.user1;
+    //   targetSocketId = widget.user2;
+    // });
   }
 
   Future<void> initSocket() async {
@@ -40,7 +41,7 @@ class _VoiceCallScreenState extends State<VoiceCallScreen> {
 
     socket.onConnect((_) {
       print('Connected to server');
-      socket.emit("register", widget.your_id);
+      socket.emit("register", widget.user1);
       //mySocketId = socket.id;
       //print('My socket ID: $mySocketId');
     });
@@ -64,6 +65,7 @@ class _VoiceCallScreenState extends State<VoiceCallScreen> {
         if (data['signal']['description']['type'] == 'offer') {
           final answer = await peerConnection.createAnswer();
           await peerConnection.setLocalDescription(answer);
+          print("get_user_2_socket_id sender " + data['sender']);
           socket.emit('signal', {
             'target': data['sender'],
             'signal': {'description': answer.toMap()}
@@ -82,7 +84,19 @@ class _VoiceCallScreenState extends State<VoiceCallScreen> {
       }
     });
 
+    socket.on('get_user_2_socket_id_response', (data) async {
+      print("get_user_2_socket_id_response " + data["user2"]);
+      setState(() {
+        targetSocketId = data["user2"];
+      });
+    });
+
     await setupWebRTC();
+  }
+
+  void get_user_2_socket_id(String user2) {
+    print("get_user_2_socket_id");
+    socket.emit("get_user_2_socket_id", user2);
   }
 
   Future<void> setupWebRTC() async {
@@ -122,7 +136,7 @@ class _VoiceCallScreenState extends State<VoiceCallScreen> {
     peerConnection.onIceCandidate = (candidate) {
       if (targetSocketId != null) {
         socket.emit('signal', {
-          'your_id': widget.your_id,
+          'your_id': widget.user1,
           'target': targetSocketId,
           'signal': {'candidate': candidate!.toMap()}
         });
@@ -140,7 +154,7 @@ class _VoiceCallScreenState extends State<VoiceCallScreen> {
     await peerConnection.setLocalDescription(offer);
 
     socket.emit('signal', {
-      'your_id': widget.your_id,
+      'your_id': widget.user1,
       'target': targetSocketId,
       'signal': {'description': offer.toMap()}
     });
