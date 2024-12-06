@@ -24,7 +24,7 @@ class MainButton extends StatelessWidget {
       ),
       child: Text(
         btnName,
-        style: TextStyle(fontSize: 18, color: mainBtnTxtColor),
+        style: const TextStyle(fontSize: 18, color: mainBtnTxtColor),
       ),
     );
   }
@@ -34,17 +34,30 @@ class MainTextboxWithIcon extends StatelessWidget {
   final TextEditingController mytextController;
   final Icon? btnIcon;
   final String? btnName;
+  final String? btnNamehint;
 
   const MainTextboxWithIcon(
-      {super.key, required this.mytextController, this.btnIcon, this.btnName});
+      {super.key,
+      required this.mytextController,
+      this.btnIcon,
+      this.btnName,
+      this.btnNamehint});
 
   @override
   Widget build(BuildContext context) {
     return TextField(
       controller: mytextController,
       decoration: InputDecoration(
-        labelText: btnName,
-        border: const OutlineInputBorder(),
+        //labelText: btnName,
+        hintText: btnNamehint,
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+              color: mainTextboxBorderColorE), // Default border color
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+              color: mainTextboxBorderColor), // Border color when focused
+        ),
         prefixIcon: btnIcon,
       ),
       keyboardType: TextInputType.emailAddress,
@@ -62,8 +75,16 @@ class MainEmailbox extends StatelessWidget {
     return TextField(
       controller: mytextController,
       decoration: const InputDecoration(
-        labelText: 'Email',
-        border: OutlineInputBorder(),
+        //labelText: 'Email', // Hint text
+        hintText: 'Enter your email', // Additional hint text
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+              color: mainTextboxBorderColorE), // Default border color
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+              color: mainTextboxBorderColor), // Border color when focused
+        ),
         prefixIcon: Icon(Icons.email),
       ),
       keyboardType: TextInputType.emailAddress,
@@ -81,8 +102,16 @@ class MainPasswordbox extends StatelessWidget {
     return TextField(
       controller: mytextController,
       decoration: const InputDecoration(
-        labelText: 'Password',
-        border: OutlineInputBorder(),
+        //labelText: 'Email', // Hint text
+        hintText: 'Enter your password', // Additional hint text
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+              color: mainTextboxBorderColorE), // Default border color
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+              color: mainTextboxBorderColor), // Border color when focused
+        ),
         prefixIcon: Icon(Icons.lock),
       ),
       obscureText: true,

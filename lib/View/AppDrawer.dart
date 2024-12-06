@@ -17,8 +17,16 @@ class MyDrawerTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(icon),
-      title: Text(title),
+      leading: Icon(
+        icon,
+        color: Colors.white,
+      ),
+      title: Text(
+        title,
+        style: TextStyle(
+          color: Colors.white,
+        ),
+      ),
       onTap: onTap,
     );
   }
@@ -30,7 +38,10 @@ class AppDrawer extends StatefulWidget {
   final String? your_image;
 
   const AppDrawer(
-      {super.key, required this.your_id, this.your_name, required this.your_image});
+      {super.key,
+      required this.your_id,
+      this.your_name,
+      required this.your_image});
 
   @override
   State<AppDrawer> createState() => _AppDrawerState();
@@ -47,74 +58,91 @@ class _AppDrawerState extends State<AppDrawer> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-        backgroundColor: Colors.orange.shade50,
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 5, top: 5),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
+      backgroundColor: const Color.fromARGB(255, 94, 55, 51),
+      child: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              // Profile Section
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CircleAvatar(
+                    backgroundImage: NetworkImage(
+                        MainConfig.image_url + (widget.your_image ?? "")),
+                    radius: 30,
+                  ),
+                  const SizedBox(width: 10),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (widget.your_image != "") ...{
-                        CircleAvatar(
-                            backgroundImage: NetworkImage(
-                                MainConfig.image_url + widget.your_image!)),
-                      },
-                      Text(widget.your_name ?? "Loading..."),
+                      Text(
+                        widget.your_name ?? "Loading...",
+                        style: const TextStyle(
+                            fontSize: 18,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 5),
+                      const Text(
+                        "Your Status Here",
+                        style: TextStyle(fontSize: 14, color: Colors.grey),
+                      ),
                     ],
                   ),
-                ),
-                const Divider(
-                  color: Colors.black,
-                ),
-                MyDrawerTile(
-                  title: "Home",
-                  icon: Icons.home,
-                  onTap: () {
-                    Navigator.pushReplacementNamed(context, '/HomePage');
-                  },
-                ),
-                MyDrawerTile(
-                  title: "Edit Profile",
-                  icon: Icons.edit,
-                  onTap: () {
-                    Navigator.pushReplacementNamed(context, '/MyProfilePage');
-                  },
-                ),
-                MyDrawerTile(
-                  title: "My Friends",
-                  icon: Icons.contact_page,
-                  onTap: () {
-                    Navigator.pushNamed(context, '/MyFriends');
-                  },
-                ),
-                MyDrawerTile(
-                  title: "Friends Request",
-                  icon: Icons.ice_skating,
-                  onTap: () {},
-                ),
-                MyDrawerTile(
-                  title: "Story",
-                  icon: Icons.ice_skating,
-                  onTap: () {
-                    Navigator.pushReplacementNamed(context, '/StoriesPage');
-                  },
-                ),
-                const Spacer(),
-                MyDrawerTile(
-                  title: "Logout",
-                  icon: Icons.logout,
-                  onTap: () {
-                    singOut(context);
-                  },
-                )
-              ],
-            ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              const Divider(
+                color: Colors.white,
+              ),
+              // Drawer Tiles
+              MyDrawerTile(
+                title: "Home",
+                icon: Icons.home,
+                onTap: () {
+                  Navigator.pushReplacementNamed(context, '/HomePage');
+                },
+              ),
+              MyDrawerTile(
+                title: "Edit Profile",
+                icon: Icons.edit,
+                onTap: () {
+                  Navigator.pushNamed(context, '/MyProfilePage');
+                },
+              ),
+              MyDrawerTile(
+                title: "My Friends",
+                icon: Icons.contact_page,
+                onTap: () {
+                  Navigator.pushNamed(context, '/MyFriends');
+                },
+              ),
+              MyDrawerTile(
+                title: "Friends Request",
+                icon: Icons.group_add,
+                onTap: () {},
+              ),
+              MyDrawerTile(
+                title: "Story",
+                icon: Icons.auto_stories,
+                onTap: () {
+                  Navigator.pushReplacementNamed(context, '/StoriesPage');
+                },
+              ),
+              const Spacer(),
+              MyDrawerTile(
+                title: "Logout",
+                icon: Icons.logout,
+                onTap: () {
+                  singOut(context);
+                },
+              ),
+            ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

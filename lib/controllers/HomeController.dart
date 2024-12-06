@@ -118,7 +118,7 @@ class _HomeControllerState extends State<HomeController>
           indicatorColor: mainTabTxtColor,
           labelColor: mainTabTxtColor,
           unselectedLabelColor: mainUnTabTxtColor,
-          tabs: [
+          tabs: const [
             Tab(icon: Icon(Icons.camera_alt)),
             Tab(
               text: "Chat",
@@ -133,14 +133,14 @@ class _HomeControllerState extends State<HomeController>
         ),
       ),
       drawer: AppDrawer(
-        your_id:your_id,
+        your_id: your_id,
         your_name: your_name,
         your_image: your_image,
       ),
       body: TabBarView(
         controller: _controller,
         children: [
-          Text("camra"),
+          const Text("camra"),
           chats.isEmpty
               ? const Center(child: Text("No chats available"))
               : Container(
@@ -163,14 +163,14 @@ class _HomeControllerState extends State<HomeController>
                   ),
                 ),
           Statuspage(
-            your_id:your_id,
-        your_name: your_name,
-        your_image: your_image,
+            your_id: your_id,
+            your_name: your_name,
+            your_image: your_image,
           ),
           Statuspage(
-            your_id:your_id,
-        your_name: your_name,
-        your_image: your_image,
+            your_id: your_id,
+            your_name: your_name,
+            your_image: your_image,
           ),
         ],
       ),

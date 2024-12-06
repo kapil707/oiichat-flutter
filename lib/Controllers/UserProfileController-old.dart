@@ -1,11 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../config/database_helper.dart';
-import '../view/AppBar.dart';
-import '../view/ChatRoomCard.dart';
-import '../view/main_widget.dart';
-import '../config/RealTimeService.dart';
-
 class UserProfileController extends StatefulWidget {
   final String? user_name;
   final String? user_image;

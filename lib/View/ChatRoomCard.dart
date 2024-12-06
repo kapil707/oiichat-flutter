@@ -32,7 +32,10 @@ class ChatRoomCardRight extends StatelessWidget {
                   top: 5,
                   bottom: 20,
                 ),
-                child: Text(chatRoomModel.message),
+                child: Text(
+                  chatRoomModel.message,
+                  style: TextStyle(color: mainCardRightTxtClr),
+                ),
               ),
               Positioned(
                 bottom: 4,
@@ -42,17 +45,21 @@ class ChatRoomCardRight extends StatelessWidget {
                     Text(
                       DateFormat('hh:mma')
                           .format(DateTime.parse(chatRoomModel.time).toLocal()),
-                      style: const TextStyle(fontSize: 10),
+                      style: const TextStyle(
+                          fontSize: 10, color: mainCardRightTxtClr),
                     ),
                     const SizedBox(width: 5),
                     if (chatRoomModel.status == 0) ...{
-                      const Icon(Icons.watch_later_outlined, size: 12),
+                      const Icon(Icons.watch_later_outlined,
+                          size: 12, color: mainCardRightTxtClr),
                     },
                     if (chatRoomModel.status == 1) ...{
-                      const Icon(Icons.done, size: 12),
+                      const Icon(Icons.done,
+                          size: 12, color: mainCardRightTxtClr),
                     },
                     if (chatRoomModel.status == 2) ...{
-                      const Icon(Icons.done_all, size: 12),
+                      const Icon(Icons.done_all,
+                          size: 12, color: mainCardRightTxtClr),
                     },
                   ],
                 ),

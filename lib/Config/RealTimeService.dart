@@ -104,7 +104,7 @@ class RealTimeService {
 
     socket.on('get_old_message_response', (data) async {
       final List<dynamic> messages = data["messages"];
-      print("get_old_message_response " + messages.length.toString());
+      print("get_old_message_response ${messages.length}");
       for (var message in messages) {
         print("get_old_message_response " + message["user_name"]);
         //insert new chat

@@ -6,7 +6,8 @@ class CallScreen extends StatefulWidget {
   final String userId;
   final String otherUserId;
 
-  const CallScreen({super.key, required this.userId, required this.otherUserId});
+  const CallScreen(
+      {super.key, required this.userId, required this.otherUserId});
 
   @override
   _CallScreenState createState() => _CallScreenState();
@@ -38,7 +39,7 @@ class _CallScreenState extends State<CallScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text("Incoming Call"),
+          title: const Text("Incoming Call"),
           content: Text("$caller is calling you"),
           actions: [
             TextButton(
@@ -46,14 +47,14 @@ class _CallScreenState extends State<CallScreen> {
                 _realTimeService.acceptCall(caller);
                 Navigator.pop(context);
               },
-              child: Text("Accept"),
+              child: const Text("Accept"),
             ),
             TextButton(
               onPressed: () {
                 _realTimeService.rejectCall(caller);
                 Navigator.pop(context);
               },
-              child: Text("Reject"),
+              child: const Text("Reject"),
             ),
           ],
         );
@@ -70,7 +71,7 @@ class _CallScreenState extends State<CallScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Call")),
+      appBar: AppBar(title: const Text("Call")),
       body: Column(
         children: [
           ElevatedButton(
@@ -81,10 +82,8 @@ class _CallScreenState extends State<CallScreen> {
           ),
           if (_remoteStream != null)
             Expanded(
-              child: RTCVideoView(
-                RTCVideoRenderer()
-                  ..srcObject = _remoteStream!
-              ),
+              child:
+                  RTCVideoView(RTCVideoRenderer()..srcObject = _remoteStream!),
             )
         ],
       ),

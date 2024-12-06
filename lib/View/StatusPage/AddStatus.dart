@@ -6,7 +6,11 @@ class AddStatus extends StatelessWidget {
   final String? your_name;
   final String? your_image;
 
-  const AddStatus({super.key, required this.your_id, required this.your_name, required this.your_image});
+  const AddStatus(
+      {super.key,
+      required this.your_id,
+      required this.your_name,
+      required this.your_image});
 
   @override
   Widget build(BuildContext context) {
@@ -15,16 +19,15 @@ class AddStatus extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: 27,
-            backgroundImage: NetworkImage(
-                                MainConfig.image_url + your_image!),
+            backgroundImage: NetworkImage(MainConfig.image_url + your_image!),
           ),
-          Positioned(
+          const Positioned(
             bottom: 0,
             right: 0,
             child: CircleAvatar(
-                backgroundColor: Colors.black,
+              backgroundColor: Colors.black,
               radius: 10,
-              child: const Icon(
+              child: Icon(
                 Icons.add,
                 size: 20,
                 color: Colors.white,

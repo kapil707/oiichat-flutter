@@ -100,75 +100,95 @@ class _LoginControllerState extends State<LoginController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Login"),
+        title: const Text("OiiChat"),
       ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // App logo or Icon
-              const Icon(
-                Icons.person,
-                size: 80,
-                color: Colors.orange,
-              ),
-              const SizedBox(height: 40),
-
-              // Username/Email Text Field
-              MainEmailbox(
-                mytextController: username,
-              ),
-              MainErrorLabel(message: usernameError),
-              const SizedBox(height: 20),
-
-              // Password Text Field
-              MainPasswordbox(
-                mytextController: password,
-              ),
-              MainErrorLabel(message: passwordError),
-              const SizedBox(height: 30),
-
-              if (_isLoading) ...{
-                const Center(
-                  child: CircularProgressIndicator(),
+      body: SingleChildScrollView(
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const SizedBox(height: 20),
+                // App logo or Icon
+                Image.asset(
+                  'assets/logo.png',
+                  width: 200,
+                  height: 200,
                 ),
-              } else ...{
-                // Login Button
-                MainButton(btnName: 'Login', callBack: _handleLogin),
-              },
-              MainErrorLabel(message: mainError),
-              const SizedBox(height: 20),
+                const SizedBox(height: 10),
+                Center(
+                  child: Text(
+                    "Welcome to OiiChat Login",
+                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                const SizedBox(height: 30),
+                // Username/Email Text Field
 
-              // Register and Forgot Password Links
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      //Get.to(SingUpController());
-                      // Handle register logic here
-                      Navigator.pushNamed(context, '/SingUpPage');
-                    },
-                    child: Text(
-                      'Create Account',
-                      style: TextStyle(color: mainLinkColor),
-                    ),
+                Text(
+                  "Enter Email",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 5),
+                MainEmailbox(
+                  mytextController: username,
+                ),
+                MainErrorLabel(message: usernameError),
+                const SizedBox(height: 20),
+
+                // Password Text Field
+                Text(
+                  "Enter Password",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 5),
+                MainPasswordbox(
+                  mytextController: password,
+                ),
+                MainErrorLabel(message: passwordError),
+                const SizedBox(height: 30),
+
+                if (_isLoading) ...{
+                  const Center(
+                    child: CircularProgressIndicator(),
                   ),
-                  TextButton(
-                    onPressed: () {
-                      // Handle forgot password logic here
-                    },
-                    child: Text(
-                      'Forgot Password?',
-                      style: TextStyle(color: mainLinkColor),
+                } else ...{
+                  // Login Button
+                  MainButton(btnName: 'Login', callBack: _handleLogin),
+                },
+                MainErrorLabel(message: mainError),
+                const SizedBox(height: 20),
+
+                // Register and Forgot Password Links
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        //Get.to(SingUpController());
+                        // Handle register logic here
+                        Navigator.pushNamed(context, '/SingUpPage');
+                      },
+                      child: const Text(
+                        'Create Account',
+                        style: TextStyle(color: mainLinkColor, fontSize: 16),
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                    TextButton(
+                      onPressed: () {
+                        // Handle forgot password logic here
+                      },
+                      child: const Text(
+                        'Forgot Password?',
+                        style: TextStyle(color: mainLinkColor, fontSize: 16),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

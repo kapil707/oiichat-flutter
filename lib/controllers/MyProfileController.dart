@@ -4,10 +4,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:oiichat/View/AppBar.dart';
+import 'package:oiichat/config/main_config.dart';
+import 'package:oiichat/config/main_functions.dart';
 import 'package:oiichat/config/retrofit_api.dart';
-
-import '../config/main_functions.dart';
-import '../view/AppDrawer.dart';
 
 class MyProfileController extends StatefulWidget {
   const MyProfileController({super.key});
@@ -20,7 +19,10 @@ class _MyProfileControllerState extends State<MyProfileController> {
   final ImagePicker _picker = ImagePicker();
   File? _selectedImage;
   final apiService = MyApiService(Dio());
-  String? user1;
+
+  String? your_id;
+  String? your_name;
+  String? your_image;
 
   @override
   void initState() {
@@ -32,7 +34,9 @@ class _MyProfileControllerState extends State<MyProfileController> {
     UserSession userSession = UserSession();
     Map<String, String> userSessionData = await userSession.GetUserSession();
     setState(() {
-      user1 = userSessionData['userId']!;
+      your_id = userSessionData['userId'];
+      your_name = userSessionData['userName'];
+      your_image = userSessionData['userImage'];
     });
   }
 
@@ -55,7 +59,7 @@ class _MyProfileControllerState extends State<MyProfileController> {
     }
 
     try {
-      final response = await apiService.uploadImage(_selectedImage!, user1!);
+      final response = await apiService.uploadImage(_selectedImage!, your_id!);
       print("Upload successful: $response");
 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -72,7 +76,7 @@ class _MyProfileControllerState extends State<MyProfileController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-     appBar: OtherPageAppBar(your_title: "My Profile"),
+      appBar: const OtherPageAppBar(your_title: "My Profile"),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -81,15 +85,15 @@ class _MyProfileControllerState extends State<MyProfileController> {
             Center(
               child: Stack(
                 children: [
-                  CircleAvatar(
-                    radius: 50,
-                    backgroundImage:
-                        NetworkImage(imageUrl), // Load image from URL
-                    onBackgroundImageError: (error, stackTrace) {
-                      // Handle error if image fails to load
-                      print("Error loading image: $error");
-                    },
-                  ),
+                  if (your_image != "") ...{
+                    CircleAvatar(
+                        radius: 50,
+                        backgroundImage:
+                            NetworkImage(MainConfig.image_url + your_image!)),
+                  } else ...{
+                    const CircleAvatar(
+                        radius: 50, backgroundColor: Colors.black),
+                  },
                   Positioned(
                     bottom: 0,
                     right: 0,

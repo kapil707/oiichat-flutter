@@ -4,9 +4,9 @@ import 'package:oiichat/Config/colors.dart';
 final ThemeData lightTheme = ThemeData(
     useMaterial3: true,
     brightness: Brightness.light,
-    primaryColor: Colors.blue,
+    primaryColor: Color.fromARGB(255, 221, 87, 76),
     scaffoldBackgroundColor: Colors.white,
-    appBarTheme: AppBarTheme(
+    appBarTheme: const AppBarTheme(
       backgroundColor: lightHeaderBgColor,
       foregroundColor: lightHeaderTxtColor,
     ));

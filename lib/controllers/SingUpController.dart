@@ -1,15 +1,6 @@
-import 'package:art_sweetalert/art_sweetalert.dart';
-import 'package:dio/dio.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_state_manager/src/simple/get_responsive.dart';
-import 'package:get/route_manager.dart';
 import 'package:oiichat/config/RealTimeService.dart';
-import 'package:oiichat/controllers/LoginController.dart';
-import 'package:oiichat/config/retrofit_api.dart';
-
-import '../view/main_widget.dart';
+import 'package:oiichat/view/main_widget.dart';
 
 class SingUpController extends StatefulWidget {
   const SingUpController({super.key});
@@ -54,75 +45,78 @@ class _SingUpControllerState extends State<SingUpController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("SingUp Page"),
+        title: const Text("OiiChat"),
       ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // App logo or Icon
-              const Icon(
-                Icons.person,
-                size: 80,
-                color: Colors.deepPurple,
-              ),
-              const SizedBox(height: 40),
-
-              MainTextboxWithIcon(
-                  mytextController: name,
-                  btnIcon: const Icon(Icons.person),
-                  btnName: 'Name'),
-              MainErrorLabel(message: nameError),
-              const SizedBox(height: 20),
-
-              // Username/Email Text Field
-              MainEmailbox(
-                mytextController: username,
-              ),
-              MainErrorLabel(message: usernameError),
-              const SizedBox(height: 20),
-
-              // Password Text Field
-              MainPasswordbox(
-                mytextController: password,
-              ),
-              MainErrorLabel(message: passwordError),
-              const SizedBox(height: 30),
-
-              if (_isLoading) ...{
-                const Center(
-                  child: CircularProgressIndicator(),
+      body: SingleChildScrollView(
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const SizedBox(height: 20),
+                // App logo or Icon
+                Image.asset(
+                  'assets/logo.png',
+                  width: 200,
+                  height: 200,
                 ),
-              } else ...{
-                // Login Button
-                MainButton(btnName: 'singUp', callBack: singUp),
-              },
-              MainErrorLabel(message: mainError),
-              const SizedBox(height: 20),
+                const SizedBox(height: 10),
+                Center(
+                  child: Text(
+                    "Welcome to OiiChat SingUp",
+                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                const SizedBox(height: 30),
 
-              // Register and Forgot Password Links
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      // Handle register logic here
-                      Get.to(const LoginController());
-                    },
-                    child: const Text('Login Account'),
+                Text(
+                  "Enter Name",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                MainTextboxWithIcon(
+                    mytextController: name,
+                    btnIcon: const Icon(Icons.person),
+                    btnName: 'Name',
+                    btnNamehint: 'Enter your name'),
+                MainErrorLabel(message: nameError),
+                const SizedBox(height: 20),
+
+                Text(
+                  "Enter Email",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                // Username/Email Text Field
+                MainEmailbox(
+                  mytextController: username,
+                ),
+                MainErrorLabel(message: usernameError),
+                const SizedBox(height: 20),
+
+                Text(
+                  "Enter Password",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                // Password Text Field
+                MainPasswordbox(
+                  mytextController: password,
+                ),
+                MainErrorLabel(message: passwordError),
+                const SizedBox(height: 30),
+
+                if (_isLoading) ...{
+                  const Center(
+                    child: CircularProgressIndicator(),
                   ),
-                  TextButton(
-                    onPressed: () {
-                      // Handle forgot password logic here
-                    },
-                    child: const Text('Forgot Password?'),
-                  ),
-                ],
-              ),
-            ],
+                } else ...{
+                  // Login Button
+                  MainButton(btnName: 'SingUp', callBack: singUp),
+                },
+                MainErrorLabel(message: mainError),
+                const SizedBox(height: 20),
+              ],
+            ),
           ),
         ),
       ),

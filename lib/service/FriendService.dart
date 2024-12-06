@@ -1,4 +1,3 @@
-import 'package:oiichat/models/FriendPageModel.dart';
 import 'package:oiichat/config/retrofit_api.dart';
 import 'package:oiichat/models/FriendPageModelApi.dart';
 

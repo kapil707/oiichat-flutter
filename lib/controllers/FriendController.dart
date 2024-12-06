@@ -8,10 +8,9 @@ import 'package:oiichat/config/retrofit_api.dart';
 import 'package:oiichat/service/HomeService.dart';
 import 'package:oiichat/view/FriendsCard.dart';
 
-
-
 class FriendController extends StatefulWidget {
-  
+  const FriendController({super.key});
+
   @override
   State<FriendController> createState() => _FriendControllerState();
 }
@@ -76,7 +75,7 @@ class _FriendControllerState extends State<FriendController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: OtherPageAppBar(your_title: "Friends"),
+      appBar: const OtherPageAppBar(your_title: "Friends"),
       body: users.isEmpty
           ? const Center(
               child: Padding(

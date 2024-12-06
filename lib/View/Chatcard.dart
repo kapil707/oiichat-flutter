@@ -39,7 +39,7 @@ class ChatCard extends StatelessWidget {
           ListTile(
             leading: CircleAvatar(
               backgroundImage: NetworkImage(userImage),
-              radius: 28,
+              radius: 25,
             ),
             title: Text(
               chatModel.name,
@@ -74,7 +74,7 @@ class ChatCard extends StatelessWidget {
                 .format(DateTime.parse(chatModel.time).toLocal())),
           ),
           const Padding(
-            padding: EdgeInsets.only(left: 30, right: 30),
+            padding: EdgeInsets.only(left: 70),
             child: Divider(
               thickness: 1,
             ),

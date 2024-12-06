@@ -14,7 +14,7 @@ class Landingpage extends StatelessWidget {
           child: Column(
             children: [
               const SizedBox(height: 20),
-              Text(
+              const Text(
                 "Welcome to OiiChat",
                 style: TextStyle(
                     color: mainLblColor,
@@ -35,7 +35,7 @@ class Landingpage extends StatelessWidget {
                         text: "Agree and Continue to accept the",
                         style: TextStyle(color: mainTxtColor),
                       ),
-                      TextSpan(
+                      const TextSpan(
                         text: " OiiChat Trems of Service and Privacy Policy",
                         style: TextStyle(color: mainLinkColor),
                       ),
@@ -51,8 +51,8 @@ class Landingpage extends StatelessWidget {
                 child: SizedBox(
                   width: MediaQuery.of(context).size.width - 110,
                   height: 55,
-                  child: Card(
-                    margin: const EdgeInsets.all(0),
+                  child: const Card(
+                    margin: EdgeInsets.all(0),
                     elevation: 8,
                     color: mainBtnColor,
                     child: Center(

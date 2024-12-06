@@ -119,7 +119,7 @@ class _VoiceCallScreenState extends State<VoiceCallScreen> {
         socket.emit('signal', {
           'your_id': widget.user1,
           'target': targetSocketId,
-          'signal': {'candidate': candidate!.toMap()}
+          'signal': {'candidate': candidate.toMap()}
         });
       }
     };

@@ -47,11 +47,11 @@ class FriendsCard extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            subtitle: Row(
+            subtitle: const Row(
               children: [
                 Text(
                   "hello",
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 14,
                   ),
                 ),
