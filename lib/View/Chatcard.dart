@@ -16,7 +16,7 @@ class ChatCard extends StatelessWidget {
   final VoidCallback onRefresh;
   @override
   Widget build(BuildContext context) {
-    String userImage = MainConfig.image_url + chatModel.image;
+    String userImage = chatModel.image;
     return InkWell(
       onTap: () async {
         final refresh = await Navigator.push(

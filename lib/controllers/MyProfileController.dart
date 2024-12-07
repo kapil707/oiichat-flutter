@@ -87,9 +87,7 @@ class _MyProfileControllerState extends State<MyProfileController> {
                 children: [
                   if (your_image != "") ...{
                     CircleAvatar(
-                        radius: 50,
-                        backgroundImage:
-                            NetworkImage(MainConfig.image_url + your_image!)),
+                        radius: 50, backgroundImage: NetworkImage(your_image!)),
                   } else ...{
                     const CircleAvatar(
                         radius: 50, backgroundColor: Colors.black),

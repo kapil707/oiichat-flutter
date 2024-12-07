@@ -69,8 +69,7 @@ class _AppDrawerState extends State<AppDrawer> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CircleAvatar(
-                    backgroundImage: NetworkImage(
-                        MainConfig.image_url + (widget.your_image ?? "")),
+                    backgroundImage: NetworkImage(widget.your_image ?? ""),
                     radius: 30,
                   ),
                   const SizedBox(width: 10),

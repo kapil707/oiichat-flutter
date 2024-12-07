@@ -19,7 +19,7 @@ class AddStatus extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: 27,
-            backgroundImage: NetworkImage(MainConfig.image_url + your_image!),
+            backgroundImage: NetworkImage(your_image!),
           ),
           const Positioned(
             bottom: 0,

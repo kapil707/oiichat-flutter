@@ -1,7 +1,9 @@
 import 'package:art_sweetalert/art_sweetalert.dart';
 import 'package:dio/dio.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import '../config/Colors.dart';
 import '../view/main_widget.dart';
@@ -43,6 +45,52 @@ class _LoginControllerState extends State<LoginController> {
       print("Firebase Token : $token");
     } catch (e) {
       print("Firebase Token Error fetching: $e");
+    }
+  }
+
+  Future<void> _handleGoogle() async {
+    final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+    final GoogleSignIn googleSignIn = GoogleSignIn();
+
+    final GoogleSignInAccount? googleSignInAccount =
+        await googleSignIn.signIn();
+
+    final GoogleSignInAuthentication? googleSignInAuthentication =
+        await googleSignInAccount?.authentication;
+
+    final AuthCredential credential = GoogleAuthProvider.credential(
+      idToken: googleSignInAuthentication?.idToken,
+      accessToken: googleSignInAuthentication?.accessToken,
+    );
+
+    UserCredential result = await firebaseAuth.signInWithCredential(credential);
+
+    User? userdetails = result.user;
+    if (result != null) {
+      // Map<String, dynamic> userInfoMap = {
+      //   "email": userdetails!.email,
+      //   "name": userdetails.displayName,
+      //   "image": userdetails.photoURL,
+      //   "id": userdetails.uid,
+      // };
+      // print(userInfoMap);
+
+      String uid = userdetails!.uid;
+      String? name = userdetails.displayName;
+      String? email = userdetails.email;
+      String? image = userdetails.photoURL;
+
+      final loginResponse = await loginService.registerUserOrLoginUser(
+          context, uid, "google", name!, email!, image!, _firebaseToken!);
+
+      setState(() {
+        _isLoading = false;
+        mainError = loginResponse.message;
+        print("login res:${loginResponse.message}");
+        if (loginResponse.status == "1") {
+          Navigator.pushReplacementNamed(context, '/');
+        }
+      });
     }
   }
 
@@ -159,6 +207,11 @@ class _LoginControllerState extends State<LoginController> {
                   MainButton(btnName: 'Login', callBack: _handleLogin),
                 },
                 MainErrorLabel(message: mainError),
+                const SizedBox(height: 20),
+
+                MainButton(
+                    btnName: 'Login With Google', callBack: _handleGoogle),
+
                 const SizedBox(height: 20),
 
                 // Register and Forgot Password Links

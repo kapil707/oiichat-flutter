@@ -12,7 +12,20 @@
           "package_name": "com.example.oiichat"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "105882593982-otlffej8icbqc52lce238t8av022rsmt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.oiichat",
+            "certificate_hash": "d7fa8be33b479f748d00e14b5c90bc420c2d6d07"
+          }
+        },
+        {
+          "client_id": "105882593982-5h500v3ao9qu276t4jesmmd7q2iceoqs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCSgDBiZyc8yaeeygNcSTscq5bzghxn1Xs"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "105882593982-5h500v3ao9qu276t4jesmmd7q2iceoqs.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "105882593982-ru0rlcm1t0cmnrhe4n2j8m4c5l2l8um9.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.oiichat"
+              }
+            }
+          ]
         }
       }
     }

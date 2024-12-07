@@ -21,6 +21,17 @@ abstract class MyApiService {
       @Field("password") String userPassword,
       @Field("firebase_token") String firebaseToken);
 
+  @POST("user/registerUserOrLoginUser")
+  @FormUrlEncoded()
+  Future<LoginModel> registerUserOrLoginUser_api(
+      @Field("api_key") String apiKey,
+      @Field("uid") String uid,
+      @Field("type") String type,
+      @Field("name") String name,
+      @Field("email") String email,
+      @Field("user_image") String image,
+      @Field("firebase_token") String firebaseToken);
+
   @POST("user/alluser")
   @FormUrlEncoded()
   Future<HomePageModel> home_page_api(@Field("api_key") String apiKey);

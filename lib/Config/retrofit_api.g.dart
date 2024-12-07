@@ -68,6 +68,56 @@ class _MyApiService implements MyApiService {
   }
 
   @override
+  Future<LoginModel> registerUserOrLoginUser_api(
+    String apiKey,
+    String uid,
+    String type,
+    String name,
+    String email,
+    String image,
+    String firebaseToken,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = {
+      'api_key': apiKey,
+      'uid': uid,
+      'type': type,
+      'name': name,
+      'email': email,
+      'user_image': image,
+      'firebase_token': firebaseToken,
+    };
+    final _options = _setStreamType<LoginModel>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+      contentType: 'application/x-www-form-urlencoded',
+    )
+        .compose(
+          _dio.options,
+          'user/registerUserOrLoginUser',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late LoginModel _value;
+    try {
+      _value = LoginModel.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
   Future<HomePageModel> home_page_api(String apiKey) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
