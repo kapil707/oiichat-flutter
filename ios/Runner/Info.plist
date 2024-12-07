@@ -51,7 +51,11 @@
 		<string>remote-notification</string>
 	</array>
 	<key>FirebaseAppDelegateProxyEnabled</key>
-	<true/>
+	<false/>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
 	<key>NSPushNotificationsUsageDescription</key>
 	<string>We need your permission to send notifications.</string>
 	<key>NSUserTrackingUsageDescription</key>

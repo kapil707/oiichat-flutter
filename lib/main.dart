@@ -2,15 +2,15 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:oiichat/controllers/HomeController.dart';
 import 'package:oiichat/themes/themeClass.dart';
-import 'package:oiichat/View/LandingPage.dart';
-import 'package:oiichat/Config/RealTimeService.dart';
-import 'package:oiichat/Config/firebase_api.dart';
+import 'package:oiichat/view/LandingPage.dart';
+import 'package:oiichat/config/RealTimeService.dart';
+import 'package:oiichat/config/firebase_api.dart';
 import 'package:oiichat/controllers/FriendController.dart';
 import 'package:oiichat/controllers/LoginController.dart';
 import 'package:oiichat/controllers/MyProfileController.dart';
 import 'package:oiichat/controllers/SingUpController.dart';
-import 'package:oiichat/View/SplashScreen.dart';
-import 'package:oiichat/View/Notification.dart';
+import 'package:oiichat/view/SplashScreen.dart';
+import 'package:oiichat/view/Notification.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 
@@ -26,7 +26,12 @@ void main() async {
   }
   //WidgetsFlutterBinding.ensureInitialized();
   //await Firebase.initializeApp();
-  await FirebaseApi().initNotifications();
+  try {    
+    await FirebaseApi().initNotifications();
+    print("FirebaseApi initialized successfully!");
+  } catch (e) {
+    print("Error initializing FirebaseApi: $e");
+  }
   runApp(const MyApp());
 }
 
