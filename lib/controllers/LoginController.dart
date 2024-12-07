@@ -67,30 +67,30 @@ class _LoginControllerState extends State<LoginController> {
 
     User? userdetails = result.user;
     if (result != null) {
-      // Map<String, dynamic> userInfoMap = {
-      //   "email": userdetails!.email,
-      //   "name": userdetails.displayName,
-      //   "image": userdetails.photoURL,
-      //   "id": userdetails.uid,
-      // };
-      // print(userInfoMap);
+      Map<String, dynamic> userInfoMap = {
+        "email": userdetails!.email,
+        "name": userdetails.displayName,
+        "image": userdetails.photoURL,
+        "id": userdetails.uid,
+      };
+      print(userInfoMap);
 
-      String uid = userdetails!.uid;
-      String? name = userdetails.displayName;
-      String? email = userdetails.email;
-      String? image = userdetails.photoURL;
+      // String uid = userdetails!.uid;
+      // String? name = userdetails.displayName;
+      // String? email = userdetails.email;
+      // String? image = userdetails.photoURL;
 
-      final loginResponse = await loginService.registerUserOrLoginUser(
-          context, uid, "google", name!, email!, image!, _firebaseToken!);
+      // final loginResponse = await loginService.registerUserOrLoginUser(
+      //     context, uid, "google", name!, email!, image!, _firebaseToken!);
 
-      setState(() {
-        _isLoading = false;
-        mainError = loginResponse.message;
-        print("login res:${loginResponse.message}");
-        if (loginResponse.status == "1") {
-          Navigator.pushReplacementNamed(context, '/');
-        }
-      });
+      // setState(() {
+      //   _isLoading = false;
+      //   mainError = loginResponse.message;
+      //   print("login res:${loginResponse.message}");
+      //   if (loginResponse.status == "1") {
+      //     Navigator.pushReplacementNamed(context, '/');
+      //   }
+      // });
     }
   }
 

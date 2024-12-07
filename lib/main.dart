@@ -26,12 +26,7 @@ void main() async {
   }
   //WidgetsFlutterBinding.ensureInitialized();
   //await Firebase.initializeApp();
-  try {    
-    await FirebaseApi().initNotifications();
-    print("FirebaseApi initialized successfully!");
-  } catch (e) {
-    print("Error initializing FirebaseApi: $e");
-  }
+  await FirebaseApi().initNotifications();
   runApp(const MyApp());
 }
 
