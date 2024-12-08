@@ -156,16 +156,16 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
         messageController.text,
       );
 
-        setState(() {
-          messages.add(
-            ChatRoomModel(
-              user_id: widget.user1!, 
-              message: messageController.text, 
-              time: DateTime.now().toIso8601String(), 
-              status: 0,
-            ),
-          );
-        });
+      setState(() {
+        messages.add(
+          ChatRoomModel(
+            user_id: widget.user1!,
+            message: messageController.text,
+            time: DateTime.now().toIso8601String(),
+            status: 0,
+          ),
+        );
+      });
 
       messageController.clear();
       scrollToBottom();

@@ -38,6 +38,19 @@ class _VoiceCallScreenState extends State<VoiceCallScreen> {
       socket.emit("register", widget.user1);
     });
 
+    socket.on('incoming_call', (data) async {
+      print("Call started incoming call " +
+          data['signal']['description']['type']);
+
+      final answer = await peerConnection.createAnswer();
+      await peerConnection.setLocalDescription(answer);
+      socket.emit('incoming_call_answer', {
+        'target': data['sender'],
+        'signal': {'description': answer.toMap()}
+      });
+      print("Call started incoming call work " + data['sender']);
+    });
+
     socket.on('signal', (data) async {
       if (data['signal']['description'] != null) {
         await peerConnection.setRemoteDescription(
@@ -136,9 +149,9 @@ class _VoiceCallScreenState extends State<VoiceCallScreen> {
     await peerConnection.setLocalDescription(offer);
     print('Call started 2');
 
-    socket.emit('signal', {
-      'your_id': widget.user1,
-      'target': targetSocketId,
+    socket.emit('calling', {
+      'user1': widget.user1,
+      'user2': targetSocketId,
       'signal': {'description': offer.toMap()}
     });
     print('Call started 3');
