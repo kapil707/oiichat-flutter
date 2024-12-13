@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:oiichat/controllers/HomeController.dart';
+import 'package:oiichat/controllers/testcall.dart';
 import 'package:oiichat/themes/themeClass.dart';
 import 'package:oiichat/view/LandingPage.dart';
 import 'package:oiichat/config/RealTimeService.dart';
@@ -44,7 +45,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       navigatorKey: navigatorKey,
       routes: {
-        '/': (context) => const SplashScreenClass(),
+        '/': (context) => SplashScreenClass(),
         '/Landingpage': (context) => const Landingpage(),
         '/LoginPage': (context) => const LoginController(),
         '/SingUpPage': (context) => const SingUpController(),
