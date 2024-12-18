@@ -1,11 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:oiichat/View/StatusPage/AddStatus.dart';
 import 'package:oiichat/config/Colors.dart';
 import 'package:oiichat/config/RealTimeService.dart';
 import 'package:oiichat/config/database_helper.dart';
 import 'package:oiichat/config/main_functions.dart';
 import 'package:oiichat/controllers/StatusPage.dart';
+import 'package:oiichat/controllers/UserCall.dart';
 import 'package:oiichat/models/ChatModel.dart';
 import 'package:oiichat/config/retrofit_api.dart';
 import 'package:oiichat/service/HomeService.dart';
@@ -39,7 +39,30 @@ class _HomeControllerState extends State<HomeController>
     //homeService = HomeService(apiService);
     //_handlePageLoad();
     _controller = TabController(length: 4, vsync: this, initialIndex: 1);
+
+    _realTimeService.onIncomingCall = (data) {
+      print("oiicall onIncomingCall " + data["user2"]);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => IncomingCallScreen(
+                    user1: data["user1"],
+                    user2: data["user2"],
+                    callerName: "Kamal",
+                    //onDecline: onDecline,
+                  )));
+    };
+    _realTimeService.onIncomingCallCancel = (data) {
+      print("oiicall onIncomingCallCancel");
+      Navigator.pop(context, true);
+    };
   }
+
+  // void onDecline() {
+  //   print('oiicall Call Declined');
+  //   _realTimeService.request_call_decline()
+  //   Navigator.pop(context, true);
+  // }
 
   @override
   void didChangeDependencies() {
@@ -55,8 +78,8 @@ class _HomeControllerState extends State<HomeController>
 
   @override
   void dispose() {
-    _realTimeService.manual_disconnect(your_id!);
-    _realTimeService.dispose();
+    //_realTimeService.manual_disconnect(your_id!);
+    //_realTimeService.dispose();
     super.dispose();
   }
 
@@ -98,20 +121,23 @@ class _HomeControllerState extends State<HomeController>
         title: const Text("Oii Chat"),
         actions: [
           IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
-          PopupMenuButton(onSelected: (value) {
-            print(value);
-          }, itemBuilder: (BuildContext context) {
-            return [
-              const PopupMenuItem(
-                value: "New Group",
-                child: Text("New Group"),
-              ),
-              const PopupMenuItem(
-                value: "Setting",
-                child: Text("Setting"),
-              ),
-            ];
-          },),
+          PopupMenuButton(
+            onSelected: (value) {
+              print(value);
+            },
+            itemBuilder: (BuildContext context) {
+              return [
+                const PopupMenuItem(
+                  value: "New Group",
+                  child: Text("New Group"),
+                ),
+                const PopupMenuItem(
+                  value: "Setting",
+                  child: Text("Setting"),
+                ),
+              ];
+            },
+          ),
         ],
         bottom: TabBar(
           controller: _controller,

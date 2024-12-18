@@ -23,6 +23,11 @@ class RealTimeService {
   Function(String)? onMessageReceivedNew;
   Function(dynamic)? onUserInfoReceived;
   Function(dynamic)? onUserTypingReceived;
+  Function(dynamic)? onIncomingCall;
+  Function(dynamic)? onIncomingCallCancel;
+
+  Function(dynamic)? onAcceptCallByUser;
+  Function(dynamic)? onRejectCallByUser;
 
   void initSocket(String user) {
     // Socket.IO connection setup
@@ -128,6 +133,38 @@ class RealTimeService {
         onMessageReceivedNew!("1");
       }
     });
+
+    //call handle
+    //jab kisi dusray user nay call ki ha to wo iss say open hoti ha iss say call ring karti ha
+    socket.on('incoming-call', (data) {
+      //print('oiicall incoming-call ' + data['user1']);
+      if (onIncomingCall != null) {
+        onIncomingCall!(data);
+      }
+    });
+
+    //jab kisi dusray user nay call ki ha or agar wo he call cut karta ha ringing time me to
+    socket.on('incoming-call-cancel', (data) {
+      //print('oiicall incoming-call ' + data['user1']);
+      if (onIncomingCallCancel != null) {
+        onIncomingCallCancel!(data);
+      }
+    });
+
+    //jiss ke pass call ayi ha agar wo call cut karta ha to
+    socket.on('reject-call-by-user', (data) {
+      //print('oiicall incoming-call ' + data['user1']);
+      if (onRejectCallByUser != null) {
+        onRejectCallByUser!(data);
+      }
+    });
+
+    socket.on('accept-call-by-user', (data) async {
+      //print('oiicall accept-call-by-user ' + data['user1']);
+      if (onAcceptCallByUser != null) {
+        onAcceptCallByUser!(data);
+      }
+    });
   }
 
   void GetUserInfo(String userId) {
@@ -186,6 +223,34 @@ class RealTimeService {
       'user2': user2,
       'status': status,
     });
+  }
+
+  //call ke liya
+  //jab user1 user2 ko call karta ha
+  void request_call(user1, user2) {
+    socket.emit('request-call', {
+      'user1': user1, // Caller (User A)
+      'user2': user2, // Recipient (User B username)
+    });
+    print('oiicall request_call');
+  }
+
+  //jiss user nay call ki ha agar wo he call cut karta ha to
+  void request_call_cancel(user1, user2) {
+    socket.emit('request-call-cancel', {
+      'user1': user1, // Caller (User A)
+      'user2': user2, // Recipient (User B username)
+    });
+    print('oiicall request_call_cancel');
+  }
+
+  //jiss ke pass call ayi ha agar wo call cut karta ha to
+  void request_call_reject(user1, user2) {
+    socket.emit('request-call-reject', {
+      'user1': user1, // Caller (User A)
+      'user2': user2, // Recipient (User B username)
+    });
+    print('oiicall request_call_reject');
   }
 
   void dispose() {
