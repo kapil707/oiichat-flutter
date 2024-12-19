@@ -30,10 +30,6 @@ class _VoiceCallScreenState extends State<VoiceCallScreen> {
     super.initState();
     initSocket();
     get_user_2_socket_id(widget.user2);
-
-    if (widget.pickup == "yes") {
-      startCall();
-    }
   }
 
   Future<void> initSocket() async {
@@ -81,6 +77,10 @@ class _VoiceCallScreenState extends State<VoiceCallScreen> {
     socket.on('get_user_2_socket_id_response', (data) async {
       setState(() {
         targetSocketId = data["user2"];
+        if (widget.pickup == "yes") {
+          startCall();
+          print("oiicall startcall");
+        }
       });
     });
 
