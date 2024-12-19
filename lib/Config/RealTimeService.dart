@@ -1,3 +1,4 @@
+import 'package:oiichat/Config/notification.dart';
 import 'package:oiichat/models/UserInfoModel.dart';
 import 'package:oiichat/config/main_config.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
@@ -150,10 +151,11 @@ class RealTimeService {
     //jab kisi dusray user nay call ki ha to wo iss say open hoti ha iss say call ring karti ha
     socket.on('incoming-call', (data) {
       print('oiicall incoming-call ' + data['user1']);
-      onIncomingCall!(data);
-      // if (onIncomingCall != null) {
-      //   onIncomingCall!(data);
-      // }
+      NotificationService.showCallNotification('John Doe', 'Audio Call');
+      //onIncomingCall!(data);
+      if (onIncomingCall != null) {
+        onIncomingCall!(data);
+      }
     });
 
     //jab kisi dusray user nay call ki ha or agar wo he call cut karta ha ringing time me to

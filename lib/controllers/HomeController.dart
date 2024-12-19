@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:oiichat/Config/notification.dart';
 import 'package:oiichat/config/Colors.dart';
 import 'package:oiichat/config/RealTimeService.dart';
 import 'package:oiichat/config/database_helper.dart';
@@ -55,8 +56,8 @@ class _HomeControllerState extends State<HomeController>
 
   @override
   void dispose() {
-    _realTimeService.manual_disconnect(your_id!);
-    _realTimeService.dispose();
+    //_realTimeService.manual_disconnect(your_id!);
+    //_realTimeService.dispose();
     super.dispose();
   }
 
@@ -84,6 +85,7 @@ class _HomeControllerState extends State<HomeController>
       _realTimeService.onIncomingCall = (data) async {
         try {
           print("oiicall newcall " + your_id! + " - " + data["user1"]);
+
           final refresh = await Navigator.push(
               context,
               MaterialPageRoute(
@@ -91,8 +93,7 @@ class _HomeControllerState extends State<HomeController>
                         user1: your_id!,
                         user2: data["user1"],
                         UserName: data["user_name"],
-                        UserImage:
-                            'https://scontent.fjdh1-2.fna.fbcdn.net/v/t39.30808-1/469531521_2303325946711562_3047562261330012207_n.jpg?stp=dst-jpg_s320x320_tt6&_nc_cat=105&ccb=1-7&_nc_sid=0ecb9b&_nc_ohc=spjJjV8E-TEQ7kNvgECWgio&_nc_zt=24&_nc_ht=scontent.fjdh1-2.fna&_nc_gid=Am37l1FquRocp-DS9f6QMqt&oh=00_AYDovrAVYzZXBkaz3l8UU1oWzm21rYbmalFJtnF4ansIMw&oe=6766C124',
+                        UserImage: data["user_image"],
                         //onDecline: onDecline,
                       )));
           if (refresh == true) {

@@ -1,5 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:oiichat/Config/notification.dart';
 import 'package:oiichat/controllers/HomeController.dart';
 import 'package:oiichat/controllers/UserCall.dart';
 import 'package:oiichat/controllers/testcall.dart';
@@ -20,6 +22,7 @@ final navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await NotificationService.initialize(); // yha call notification ke liya
   try {
     await Firebase.initializeApp();
     print("Firebase initialized successfully!");
@@ -29,6 +32,11 @@ void main() async {
   //WidgetsFlutterBinding.ensureInitialized();
   //await Firebase.initializeApp();
   await FirebaseApi().initNotifications();
+  // await FirebaseMessaging.instance.requestPermission(
+  //   announcement: true,
+  //   carPlay: false,
+  //   criticalAlert: false,
+  // );
   runApp(const MyApp());
 }
 
