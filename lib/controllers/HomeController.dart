@@ -39,30 +39,7 @@ class _HomeControllerState extends State<HomeController>
     //homeService = HomeService(apiService);
     //_handlePageLoad();
     _controller = TabController(length: 4, vsync: this, initialIndex: 1);
-
-    _realTimeService.onIncomingCall = (data) {
-      print("oiicall onIncomingCall " + data["user2"]);
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => IncomingCallScreen(
-                    user1: data["user1"],
-                    user2: data["user2"],
-                    callerName: "Kamal",
-                    //onDecline: onDecline,
-                  )));
-    };
-    _realTimeService.onIncomingCallCancel = (data) {
-      print("oiicall onIncomingCallCancel");
-      Navigator.pop(context, true);
-    };
   }
-
-  // void onDecline() {
-  //   print('oiicall Call Declined');
-  //   _realTimeService.request_call_decline()
-  //   Navigator.pop(context, true);
-  // }
 
   @override
   void didChangeDependencies() {
@@ -78,8 +55,8 @@ class _HomeControllerState extends State<HomeController>
 
   @override
   void dispose() {
-    //_realTimeService.manual_disconnect(your_id!);
-    //_realTimeService.dispose();
+    _realTimeService.manual_disconnect(your_id!);
+    _realTimeService.dispose();
     super.dispose();
   }
 
@@ -102,6 +79,28 @@ class _HomeControllerState extends State<HomeController>
       _realTimeService.onMessageReceivedNew = (data) {
         print("get_old_message_response 2ok");
         loadChats();
+      };
+
+      _realTimeService.onIncomingCall = (data) async {
+        try {
+          print("oiicall newcall " + your_id! + " - " + data["user1"]);
+          final refresh = await Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => IncomingCallScreen(
+                        user1: your_id!,
+                        user2: data["user1"],
+                        UserName: data["user_name"],
+                        UserImage:
+                            'https://scontent.fjdh1-2.fna.fbcdn.net/v/t39.30808-1/469531521_2303325946711562_3047562261330012207_n.jpg?stp=dst-jpg_s320x320_tt6&_nc_cat=105&ccb=1-7&_nc_sid=0ecb9b&_nc_ohc=spjJjV8E-TEQ7kNvgECWgio&_nc_zt=24&_nc_ht=scontent.fjdh1-2.fna&_nc_gid=Am37l1FquRocp-DS9f6QMqt&oh=00_AYDovrAVYzZXBkaz3l8UU1oWzm21rYbmalFJtnF4ansIMw&oe=6766C124',
+                        //onDecline: onDecline,
+                      )));
+          if (refresh == true) {
+            _handlePageLoad();
+          }
+        } catch (e) {
+          print("oiicall : $e");
+        }
       };
     });
   }

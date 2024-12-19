@@ -23,6 +23,7 @@ class RealTimeService {
   Function(String)? onMessageReceivedNew;
   Function(dynamic)? onUserInfoReceived;
   Function(dynamic)? onUserTypingReceived;
+
   Function(dynamic)? onIncomingCall;
   Function(dynamic)? onIncomingCallCancel;
 
@@ -83,18 +84,29 @@ class RealTimeService {
     });
 
     socket.on("get_user_info_response", (data) async {
-      // print("User status: ${data['user_id']}");
+      print("User status: ${data['user_id']}");
       // print("User status: ${data['user_name']}");
       // print("User status: ${data['user_image']}");
 
-      //insert update user info
-      final newUser = UserInfoModel(
-        user_id: data["user_id"],
-        user_name: data["user_name"],
-        user_image: data["user_image"],
-      );
-      await dbHelper.insertOrUpdateUserInfo(newUser);
-
+      if (data["user_image"] != null) {
+        //insert update user info
+        final newUser = UserInfoModel(
+          user_id: data["user_id"],
+          user_name: data["user_name"],
+          user_image: data["user_image"],
+        );
+        await dbHelper.insertOrUpdateUserInfo(newUser);
+      } else {
+        if (data["user_image"] != null) {
+          //insert update user info
+          final newUser = UserInfoModel(
+            user_id: data["user_id"],
+            user_name: data["user_name"],
+            user_image: "",
+          );
+          await dbHelper.insertOrUpdateUserInfo(newUser);
+        }
+      }
       if (onUserInfoReceived != null) {
         onUserInfoReceived!(data);
       }
@@ -137,23 +149,25 @@ class RealTimeService {
     //call handle
     //jab kisi dusray user nay call ki ha to wo iss say open hoti ha iss say call ring karti ha
     socket.on('incoming-call', (data) {
-      //print('oiicall incoming-call ' + data['user1']);
-      if (onIncomingCall != null) {
-        onIncomingCall!(data);
-      }
+      print('oiicall incoming-call ' + data['user1']);
+      onIncomingCall!(data);
+      // if (onIncomingCall != null) {
+      //   onIncomingCall!(data);
+      // }
     });
 
     //jab kisi dusray user nay call ki ha or agar wo he call cut karta ha ringing time me to
     socket.on('incoming-call-cancel', (data) {
-      //print('oiicall incoming-call ' + data['user1']);
+      print('oiicall incoming-call-cancel ' + data['user1']);
+      //onIncomingCallCancel!(data);
       if (onIncomingCallCancel != null) {
         onIncomingCallCancel!(data);
       }
     });
 
     //jiss ke pass call ayi ha agar wo call cut karta ha to
-    socket.on('reject-call-by-user', (data) {
-      //print('oiicall incoming-call ' + data['user1']);
+    socket.on('reject-call-by-user', (data) async {
+      print('oiicall reject-call-by-user');
       if (onRejectCallByUser != null) {
         onRejectCallByUser!(data);
       }
@@ -247,10 +261,18 @@ class RealTimeService {
   //jiss ke pass call ayi ha agar wo call cut karta ha to
   void request_call_reject(user1, user2) {
     socket.emit('request-call-reject', {
-      'user1': user1, // Caller (User A)
-      'user2': user2, // Recipient (User B username)
+      'user1': user2, // Caller (User A)
+      'user2': user1, // Recipient (User B username)
     });
     print('oiicall request_call_reject');
+  }
+
+  void request_call_accept(user1, user2) {
+    socket.emit('request-call-accept', {
+      'user1': user2, // Caller (User A)
+      'user2': user1, // Recipient (User B username)
+    });
+    print('oiicall request_call_accept');
   }
 
   void dispose() {

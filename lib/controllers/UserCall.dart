@@ -1,8 +1,7 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
-import 'package:oiichat/Config/main_config.dart';
 import 'package:oiichat/config/RealTimeService.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class OutGoingCallScreen extends StatefulWidget {
   final String UserName;
@@ -26,17 +25,14 @@ class OutGoingCallScreen extends StatefulWidget {
 
 class _OutGoingCallScreenState extends State<OutGoingCallScreen> {
   final RealTimeService _realTimeService = RealTimeService();
-  late IO.Socket socket;
-  late RTCPeerConnection peerConnection;
-  MediaStream? localStream;
-  MediaStream? remoteStream;
-  String? targetSocketId;
+  final AudioPlayer _audioPlayer = AudioPlayer();
 
   @override
   void initState() {
     super.initState();
-    initSocket();
+
     _realTimeService.initSocket(widget.user1);
+
     //jab user1 user2 ko call karta ha
     _realTimeService.request_call(widget.user1, widget.user2);
 
@@ -44,36 +40,27 @@ class _OutGoingCallScreenState extends State<OutGoingCallScreen> {
       print("oiicall onRejectCallByUser");
       Navigator.pop(context, true);
     };
+
+    _realTimeService.onAcceptCallByUser = (data) {
+      print("oiicall onAcceptCallByUser");
+      //Navigator.pop(context, true);
+    };
+    playIncomingCall();
   }
 
-  Future<void> initSocket() async {
-    socket = IO.io(MainConfig.host_url, <String, dynamic>{
-      'transports': ['websocket'],
-    });
-
-    socket.onConnect((_) {
-      print('oiicall Connected to server');
-      socket.emit('register', widget.user1);
-    });
-
-    // Handle incoming call
-    //step 2
-    // socket.on('incoming-call', (data) {
-    //   print('oiicall incoming-call ' + data['user1']);
-    //   setState(() {
-    //     targetSocketId = data['userA'];
-    //   });
-    // });
-    //step 4
-    // socket.on('accept-call-by-user', (data) async {
-    //   print('oiicall accept-call-by-user ' + data['user1']);
-    // });
+  void playIncomingCall() async {
+    try {
+      await _audioPlayer.play(AssetSource('calling.mp3'));
+    } catch (e) {
+      print("Error playing sound: $e");
+    }
   }
 
   void cancelCall(BuildContext context) {
     //print('Call Declined');
     //jiss user nay call ki ha agar wo he call cut karta ha to
     _realTimeService.request_call_cancel(widget.user1, widget.user2);
+    _audioPlayer.stop();
     Navigator.pop(context, true);
   }
 
@@ -138,7 +125,8 @@ class _OutGoingCallScreenState extends State<OutGoingCallScreen> {
 class IncomingCallScreen extends StatefulWidget {
   final String user1;
   final String user2;
-  final String callerName;
+  final String UserName;
+  final String UserImage;
   //final VoidCallback onAccept;
   //final VoidCallback onDecline;
 
@@ -146,7 +134,8 @@ class IncomingCallScreen extends StatefulWidget {
     Key? key,
     required this.user1,
     required this.user2,
-    required this.callerName,
+    required this.UserName,
+    required this.UserImage,
   }) : super(key: key);
 
   @override
@@ -155,21 +144,40 @@ class IncomingCallScreen extends StatefulWidget {
 
 class _IncomingCallScreenState extends State<IncomingCallScreen> {
   final RealTimeService _realTimeService = RealTimeService();
+  final AudioPlayer _audioPlayer = AudioPlayer();
 
   @override
   void initState() {
     super.initState();
+
     _realTimeService.initSocket(widget.user1);
+
+    _realTimeService.onIncomingCallCancel = (data) {
+      print("oiicall onIncomingCallCancel");
+      Navigator.pop(context, true);
+    };
+
+    playIncomingCall();
+  }
+
+  void playIncomingCall() async {
+    try {
+      await _audioPlayer.play(AssetSource('incoming-call.mp3'));
+    } catch (e) {
+      print("Error playing sound: $e");
+    }
   }
 
   void onAccept(BuildContext context) {
     //print('Call Declined');
-    Navigator.pop(context, true);
+    _realTimeService.request_call_accept(widget.user1, widget.user2);
+    _audioPlayer.stop();
+    //Navigator.pop(context, true);
   }
 
   void onDecline(BuildContext context) {
-    print('oiicall Call Declined');
     _realTimeService.request_call_reject(widget.user1, widget.user2);
+    _audioPlayer.stop();
     Navigator.pop(context, true);
   }
 
@@ -180,10 +188,17 @@ class _IncomingCallScreenState extends State<IncomingCallScreen> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(Icons.phone_in_talk, size: 100, color: Colors.green),
-          const SizedBox(height: 20),
+          const SizedBox(height: 80),
           Text(
-            '${widget.callerName} is calling...',
+            'Oii Audio Call',
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Text(
+            '${widget.UserName}',
             style: const TextStyle(
               color: Colors.white,
               fontSize: 24,
@@ -191,6 +206,17 @@ class _IncomingCallScreenState extends State<IncomingCallScreen> {
             ),
           ),
           const SizedBox(height: 40),
+          const Icon(Icons.phone_in_talk, size: 100, color: Colors.green),
+          const SizedBox(height: 40),
+          ClipOval(
+            child: Image.network(
+              widget.UserImage,
+              width: 250, // Set the custom width
+              height: 250, // Set the custom height
+              fit: BoxFit.cover, // Ensures the image fills the circle
+            ),
+          ),
+          const Spacer(),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -214,6 +240,7 @@ class _IncomingCallScreenState extends State<IncomingCallScreen> {
               ),
             ],
           ),
+          const SizedBox(height: 100),
         ],
       ),
     );
