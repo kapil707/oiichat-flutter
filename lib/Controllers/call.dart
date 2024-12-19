@@ -6,8 +6,13 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 class VoiceCallScreen extends StatefulWidget {
   final String user1;
   final String user2;
+  final String pickup;
 
-  const VoiceCallScreen({super.key, required this.user1, required this.user2});
+  const VoiceCallScreen(
+      {super.key,
+      required this.user1,
+      required this.user2,
+      required this.pickup});
 
   @override
   _VoiceCallScreenState createState() => _VoiceCallScreenState();
@@ -25,6 +30,10 @@ class _VoiceCallScreenState extends State<VoiceCallScreen> {
     super.initState();
     initSocket();
     get_user_2_socket_id(widget.user2);
+
+    if (widget.pickup == "yes") {
+      startCall();
+    }
   }
 
   Future<void> initSocket() async {
@@ -152,10 +161,10 @@ class _VoiceCallScreenState extends State<VoiceCallScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ElevatedButton(
-              onPressed: startCall,
-              child: const Text('Start Call'),
-            ),
+            // ElevatedButton(
+            //   onPressed: startCall,
+            //   child: const Text('Start Call'),
+            // ),
             if (remoteStream != null) const Text('Connected to remote stream'),
           ],
         ),

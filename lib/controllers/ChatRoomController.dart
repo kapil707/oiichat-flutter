@@ -3,6 +3,7 @@ import 'package:oiichat/Controllers/UserProfileController.dart';
 import 'package:oiichat/config/RealTimeService.dart';
 import 'package:oiichat/config/database_helper.dart';
 import 'package:oiichat/controllers/UserCall.dart';
+import 'package:oiichat/controllers/call.dart';
 import 'package:oiichat/controllers/call2.dart';
 import 'package:oiichat/models/ChatRoomModel.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -218,6 +219,13 @@ class _ChatRoomControllerState extends State<ChatRoomController> {
           );
         },
         onCallPressed: () {
+          // Navigator.push(
+          //     context,
+          //     MaterialPageRoute(
+          //         builder: (context) => VoiceCallScreen(
+          //               user1: widget.user1!,
+          //               user2: widget.user2!,
+          //             )));
           Navigator.push(
               context,
               MaterialPageRoute(

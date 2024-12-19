@@ -2,6 +2,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:oiichat/config/RealTimeService.dart';
+import 'package:oiichat/controllers/call.dart';
 
 class OutGoingCallScreen extends StatefulWidget {
   final String UserName;
@@ -44,6 +45,11 @@ class _OutGoingCallScreenState extends State<OutGoingCallScreen> {
     _realTimeService.onAcceptCallByUser = (data) {
       print("oiicall onAcceptCallByUser");
       //Navigator.pop(context, true);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => VoiceCallScreen(
+                  user1: widget.user1, user2: widget.user2, pickup: "yes")));
     };
     playIncomingCall();
   }
@@ -173,6 +179,12 @@ class _IncomingCallScreenState extends State<IncomingCallScreen> {
     _realTimeService.request_call_accept(widget.user1, widget.user2);
     _audioPlayer.stop();
     //Navigator.pop(context, true);
+
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => VoiceCallScreen(
+                user1: widget.user1, user2: widget.user2, pickup: "no")));
   }
 
   void onDecline(BuildContext context) {
