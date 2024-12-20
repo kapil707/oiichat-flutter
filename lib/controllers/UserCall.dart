@@ -45,7 +45,8 @@ class _OutGoingCallScreenState extends State<OutGoingCallScreen> {
     _realTimeService.onAcceptCallByUser = (data) {
       print("oiicall onAcceptCallByUser");
       //Navigator.pop(context, true);
-      Navigator.push(
+      _audioPlayer.stop();
+      Navigator.pushReplacement(
           context,
           MaterialPageRoute(
               builder: (context) => VoiceCallScreen(
@@ -180,7 +181,7 @@ class _IncomingCallScreenState extends State<IncomingCallScreen> {
     _audioPlayer.stop();
     //Navigator.pop(context, true);
 
-    Navigator.push(
+    Navigator.pushReplacement(
         context,
         MaterialPageRoute(
             builder: (context) => VoiceCallScreen(

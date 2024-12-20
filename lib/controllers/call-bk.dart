@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:oiichat/Config/main_config.dart';
@@ -25,18 +23,13 @@ class _VoiceCallScreenState extends State<VoiceCallScreen> {
   late RTCPeerConnection peerConnection;
   MediaStream? localStream;
   MediaStream? remoteStream;
+  String? targetSocketId;
 
   @override
   void initState() {
     super.initState();
     initSocket();
-    print("oiicall user1 : " + widget.user1 + " user2 : " + widget.user2);
-    if (widget.pickup == "yes") {
-      Timer(const Duration(seconds: 2), () {
-        //startCall();
-      });
-      print("oiicall startcall");
-    }
+    get_user_2_socket_id(widget.user2);
   }
 
   Future<void> initSocket() async {
@@ -64,7 +57,7 @@ class _VoiceCallScreenState extends State<VoiceCallScreen> {
           await peerConnection.setLocalDescription(answer);
 
           socket.emit('signal', {
-            'user2': data['sender'],
+            'target': data['sender'],
             'signal': {'description': answer.toMap()}
           });
         }
@@ -80,7 +73,23 @@ class _VoiceCallScreenState extends State<VoiceCallScreen> {
         );
       }
     });
+
+    socket.on('get_user_2_socket_id_response', (data) async {
+      setState(() {
+        targetSocketId = data["user2"];
+        if (widget.pickup == "yes") {
+          startCall();
+          print("oiicall startcall");
+        }
+      });
+    });
+
     await setupWebRTC();
+  }
+
+  void get_user_2_socket_id(String user2) {
+    //print("get_user_2_socket_id");
+    socket.emit("get_user_2_socket_id", user2);
   }
 
   Future<void> setupWebRTC() async {
@@ -114,10 +123,10 @@ class _VoiceCallScreenState extends State<VoiceCallScreen> {
 
     // Handle ICE candidates
     peerConnection.onIceCandidate = (candidate) {
-      if (widget.user2 != null) {
+      if (targetSocketId != null) {
         socket.emit('signal', {
-          'user1': widget.user1,
-          'user2': widget.user2,
+          'your_id': widget.user1,
+          'target': targetSocketId,
           'signal': {'candidate': candidate.toMap()}
         });
       }
@@ -126,7 +135,7 @@ class _VoiceCallScreenState extends State<VoiceCallScreen> {
 
   void startCall() async {
     print('Call started 1');
-    if (widget.user2 == null) {
+    if (targetSocketId == null) {
       print('No target user to call');
       return;
     }
@@ -135,8 +144,8 @@ class _VoiceCallScreenState extends State<VoiceCallScreen> {
     await peerConnection.setLocalDescription(offer);
     print('Call started 2');
     socket.emit('signal', {
-      'user1': widget.user1,
-      'user2': widget.user2,
+      'your_id': widget.user1,
+      'target': targetSocketId,
       'signal': {'description': offer.toMap()}
     });
     print('Call started 3');
@@ -152,10 +161,10 @@ class _VoiceCallScreenState extends State<VoiceCallScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ElevatedButton(
-              onPressed: startCall,
-              child: const Text('Start Call'),
-            ),
+            // ElevatedButton(
+            //   onPressed: startCall,
+            //   child: const Text('Start Call'),
+            // ),
             if (remoteStream != null) const Text('Connected to remote stream'),
           ],
         ),
