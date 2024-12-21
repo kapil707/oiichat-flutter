@@ -7,12 +7,16 @@ import 'package:oiichat/config/RealTimeService.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class VoiceCallScreen extends StatefulWidget {
+  final String UserName;
+  final String UserImage;
   final String user1;
   final String user2;
   final String pickup;
 
   const VoiceCallScreen(
       {super.key,
+      required this.UserName,
+      required this.UserImage,
       required this.user1,
       required this.user2,
       required this.pickup});
@@ -28,6 +32,8 @@ class _VoiceCallScreenState extends State<VoiceCallScreen> {
   MediaStream? localStream;
   MediaStream? remoteStream;
   String? targetSocketId;
+  Timer? _timer;
+  int _secondsElapsed = 0;
 
   @override
   void initState() {
@@ -37,10 +43,12 @@ class _VoiceCallScreenState extends State<VoiceCallScreen> {
     if (widget.pickup == "yes") {
       Timer(const Duration(seconds: 2), () {
         //startCall();
+        get_user_2_socket_id(widget.user2);
       });
       print("oiicall startcall");
+    } else {
+      startTimer();
     }
-    get_user_2_socket_id(widget.user2);
   }
 
   void get_user_2_socket_id(String user2) {
@@ -55,7 +63,7 @@ class _VoiceCallScreenState extends State<VoiceCallScreen> {
     });
 
     socket.onConnect((_) {
-      print('Connected to server');
+      print('oiicall Connected to server');
       socket.emit("register", widget.user1);
     });
 
@@ -73,7 +81,7 @@ class _VoiceCallScreenState extends State<VoiceCallScreen> {
           await peerConnection.setLocalDescription(answer);
 
           socket.emit('signal', {
-            'user2': data['sender'],
+            'target': data['sender'],
             'signal': {'description': answer.toMap()}
           });
         }
@@ -93,13 +101,10 @@ class _VoiceCallScreenState extends State<VoiceCallScreen> {
     socket.on('get_user_2_socket_id_response', (data) async {
       setState(() {
         targetSocketId = data["user2"];
-        if (widget.pickup == "yes") {
-          startCall();
-          print("oiicall startcall");
-        }
+        startCall();
+        startTimer();
       });
     });
-
     await setupWebRTC();
   }
 
@@ -134,49 +139,118 @@ class _VoiceCallScreenState extends State<VoiceCallScreen> {
 
     // Handle ICE candidates
     peerConnection.onIceCandidate = (candidate) {
-      if (targetSocketId != null) {
-        socket.emit('signal', {
-          'user1': widget.user1,
-          'user2': targetSocketId,
-          'signal': {'candidate': candidate.toMap()}
-        });
-      }
+      socket.emit('signal', {
+        'user1': widget.user1,
+        'target': targetSocketId,
+        'signal': {'candidate': candidate.toMap()}
+      });
     };
   }
 
   void startCall() async {
     print('Call started 1');
-    if (targetSocketId == null) {
-      print('No target user to call');
-      return;
-    }
+    // if (targetSocketId == null) {
+    //   print('No target user to call');
+    //   return;
+    // }
 
     final offer = await peerConnection.createOffer();
     await peerConnection.setLocalDescription(offer);
     print('Call started 2');
     socket.emit('signal', {
       'user1': widget.user1,
-      'user2': targetSocketId,
+      'target': targetSocketId,
       'signal': {'description': offer.toMap()}
     });
     print('Call started 3');
   }
 
+  void cancelCall(BuildContext context) {
+    Navigator.pop(context, true);
+  }
+
+  void startTimer() {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {
+        _secondsElapsed++;
+      });
+    });
+  }
+
+  String formatTime(int seconds) {
+    final minutes = seconds ~/ 60; // Get the total minutes
+    final remainingSeconds = seconds % 60; // Get the remaining seconds
+    return '${minutes.toString().padLeft(2, '0')}:${remainingSeconds.toString().padLeft(2, '0')}';
+  }
+
   @override
   Widget build(BuildContext context) {
+    // return Scaffold(
+    //   appBar: AppBar(
+    //     title: const Text('Voice Call'),
+    //   ),
+    //   body: Center(
+    //     child: Column(
+    //       mainAxisAlignment: MainAxisAlignment.center,
+    //       children: [
+    //         ElevatedButton(
+    //           onPressed: startCall,
+    //           child: const Text('Start Call'),
+    //         ),
+    //         if (remoteStream != null) const Text('Connected to remote stream'),
+    //       ],
+    //     ),
+    //   ),
+    // );
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Voice Call'),
-      ),
-      body: Center(
+      backgroundColor: Colors.black.withOpacity(0.9),
+      body: Container(
+        width: MediaQuery.of(context).size.width,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ElevatedButton(
-              onPressed: startCall,
-              child: const Text('Start Call'),
+            SizedBox(height: 80),
+            Text(
+              '${widget.UserName}',
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-            if (remoteStream != null) const Text('Connected to remote stream'),
+            SizedBox(height: 5),
+            Text(
+              formatTime(_secondsElapsed),
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 20),
+            const Icon(Icons.phone_in_talk, size: 100, color: Colors.green),
+            const Spacer(),
+            ClipOval(
+              child: Image.network(
+                widget.UserImage,
+                width: 250, // Set the custom width
+                height: 250, // Set the custom height
+                fit: BoxFit.cover, // Ensures the image fills the circle
+              ),
+            ),
+            const Spacer(), // Pushes everything above to the top
+            Padding(
+              padding: const EdgeInsets.only(bottom: 40),
+              child: ElevatedButton(
+                onPressed: () => cancelCall(context), // Fix here,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  shape: const CircleBorder(),
+                  padding: const EdgeInsets.all(20),
+                ),
+                child: const Icon(Icons.call_end, color: Colors.white),
+              ),
+            ),
           ],
         ),
       ),
@@ -185,6 +259,7 @@ class _VoiceCallScreenState extends State<VoiceCallScreen> {
 
   @override
   void dispose() {
+    _timer?.cancel();
     socket.dispose();
     peerConnection.close();
     localStream?.dispose();

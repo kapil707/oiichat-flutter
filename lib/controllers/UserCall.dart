@@ -47,10 +47,17 @@ class _OutGoingCallScreenState extends State<OutGoingCallScreen> {
       //Navigator.pop(context, true);
       _audioPlayer.stop();
       Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) => VoiceCallScreen(
-                  user1: widget.user1, user2: widget.user2, pickup: "yes")));
+        context,
+        MaterialPageRoute(
+          builder: (context) => VoiceCallScreen(
+            UserName: widget.UserName,
+            UserImage: widget.UserImage,
+            user1: widget.user1,
+            user2: widget.user2,
+            pickup: "yes",
+          ),
+        ),
+      );
     };
     playIncomingCall();
   }
@@ -182,10 +189,17 @@ class _IncomingCallScreenState extends State<IncomingCallScreen> {
     //Navigator.pop(context, true);
 
     Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-            builder: (context) => VoiceCallScreen(
-                user1: widget.user1, user2: widget.user2, pickup: "no")));
+      context,
+      MaterialPageRoute(
+        builder: (context) => VoiceCallScreen(
+          UserName: widget.UserName,
+          UserImage: widget.UserImage,
+          user1: widget.user1,
+          user2: widget.user2,
+          pickup: "no",
+        ),
+      ),
+    );
   }
 
   void onDecline(BuildContext context) {
