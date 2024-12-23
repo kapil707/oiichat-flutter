@@ -176,10 +176,10 @@ class _VoiceCallScreenState extends State<VoiceCallScreen> {
     Navigator.pop(context);
   }
 
-  void request_call_cut(user1, user2) {
+  void request_call_cut(user1, targetSocketId) {
     socket.emit('request-call-cut', {
       'user1': user1, // Caller (User A)
-      'user2': user2, // Recipient (User B username)
+      'user2': targetSocketId, // Recipient (User B username)
     });
     print('oiicall request_call_cut');
   }
