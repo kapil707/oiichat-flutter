@@ -105,6 +105,11 @@ class _VoiceCallScreenState extends State<VoiceCallScreen> {
         startTimer();
       });
     });
+
+    socket.on('cut-call-by-user', (data) async {
+      Navigator.pop(context, true);
+    });
+
     await setupWebRTC();
   }
 

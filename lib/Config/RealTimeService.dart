@@ -288,8 +288,8 @@ class RealTimeService {
 
   void request_call_cut(user1, user2) {
     socket.emit('request-call-cut', {
-      'user1': user2, // Caller (User A)
-      'user2': user1, // Recipient (User B username)
+      'user1': user1, // Caller (User A)
+      'user2': user2, // Recipient (User B username)
     });
     print('oiicall request_call_cut');
   }
