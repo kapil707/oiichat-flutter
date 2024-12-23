@@ -26,7 +26,6 @@ class VoiceCallScreen extends StatefulWidget {
 }
 
 class _VoiceCallScreenState extends State<VoiceCallScreen> {
-  final RealTimeService _realTimeService = RealTimeService();
   late IO.Socket socket;
   late RTCPeerConnection peerConnection;
   MediaStream? localStream;
@@ -171,8 +170,18 @@ class _VoiceCallScreenState extends State<VoiceCallScreen> {
   }
 
   void cancelCall(BuildContext context) {
-    _realTimeService.request_call_cut(widget.user1, widget.user2);
-    Navigator.pop(context, true);
+    print('oiicall cancelCall');
+    //_realTimeService.request_call_cut(widget.user1, widget.user2);
+    request_call_cut(widget.user1, widget.user2);
+    Navigator.pop(context);
+  }
+
+  void request_call_cut(user1, user2) {
+    socket.emit('request-call-cut', {
+      'user1': user1, // Caller (User A)
+      'user2': user2, // Recipient (User B username)
+    });
+    print('oiicall request_call_cut');
   }
 
   void startTimer() {

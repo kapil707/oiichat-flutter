@@ -374,7 +374,7 @@ class _UserNotAnswerCallState extends State<UserNotAnswerCall> {
                     ),
                     SizedBox(height: 5),
                     Text(
-                      "Cencel",
+                      "Cancel",
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 18,
