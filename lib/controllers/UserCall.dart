@@ -1,6 +1,7 @@
+import 'dart:async';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:oiichat/config/RealTimeService.dart';
 import 'package:oiichat/controllers/call.dart';
 
@@ -39,7 +40,18 @@ class _OutGoingCallScreenState extends State<OutGoingCallScreen> {
 
     _realTimeService.onRejectCallByUser = (data) {
       print("oiicall onRejectCallByUser");
-      Navigator.pop(context, true);
+      //Navigator.pop(context, true);
+      //jab user incmoing call cut karta ha to
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => UserNotAnswerCall(
+            UserName: widget.UserName,
+            UserImage: widget.UserImage,
+            CutType: "Call declined",
+          ),
+        ),
+      );
     };
 
     _realTimeService.onAcceptCallByUser = (data) {
@@ -60,6 +72,23 @@ class _OutGoingCallScreenState extends State<OutGoingCallScreen> {
       );
     };
     playIncomingCall();
+
+    //30 sec tak ring banjay ge oss ke bad not aswer wali screen par chala jaya ga
+    Timer(const Duration(seconds: 30), () {
+      _realTimeService.request_call_cancel(widget.user1, widget.user2);
+      _audioPlayer.stop();
+      // jab user call nahi pic karta ha to
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => UserNotAnswerCall(
+            UserName: widget.UserName,
+            UserImage: widget.UserImage,
+            CutType: "Not answer",
+          ),
+        ),
+      );
+    });
   }
 
   void playIncomingCall() async {
@@ -269,6 +298,94 @@ class _IncomingCallScreenState extends State<IncomingCallScreen> {
           ),
           const SizedBox(height: 100),
         ],
+      ),
+    );
+  }
+}
+
+class UserNotAnswerCall extends StatefulWidget {
+  final String UserName;
+  final String UserImage;
+  final String CutType;
+  const UserNotAnswerCall(
+      {super.key,
+      required this.UserName,
+      required this.UserImage,
+      required this.CutType});
+
+  @override
+  State<UserNotAnswerCall> createState() => _UserNotAnswerCallState();
+}
+
+class _UserNotAnswerCallState extends State<UserNotAnswerCall> {
+  void cancelCall(BuildContext context) {
+    Navigator.pop(context, true);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black.withOpacity(0.9),
+      body: Container(
+        width: MediaQuery.of(context).size.width,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(height: 80),
+            Text(
+              '${widget.UserName}',
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 5),
+            Text(
+              '${widget.CutType}',
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 20),
+            const Icon(Icons.phone_disabled, size: 100, color: Colors.red),
+            const Spacer(),
+            ClipOval(
+              child: Image.network(
+                widget.UserImage,
+                width: 250, // Set the custom width
+                height: 250, // Set the custom height
+                fit: BoxFit.cover, // Ensures the image fills the circle
+              ),
+            ),
+            const Spacer(), // Pushes everything above to the top
+            Padding(
+              padding: const EdgeInsets.only(bottom: 40),
+              child: InkWell(
+                onTap: () => cancelCall(context), // Fix here,
+                child: Column(
+                  children: [
+                    const Icon(
+                      Icons.cancel,
+                      color: Colors.white,
+                      size: 60,
+                    ),
+                    SizedBox(height: 5),
+                    Text(
+                      "Cencel",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

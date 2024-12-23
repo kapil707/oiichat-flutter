@@ -31,6 +31,8 @@ class RealTimeService {
   Function(dynamic)? onAcceptCallByUser;
   Function(dynamic)? onRejectCallByUser;
 
+  Function(dynamic)? onCutCallByUser;
+
   void initSocket(String user) {
     // Socket.IO connection setup
     socket = IO.io(MainConfig.host_url, <String, dynamic>{
@@ -181,6 +183,13 @@ class RealTimeService {
         onAcceptCallByUser!(data);
       }
     });
+
+    socket.on('cut-call-by-user', (data) async {
+      //print('oiicall accept-call-by-user ' + data['user1']);
+      if (onCutCallByUser != null) {
+        onCutCallByUser!(data);
+      }
+    });
   }
 
   void GetUserInfo(String userId) {
@@ -275,6 +284,14 @@ class RealTimeService {
       'user2': user1, // Recipient (User B username)
     });
     print('oiicall request_call_accept');
+  }
+
+  void request_call_cut(user1, user2) {
+    socket.emit('request-call-cut', {
+      'user1': user2, // Caller (User A)
+      'user2': user1, // Recipient (User B username)
+    });
+    print('oiicall request_call_cut');
   }
 
   void dispose() {

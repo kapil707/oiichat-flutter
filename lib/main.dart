@@ -81,14 +81,13 @@ class IncomingCallExample extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
-    // return OutGoingCallScreen(
-    //   callerName: 'Kapil Sharma',
-    //   callerImage:
-    //       'https://scontent.fjdh1-2.fna.fbcdn.net/v/t39.30808-1/469531521_2303325946711562_3047562261330012207_n.jpg?stp=dst-jpg_s320x320_tt6&_nc_cat=105&ccb=1-7&_nc_sid=0ecb9b&_nc_ohc=spjJjV8E-TEQ7kNvgECWgio&_nc_zt=24&_nc_ht=scontent.fjdh1-2.fna&_nc_gid=Am37l1FquRocp-DS9f6QMqt&oh=00_AYDovrAVYzZXBkaz3l8UU1oWzm21rYbmalFJtnF4ansIMw&oe=6766C124',
-    //   calltype: "Calling...",
-    //   onDecline: declineCall,
-    // );
+    //return Container();
+    return UserNotAnswerCall(
+      CutType: "Not answer",
+      UserName: 'Kapil Sharma',
+      UserImage:
+          'https://scontent.fjdh1-2.fna.fbcdn.net/v/t39.30808-1/469531521_2303325946711562_3047562261330012207_n.jpg?stp=dst-jpg_s320x320_tt6&_nc_cat=105&ccb=1-7&_nc_sid=0ecb9b&_nc_ohc=spjJjV8E-TEQ7kNvgECWgio&_nc_zt=24&_nc_ht=scontent.fjdh1-2.fna&_nc_gid=Am37l1FquRocp-DS9f6QMqt&oh=00_AYDovrAVYzZXBkaz3l8UU1oWzm21rYbmalFJtnF4ansIMw&oe=6766C124',
+    );
   }
 }
 

@@ -166,6 +166,7 @@ class _VoiceCallScreenState extends State<VoiceCallScreen> {
   }
 
   void cancelCall(BuildContext context) {
+    _realTimeService.request_call_cut(widget.user1, widget.user2);
     Navigator.pop(context, true);
   }
 
