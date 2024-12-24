@@ -326,7 +326,7 @@ class _UserNotAnswerCallState extends State<UserNotAnswerCall> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black.withOpacity(0.9),
-      body: Container(
+      body: SizedBox(
         width: MediaQuery.of(context).size.width,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -340,7 +340,7 @@ class _UserNotAnswerCallState extends State<UserNotAnswerCall> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 5),
+            const SizedBox(height: 5),
             Text(
               '${widget.CutType}',
               style: const TextStyle(
@@ -365,9 +365,9 @@ class _UserNotAnswerCallState extends State<UserNotAnswerCall> {
               padding: const EdgeInsets.only(bottom: 40),
               child: InkWell(
                 onTap: () => cancelCall(context), // Fix here,
-                child: Column(
+                child: const Column(
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.cancel,
                       color: Colors.white,
                       size: 60,

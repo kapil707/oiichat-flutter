@@ -1,6 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:oiichat/main.dart';
+import 'package:oiichat/service/wakelock_service.dart';
 
 final FlutterLocalNotificationsPlugin _notificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -78,5 +79,7 @@ class FirebaseApi {
       platformChannelSpecifics,
       payload: 'incoming_call', // Pass data for navigation
     );
+    // Wake up the screen
+    await WakelockService.wakeScreen();
   }
 }
