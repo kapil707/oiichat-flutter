@@ -1,5 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:oiichat/controllers/UserCall.dart';
 import 'package:oiichat/main.dart';
 import 'package:oiichat/service/wakelock_service.dart';
 
@@ -31,8 +33,38 @@ class FirebaseApi {
     }
 
     // Setup foreground notifications
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print("Message received in foreground: ${message.notification?.title}");
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      print(
+          "oiicall Message received in foreground: ${message.notification?.title}");
+
+      // Wake up screen when message is received
+      await WakelockService.wakeScreen();
+
+      // Navigate to Incoming Call Screen
+      // navigatorKey.currentState?.push(MaterialPageRoute(
+      //   builder: (context) => IncomingCallScreen(
+      //     user1: "111",
+      //     user2: "2222",
+      //     UserName: "kamal",
+      //     UserImage: "",
+      //   ),
+      // ));
+
+      // Show local notification
+      await _notificationsPlugin.show(
+        0,
+        message.notification?.title ?? 'New Message',
+        message.notification?.body ?? 'You have a new message',
+        const NotificationDetails(
+          android: AndroidNotificationDetails(
+            'default_channel', // Channel ID
+            'Default Notifications', // Channel name
+            channelDescription: 'Notifications for app messages',
+            importance: Importance.max,
+            priority: Priority.high,
+          ),
+        ),
+      );
     });
 
     //await _firebaseMessaging.requestPermission();
